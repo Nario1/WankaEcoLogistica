@@ -50,7 +50,7 @@ Diseñar, desarrollar y validar una versión funcional de **WankaEcoLogística H
 | Capa | Tecnología | Justificación |
 |---|---|---|
 | **Frontend** | React (PWA) | Interfaz reactiva con soporte offline para conductores en campo. |
-| **Backend / API** | Python + FastAPI | Alto rendimiento asíncrono, bajo consumo de recursos y ecosistema de optimización (OR-Tools). |
+| **Backend / API** | Node.js + Express | Alto rendimiento asíncrono, bajo consumo de recursos y ecosistema maduro para APIs y servicios geoespaciales. |
 | **Base de Datos** | PostgreSQL + PostGIS | Modelo relacional con capacidades geoespaciales nativas para consultas de coordenadas y distancias. |
 | **Caché** | Redis | Almacenamiento de sesiones y rutas temporales calculadas. |
 | **Optimización** | Google OR-Tools | Librería matemática para resolución de problemas de enrutamiento de vehículos (VRP). |
@@ -64,7 +64,7 @@ Diseñar, desarrollar y validar una versión funcional de **WankaEcoLogística H
 El sistema sigue una arquitectura de capas limpias organizada en tres niveles principales (Modelo C4):
 
 - **Nivel 1 (Contexto):** Los usuarios acceden al sistema a través de HTTPS. El sistema se integra con un proveedor externo de mapas, un servicio OAuth2 para autenticación y un servicio SMTP para notificaciones.
-- **Nivel 2 (Contenedores):** La plataforma se compone de una Single Page Application (React PWA), una API Backend (Python / FastAPI), una base de datos relacional (PostgreSQL + PostGIS) y una capa de caché (Redis).
+- **Nivel 2 (Contenedores):** La plataforma se compone de una Single Page Application (React PWA), una API Backend (Node.js / Express), una base de datos relacional (PostgreSQL + PostGIS) y una capa de caché (Redis).
 - **Nivel 3 (Componentes):** La API se organiza internamente en Controladores / Endpoints, Middleware de Seguridad y Autenticación, Servicio de Optimización y Ruteo, Servicios Transaccionales Core y una Capa de Repositorios / ORM.
 
 Para el diagrama completo del Modelo C4, consultar el documento [Arquitectura de Software - Modelo C4](docs/01%20Inicio/12.%20Modelo%20C4%20V_1_0_0.md).
@@ -101,7 +101,6 @@ A continuación se presentan los pasos necesarios para configurar el entorno de 
 
 **Requisitos previos:**
 
-- Python 3.11 o superior
 - Node.js 20 o superior
 - PostgreSQL 15 con extensión PostGIS habilitada
 - Redis 7
@@ -119,9 +118,7 @@ cd WankaEcoLog-stica
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-pip install -r requirements.txt
+npm install
 ```
 
 3. Configurar la base de datos:
@@ -144,7 +141,7 @@ SECRET_KEY=clave_secreta_segura
 5. Ejecutar las migraciones y el servidor de desarrollo del backend:
 
 ```bash
-python -m uvicorn main:app --reload
+npm run dev
 ```
 
 6. Configurar e iniciar el frontend:
