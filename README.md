@@ -192,6 +192,15 @@ A continuación se presenta el índice completo de los artefactos generados dura
 
 ---
 
+## Fase 02: Planificación del Proyecto
+
+- [01 Transformando a ágil V_1_0_0](docs/02%20Planificación/01%20Transformando%20a%20ágil%20V_1_0_0.md)
+- [02 Artefactos Jira V_1_0_0](docs/02%20Planificación/02%20Artefactos%20Jira%20V_1_0_0.md)
+- [03 Registro de riesgos V_1_0_0](docs/02%20Planificación/03%20Registro%20de%20riesgos%20V_1_0_0.md)
+- [04 Presupuesto del proyecto V_1_0_0](docs/02%20Planificación/04%20Presupuesto%20del%20proyecto%20V_1_0_0.md)
+
+---
+
 ## 10. Pruebas
 
 La estrategia de calidad del proyecto contempla las siguientes categorías de pruebas:
