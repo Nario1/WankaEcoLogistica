@@ -76,20 +76,25 @@ Para el diagrama completo del Modelo C4, consultar el documento [Arquitectura de
 ```
 WankaEcoLogística/
 ├── docs/
-│   └── 01 Inicio/
-│       ├── 01. Selección del enfoque del proyecto V_1_0_0.md
-│       ├── 02. Acta de constitución V_1_0_0.md
-│       ├── 03. Declaración de la visión V_1_0_0.md
-│       ├── 04. Registro de supuestos y restricciones V_1_0_0.md
-│       ├── 05. Registro de interesados V_1_0_0.md
-│       ├── 06. Requisitos funcionales V_1_0_0.md
-│       ├── 07. Requisitos no funcionales V_1_0_0.md
-│       ├── 08. Usuarios V_1_0_0.md
-│       ├── 09. Reglas de negocio V_1_0_0.md
-│       ├── 10. Stack tecnológico V_1_0_0.md
-│       ├── 11. Base de datos V_1_0_0.md
-│       ├── 12. Modelo C4 V_1_0_0.md
-│       └── 13. Restricciones V_1_0_0.md
+│   ├── 01 Inicio/
+│   │   ├── 01. Selección del enfoque del proyecto V_1_0_0.md
+│   │   ├── 02. Acta de constitución V_1_0_0.md
+│   │   ├── 03. Declaración de la visión V_1_0_0.md
+│   │   ├── 04. Registro de supuestos y restricciones V_1_0_0.md
+│   │   ├── 05. Registro de interesados V_1_0_0.md
+│   │   ├── 06. Requisitos funcionales V_1_0_0.md
+│   │   ├── 07. Requisitos no funcionales V_1_0_0.md
+│   │   ├── 08. Usuarios V_1_0_0.md
+│   │   ├── 09. Reglas de negocio V_1_0_0.md
+│   │   ├── 10. Stack tecnológico V_1_0_0.md
+│   │   ├── 11. Base de datos V_1_0_0.md
+│   │   ├── 12. Modelo C4 V_1_0_0.md
+│   │   └── 13. Restricciones V_1_0_0.md
+│   └── 02 Planificación/
+│       ├── 01 Transformando a ágil V_1_0_0.md
+│       ├── 02 Artefactos Jira V_1_0_0.md
+│       ├── 03 Registro de riesgos V_1_0_0.md
+│       └── 04 Presupuesto del proyecto V_1_0_0.md
 └── README.md
 ```
 
