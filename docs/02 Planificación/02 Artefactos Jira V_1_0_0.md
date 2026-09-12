@@ -15,9 +15,13 @@ Este documento especifica la configuración que debe registrarse en Jira Softwar
 
 Proyecto tipo **Scrum**; issue types: Épica, Historia y Enabler (o Tarea técnica si la instancia no permite el tipo Enabler). Campos obligatorios: prioridad, Story Points, épica, componente, sprint y fix version. Componentes: `Operación`, `Ruteo`, `Mapa/PWA`, `Sostenibilidad`, `Plataforma`.
 
+Las imágenes siguientes proceden de la instancia Jira del proyecto. Se incluyen como evidencia visual sin alterar su contenido.
+
+![Épicas configuradas en Jira](image.png)
+
 ### Evidencia 1: Roadmap del Proyecto
 
-📸 INSERTAR AQUÍ LA CAPTURA RECORTADA DEL ROADMAP DE JIRA.
+![Roadmap de Jira con las épicas planificadas](image-2.png)
 
 | Épica | Relación / dependencia | Ventana propuesta | Release |
 |---|---|---|---|
@@ -32,7 +36,7 @@ Las líneas de tiempo son una propuesta de planificación, sujeta a la capacidad
 
 ### Evidencia 2: Backlog priorizado
 
-📸 INSERTAR AQUÍ LA CAPTURA RECORTADA DEL BACKLOG DE JIRA.
+![Backlog de Jira organizado por sprints](image-1.png)
 
 | ID | Tipo | Título | Épica | Prioridad | SP | Componente |
 |---|---|---|---|---|---:|---|
@@ -56,7 +60,7 @@ Las líneas de tiempo son una propuesta de planificación, sujeta a la capacidad
 
 ### Evidencia 3: Sprint 1
 
-📸 INSERTAR AQUÍ LA CAPTURA RECORTADA DEL SPRINT ACTIVO O DE SU PLANIFICACIÓN EN JIRA.
+![Planificación de sprints en Jira](image-1.png)
 
 **Duración:** 2 semanas.  
 **Capacidad propuesta:** 26 Story Points, que debe confirmarse con la velocidad real.  
@@ -70,7 +74,7 @@ Disponer en staging de una base segura para registrar pedidos, vehículos y cond
 
 ### Evidencia 4: Tablero Scrum
 
-📸 INSERTAR AQUÍ LA CAPTURA RECORTADA DEL TABLERO SCRUM DE JIRA.
+![Tablero Scrum de Jira](image-3.png)
 
 `To Do → In Progress → In Review / QA → Done`
 
@@ -85,9 +89,13 @@ Disponer en staging de una base segura para registrar pedidos, vehículos y cond
 
 ### Evidencia 5: Release v1.0.0-MVP
 
-📸 INSERTAR AQUÍ LA CAPTURA RECORTADA DE LA VERSIÓN/RELEASE EN JIRA.
+> 📸 Pendiente: insertar una captura específica de la pantalla **Releases / Versiones** de Jira donde se visualice `v1.0.0-MVP`. Las imágenes disponibles evidencian épicas, backlog, sprints y tablero, pero no una release; se mantiene este marcador para no atribuir evidencia inexistente.
 
 **Versión:** `v1.0.0-MVP`. **Objetivo:** primera versión demostrable de gestión operativa, optimización, seguimiento y reporte sostenible. Incluye US-001 a US-008 y EN-001 a EN-007, condicionados a la aceptación de cada ítem y al alcance real aprobado al cierre. La versión se crea en Jira con la fecha de liberación que acuerde el equipo; esta documentación no afirma que haya sido liberada.
+
+Como evidencia complementaria del espacio Jira, sin sustituir la evidencia específica de la release, se conserva el resumen visible del proyecto:
+
+![Resumen del espacio Jira](image-4.png)
 
 ## 6. Reglas para las evidencias
 
