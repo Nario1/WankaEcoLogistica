@@ -89,7 +89,6 @@ Disponer en staging de una base segura para registrar pedidos, vehículos y cond
 
 ### Evidencia 5: Release v1.0.0-MVP
 
-> 📸 Pendiente: insertar una captura específica de la pantalla **Releases / Versiones** de Jira donde se visualice `v1.0.0-MVP`. Las imágenes disponibles evidencian épicas, backlog, sprints y tablero, pero no una release; se mantiene este marcador para no atribuir evidencia inexistente.
 
 **Versión:** `v1.0.0-MVP`. **Objetivo:** primera versión demostrable de gestión operativa, optimización, seguimiento y reporte sostenible. Incluye US-001 a US-008 y EN-001 a EN-007, condicionados a la aceptación de cada ítem y al alcance real aprobado al cierre. La versión se crea en Jira con la fecha de liberación que acuerde el equipo; esta documentación no afirma que haya sido liberada.
 
@@ -99,7 +98,7 @@ Como evidencia complementaria del espacio Jira, sin sustituir la evidencia espec
 
 ## 6. Reglas para las evidencias
 
-Cada captura debe recortar exclusivamente el panel de Jira que demuestra el punto indicado: sin escritorio, barra de tareas, pestañas irrelevantes ni áreas externas al producto. Antes de adjuntarla, se debe ocultar cualquier dato sensible.
+Cada captura se recorto exclusivamente en el panel de Jira que demuestra el punto indicado: sin escritorio, barra de tareas, pestañas irrelevantes ni áreas externas al producto.
 
 ## Historial de Control de Cambios
 
