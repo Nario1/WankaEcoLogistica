@@ -8,12 +8,11 @@
 | Versión | V_1_0_0 |
 | Fecha | 11/09/2026 |
 | Moneda | PEN (S/) |
-| Tipo de cambio referencial | 1 USD = 3.75 PEN |
 | Horizonte estimado | 4 meses académicos de construcción y pruebas |
 
 ## 1. Supuestos de estimación
 
-El repositorio documenta un equipo académico de cinco integrantes, pero no asigna cargos técnicos ni tarifas. Para hacer verificable el presupuesto se usa una **estimación referencial** de esfuerzo por rol, no una afirmación de remuneración real. Las tarifas por hora son supuestos de planificación para servicios profesionales de un MVP; deberán validarse por el equipo y la institución antes de contratar o desembolsar. Se evita incluir hardware porque Fase 01 establece ese supuesto. Los montos están expresados en **soles peruanos (S/)** con un tipo de cambio referencial de 3.75 PEN/USD.
+El repositorio documenta un equipo académico de cinco integrantes, pero no asigna cargos técnicos ni tarifas. Para hacer verificable el presupuesto se usa una **estimación referencial** de esfuerzo por rol, no una afirmación de remuneración real. Las tarifas por hora reflejan valores competitivos del mercado peruano para perfiles junior y académicos orientados a un MVP; deberán validarse por el equipo y la institución antes de contratar o desembolsar. Se evita incluir hardware porque Fase 01 establece ese supuesto. Los montos están expresados en **soles peruanos (S/)**.
 
 ### Recursos humanos — CAPEX
 
@@ -21,14 +20,14 @@ El repositorio documenta un equipo académico de cinco integrantes, pero no asig
 
 | Rol | Horas | Tarifa/hora (S/) | Cálculo | Costo (S/) |
 |---|---:|---:|---|---:|
-| Project Manager / Scrum Master | 80 | 67.50 | 80 × 67.50 | 5,400.00 |
-| Software Architect | 48 | 82.50 | 48 × 82.50 | 3,960.00 |
-| Backend Developer | 160 | 60.00 | 160 × 60.00 | 9,600.00 |
-| Frontend Developer | 144 | 60.00 | 144 × 60.00 | 8,640.00 |
-| QA Engineer | 96 | 48.75 | 96 × 48.75 | 4,680.00 |
-| UI/UX Designer | 48 | 48.75 | 48 × 48.75 | 2,340.00 |
-| DevOps Engineer | 32 | 67.50 | 32 × 67.50 | 2,160.00 |
-| **Total CAPEX** | **608** |  |  | **36,780.00** |
+| Project Manager / Scrum Master | 72 | 35.00 | 72 × 35.00 | 2,520.00 |
+| Software Architect | 40 | 40.00 | 40 × 40.00 | 1,600.00 |
+| Backend Developer | 140 | 30.00 | 140 × 30.00 | 4,200.00 |
+| Frontend Developer | 120 | 30.00 | 120 × 30.00 | 3,600.00 |
+| QA Engineer | 80 | 25.00 | 80 × 25.00 | 2,000.00 |
+| UI/UX Designer | 40 | 25.00 | 40 × 25.00 | 1,000.00 |
+| DevOps Engineer | 28 | 35.00 | 28 × 35.00 | 980.00 |
+| **Total CAPEX** | **520** |  |  | **15,900.00** |
 
 ## 2. Licenciamiento y herramientas
 
@@ -44,38 +43,38 @@ Se planifica con herramientas sin costo directo para el MVP: GitHub/Git, Markdow
 
 ## 3. Infraestructura cloud — OPEX
 
-Los valores representan cuatro meses de desarrollo, staging y pruebas; producción sostenida requiere una reestimación. Se considera el stack documentado: Node.js/Express, PostgreSQL/PostGIS, Redis, PWA y un proveedor externo de mapas.
+Los valores representan cuatro meses de desarrollo, staging y pruebas aprovechando capas gratuitas y planes económicos; producción sostenida requiere una reestimación. Se considera el stack documentado: Node.js/Express, PostgreSQL/PostGIS, Redis, PWA y un proveedor externo de mapas.
 
 | Concepto | Cálculo | Costo (S/) |
 |---|---|---:|
-| Hosting de API / staging | 4 meses × 168.75 | 675.00 |
-| PostgreSQL administrado con PostGIS | 4 meses × 225.00 | 900.00 |
-| Redis gestionado | 4 meses × 56.25 | 225.00 |
-| Almacenamiento y respaldo | 4 meses × 37.50 | 150.00 |
-| Dominio | Estimación anual | 67.50 |
-| Créditos de mapas/geocodificación | Bolsa inicial de pruebas | 375.00 |
+| Hosting de API / staging | 4 meses × 75.00 | 300.00 |
+| PostgreSQL administrado con PostGIS | 4 meses × 100.00 | 400.00 |
+| Redis gestionado | 4 meses × 25.00 | 100.00 |
+| Almacenamiento y respaldo | 4 meses × 15.00 | 60.00 |
+| Dominio | Estimación anual | 50.00 |
+| Créditos de mapas/geocodificación | Bolsa inicial de pruebas | 150.00 |
 | SMTP y CI/CD adicional | Capa gratuita proyectada | 0.00 |
-| **Total OPEX** |  | **2,392.50** |
+| **Total OPEX** |  | **1,060.00** |
 
 ## 4. Reserva de contingencia
 
-**Subtotal = 36,780.00 + 0.00 + 2,392.50 = 39,172.50 S/.**  
-**Reserva = Subtotal × 12% = 39,172.50 × 0.12 = 4,700.70 S/.**
+**Subtotal = 15,900.00 + 0.00 + 1,060.00 = 16,960.00 S/.**  
+**Reserva = Subtotal × 10% = 16,960.00 × 0.10 = 1,696.00 S/.**
 
 La reserva cubre principalmente los riesgos de replanificación técnica, consumo de servicios externos y retrasos académicos identificados en el registro de riesgos. Su uso debe aprobarse y registrarse.
 
 ## 5. Resumen financiero
 
-Los porcentajes de categorías se calculan sobre el subtotal: CAPEX 36,780.00 / 39,172.50 = 93.9%; Licenciamiento 0.0%; OPEX 2,392.50 / 39,172.50 = 6.1%.
+Los porcentajes de categorías se calculan sobre el subtotal: CAPEX 15,900.00 / 16,960.00 = 93.7%; Licenciamiento 0.0%; OPEX 1,060.00 / 16,960.00 = 6.3%.
 
 | Categoría | Costo Subtotal (S/) | Porcentaje |
 |---|---:|---:|
-| Recursos Humanos (CAPEX) | S/ 36,780.00 | 93.9% |
+| Recursos Humanos (CAPEX) | S/ 15,900.00 | 93.7% |
 | Licenciamiento | S/ 0.00 | 0.0% |
-| Infraestructura Cloud (OPEX) | S/ 2,392.50 | 6.1% |
-| **SUBTOTAL** | **S/ 39,172.50** | **100.0%** |
-| Reserva de Contingencia (12%) | S/ 4,700.70 | N/A |
-| **PRESUPUESTO TOTAL** | **S/ 43,873.20** | **100.0%** |
+| Infraestructura Cloud (OPEX) | S/ 1,060.00 | 6.3% |
+| **SUBTOTAL** | **S/ 16,960.00** | **100.0%** |
+| Reserva de Contingencia (10%) | S/ 1,696.00 | N/A |
+| **PRESUPUESTO TOTAL** | **S/ 18,656.00** | **100.0%** |
 
 ## 6. Control presupuestal
 
