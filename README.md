@@ -108,7 +108,7 @@ A continuación se presentan los pasos necesarios para configurar el entorno de 
 
 - Node.js 20 o superior
 - PostgreSQL 15 con extensión PostGIS habilitada
-- Redis 7
+- Redis 7 (requerido en sprints posteriores)
 
 **Pasos de instalación:**
 
@@ -124,6 +124,7 @@ cd WankaEcoLog-stica
 ```bash
 cd backend
 npm install
+cp .env.example .env
 ```
 
 3. Configurar la base de datos:
@@ -135,17 +136,21 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "postgis";
 ```
 
-4. Configurar las variables de entorno (crear archivo `.env` en la raíz del backend):
+4. Configurar las variables de entorno en `backend/.env` sin versionar secretos:
 
 ```
 DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/wanka_ecologistica
-REDIS_URL=redis://localhost:6379
-SECRET_KEY=clave_secreta_segura
+DATABASE_SSL=false
+JWT_SECRET=una_clave_aleatoria_de_al_menos_32_caracteres
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=una_contraseña_segura
 ```
 
 5. Ejecutar las migraciones y el servidor de desarrollo del backend:
 
 ```bash
+npm run db:migrate
+npm run db:seed
 npm run dev
 ```
 
@@ -154,6 +159,7 @@ npm run dev
 ```bash
 cd frontend
 npm install
+cp .env.example .env
 npm run dev
 ```
 

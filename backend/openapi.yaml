@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: WankaEcoLogística API
+  version: 0.1.0
+  description: API del Sprint 1 para autenticación, pedidos, flota y conductores.
+servers:
+  - url: http://localhost:3000
+paths:
+  /health:
+    get:
+      summary: Estado de la API
+      responses:
+        "200": { description: API disponible }
+  /api/auth/login:
+    post:
+      summary: Iniciar sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8 }
+      responses:
+        "200": { description: Token y usuario }
+        "401": { description: Credenciales inválidas }
+        "423": { description: Cuenta bloqueada }
+  /api/orders:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Listar pedidos
+      responses:
+        "200": { description: Lista de pedidos }
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Registrar pedido
+      responses:
+        "201": { description: Pedido registrado }
+        "400": { description: Datos inválidos }
+  /api/orders/{id}:
+    patch:
+      security: [{ bearerAuth: [] }]
+      summary: Actualizar pedido
+      parameters:
+        [
+          {
+            in: path,
+            name: id,
+            required: true,
+            schema: { type: string, format: uuid },
+          },
+        ]
+      responses:
+        "200": { description: Pedido actualizado }
+        "404": { description: Pedido inexistente }
+  /api/vehicles:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Listar vehículos
+      responses:
+        "200": { description: Lista de vehículos }
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Registrar vehículo (ADMIN)
+      responses:
+        "201": { description: Vehículo registrado }
+        "409": { description: Placa duplicada }
+  /api/vehicles/{id}:
+    patch:
+      security: [{ bearerAuth: [] }]
+      summary: Actualizar vehículo o estado (ADMIN)
+      parameters:
+        [
+          {
+            in: path,
+            name: id,
+            required: true,
+            schema: { type: string, format: uuid },
+          },
+        ]
+      responses:
+        "200": { description: Vehículo actualizado }
+  /api/drivers:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Listar conductores
+      responses:
+        "200": { description: Lista de conductores }
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Registrar conductor (ADMIN)
+      responses:
+        "201": { description: Conductor registrado }
+  /api/routes:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Listar rutas operativas
+      responses:
+        "200": { description: Lista de rutas }
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Crear ruta manual para asignación
+      responses:
+        "201": { description: Ruta creada }
+  /api/routes/{id}/driver:
+    put:
+      security: [{ bearerAuth: [] }]
+      summary: Asignar o reasignar conductor
+      parameters:
+        [
+          {
+            in: path,
+            name: id,
+            required: true,
+            schema: { type: string, format: uuid },
+          },
+        ]
+      responses:
+        "200": { description: Conductor asignado }
+        "409": { description: Conflicto horario o jornada mayor de ocho horas }
+  /api/emissions/calculate:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Calcular emisiones conservando valores fuente
+      responses:
+        "200": { description: Cálculo reproducible }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
