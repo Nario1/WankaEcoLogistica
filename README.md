@@ -159,18 +159,6 @@ npm run dev
 
 ---
 
-## Sprint 1 implementado
-
-El primer incremento funcional está disponible en `backend/` y `frontend/`.
-
-```bash
-cd backend
-npm.cmd test
-npm.cmd run dev
-```
-
-Las pruebas del incremento están organizadas por módulo en `backend/tests/`. El detalle de alcance, pruebas y criterios se encuentra en [Sprint 1](<docs/03 Ejecución/01 Sprint 1 V_1_0_0.md>).
-
 ## 8. Uso del Sistema
 
 Una vez iniciados tanto el backend como el frontend, el sistema estará disponible en `http://localhost:5173` (o el puerto configurado por el servidor de desarrollo).
