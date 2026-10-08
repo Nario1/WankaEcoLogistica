@@ -1,5 +1,7 @@
 # Retrospectiva del Sprint 1
 
+[← Volver al README principal](../../../README.md)
+
 **Proyecto:** WankaEcoLogística Huancayo  
 **Responsable:** Equipo del proyecto  
 **Fecha de cierre:** 02/10/2026

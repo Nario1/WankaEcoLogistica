@@ -1,5 +1,7 @@
 # Informe de estado del proyecto
 
+[← Volver al README principal](../../../README.md)
+
 **Proyecto:** WankaEcoLogística Huancayo  
 **Responsable:** Equipo del proyecto  
 **Fecha del informe:** 02/10/2026  

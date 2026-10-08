@@ -1,6 +1,6 @@
 # Informe de estado del proyecto
 
-[← Volver al README principal](../../README.md)
+[← Volver al README principal](../../../README.md)
 
 | Campo | Información |
 |---|---|

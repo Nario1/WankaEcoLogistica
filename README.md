@@ -82,9 +82,16 @@ Para ejecutar también la integración PostGIS configure `TEST_DATABASE_URL` con
 - [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>)
 - [Calidad de código](CODE_QUALITY.md)
 
+### Entregables del Sprint 1
+
+- [01 Informe de estado del proyecto](<docs/03 Implementación/Sprint 1/01 Informe de estado del proyecto V_1_0_0.md>)
+- [02 Registro de Impedimentos](<docs/03 Implementación/Sprint 1/02 Registro de Impedimentos V_1_0_0.md>)
+- [03 Revisión del Sprint](<docs/03 Implementación/Sprint 1/03 Revisión del Sprint V_1_0_0.md>)
+- [04 Retrospectiva del Sprint](<docs/03 Implementación/Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>)
+
 ### Entregables del Sprint 2
 
-- [01 Informe de estado del proyecto](<docs/03 Implementación/01 Informe de estado del proyecto V_1_0_0.md>)
-- [02 Registro de Impedimentos](<docs/03 Implementación/02 Registro de Impedimentos V_1_0_0.md>)
-- [03 Revisión del Sprint](<docs/03 Implementación/03 Revisión del Sprint V_1_0_0.md>)
-- [04 Retrospectiva del Sprint](<docs/03 Implementación/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [01 Informe de estado del proyecto](<docs/03 Implementación/Sprint 2/01 Informe de estado del proyecto V_1_0_0.md>)
+- [02 Registro de Impedimentos](<docs/03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
+- [03 Revisión del Sprint](<docs/03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
+- [04 Retrospectiva del Sprint](<docs/03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)

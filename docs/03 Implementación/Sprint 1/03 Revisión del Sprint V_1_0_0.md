@@ -1,5 +1,7 @@
 # Revisión del Sprint 1
 
+[← Volver al README principal](../../../README.md)
+
 **Proyecto:** WankaEcoLogística Huancayo  
 **Responsable:** Equipo del proyecto  
 **Sprint goal:** disponer de una base segura para registrar pedidos, vehículos y conductores, con datos geográficos válidos y reglas operativas verificables.

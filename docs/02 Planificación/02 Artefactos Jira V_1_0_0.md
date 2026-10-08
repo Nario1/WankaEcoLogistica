@@ -7,7 +7,7 @@
 | Proyecto | WankaEcoLogística Huancayo |
 | Versión | V_1_0_0 |
 | Fecha | 11/09/2026 |
-| Estado | Backlog de planificación; ejecución del Sprint 1 documentada en `docs/3. Implementación/` |
+| Estado | Backlog de planificación; ejecución del Sprint 1 documentada en `docs/03 Implementación/Sprint 1/` |
 
 Este documento especifica la configuración que debe registrarse en Jira Software para el backlog de la Fase 02. No existe evidencia visual de una instancia Jira en el repositorio; por tanto, los espacios siguientes son marcadores y no capturas fabricadas.
 

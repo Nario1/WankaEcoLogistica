@@ -1,5 +1,7 @@
 # Registro de impedimentos
 
+[← Volver al README principal](../../../README.md)
+
 **Proyecto:** WankaEcoLogística Huancayo  
 **Responsable:** Equipo del proyecto
 

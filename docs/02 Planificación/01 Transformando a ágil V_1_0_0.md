@@ -11,7 +11,7 @@
 
 ## 1. Criterio de transformación y alcance
 
-Este artefacto convierte el catálogo de Fase 01 en un Product Backlog inicial. La trazabilidad sigue `RF → Épica → Historia de Usuario`; los RNF se convierten en enablers y, cuando procede, en criterios de calidad transversales. Al cierre del Sprint 1 se implementaron US-001, US-002, US-003, EN-002 y EN-006; la evidencia y el estado se registran en `docs/3. Implementación/`.
+Este artefacto convierte el catálogo de Fase 01 en un Product Backlog inicial. La trazabilidad sigue `RF → Épica → Historia de Usuario`; los RNF se convierten en enablers y, cuando procede, en criterios de calidad transversales. Al cierre del Sprint 1 se implementaron US-001, US-002, US-003, EN-002 y EN-006; la evidencia y el estado se registran en `docs/03 Implementación/Sprint 1/`.
 
 | Fuente | Transformación |
 |---|---|
@@ -258,7 +258,7 @@ No se alteraron los requisitos de Fase 01 porque los hallazgos no constituyen un
 | EN-001 | Done | Benchmark automatizado de 50 puntos con umbral P95 ≤ 3,5 s. |
 | EN-007 | Done local | OpenAPI 0.2.0, migración incremental, lint, formato, build y cobertura. |
 
-La prueba PostGIS requiere `TEST_DATABASE_URL`; si el entorno no la proporciona se registra como omitida y no como aprobada. La evidencia detallada está en [`docs/03 Implementación`](<../03 Implementación/03 Revisión del Sprint V_1_0_0.md>).
+La prueba PostGIS requiere `TEST_DATABASE_URL`; si el entorno no la proporciona se registra como omitida y no como aprobada. La evidencia detallada está en la [revisión del Sprint 2](<../03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>).
 
 ## Historial de Control de Cambios
 

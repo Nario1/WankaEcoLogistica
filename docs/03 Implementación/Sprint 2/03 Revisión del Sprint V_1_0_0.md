@@ -1,6 +1,6 @@
 # Revisión del Sprint 2
 
-[← Volver al README principal](../../README.md)
+[← Volver al README principal](../../../README.md)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
