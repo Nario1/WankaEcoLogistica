@@ -2,8 +2,10 @@
 
 [← Volver al README principal](../../README.md)
 
-**Nombre del proyecto:** WankaEcoLogística Huancayo  
-**Líder del proyecto:** Equipo del proyecto  
+**Nombre del proyecto:** WankaEcoLogística Huancayo
+
+**Líder del proyecto:** Equipo del proyecto
+
 **Versión:** V_1_0_0
 
 ## Historias de usuario completadas en este Sprint
