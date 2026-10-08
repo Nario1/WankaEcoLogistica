@@ -1,12 +1,12 @@
 # Retrospectiva del Sprint 2
 
-[← Volver al README principal](../../../README.md)
+[← Anterior: Revisión](<03 Revisión del Sprint V_1_0_0.md>) · [Índice del Sprint 2](README.md) · [README principal](../../../README.md)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
 **Líder del proyecto:** Equipo del proyecto
 
-**Versión:** V_1_0_0
+**Versión:** V_1_0_1
 
 **Fecha de cierre:** 07/10/2026
 
@@ -33,7 +33,7 @@ Realizar la demostración con el responsable operativo para contrastar prioridad
 
 ### Procesos
 
-Definir la planificación del Sprint 2 en Jira antes del desarrollo y registrar evidencia de staging dentro de la Definition of Done, no al final.
+Mantener la planificación y la evidencia de aceptación sincronizadas durante el sprint mediante una revisión intermedia de trazabilidad.
 
 ### Herramientas
 
@@ -52,4 +52,5 @@ Proveer PostgreSQL/PostGIS aislado en CI y publicar los resultados de cobertura 
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_1 | 07/10/2026 | Mejora de procesos y navegación según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Retrospectiva y plan de acción del Sprint 2. | Equipo del proyecto |

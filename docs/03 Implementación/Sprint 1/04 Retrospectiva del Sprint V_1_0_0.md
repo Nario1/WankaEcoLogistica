@@ -1,44 +1,55 @@
 # Retrospectiva del Sprint 1
 
-[← Volver al README principal](../../../README.md)
+[← Anterior: Revisión](<03 Revisión del Sprint V_1_0_0.md>) · [Índice del Sprint 1](README.md) · [README principal](../../../README.md) · [Sprint 2 →](<../Sprint 2/README.md>)
 
-**Proyecto:** WankaEcoLogística Huancayo  
-**Responsable:** Equipo del proyecto  
+**Nombre del proyecto:** WankaEcoLogística Huancayo
+
+**Líder del proyecto:** Equipo del proyecto
+
+**Versión:** V_1_0_1
+
 **Fecha de cierre:** 02/10/2026
 
 ## ¿Qué aprendimos?
 
-La instalación local debe validarse desde el ejecutable de PostgreSQL, el servicio, PostGIS y las migraciones antes de probar el frontend. También se comprobó que la validación del navegador no sustituye a la validación del servidor: la API debe proteger siempre sus contratos y devolver errores comprensibles.
+La preparación temprana de datos, ambientes y criterios negativos reduce incertidumbre durante la demostración. La validación del navegador complementa, pero no sustituye, las invariantes y permisos del servidor.
 
 ## ¿Qué estamos haciendo bien?
 
-- Se mantuvo una arquitectura por rutas, servicios y repositorios, que separa HTTP, reglas de negocio y persistencia.
-- Se utilizaron PostgreSQL y PostGIS para conservar datos geográficos con restricciones explícitas.
-- Las validaciones de roles, autenticación, horarios, placas y datos numéricos se ejecutan en el backend.
-- Se automatizaron pruebas, análisis estático, formato y build antes del cierre.
+- Separación clara entre rutas, servicios y repositorios.
+- Validación de roles, horarios, placas y datos geográficos en el backend.
+- Migraciones repetibles y consultas parametrizadas.
+- Pruebas, análisis estático, formato y build antes del cierre.
 
-## ¿Qué podemos mejorar?
+## ¿Qué podemos hacer mejor?
 
 ### Personas
 
-Registrar desde el inicio quién asume la validación funcional y quién mantiene las credenciales y variables de cada entorno.
+Asignar desde la planificación responsables de validación funcional, revisión técnica y evidencia.
 
 ### Relaciones
 
-Revisar con usuarios de operación los mensajes y valores de ejemplo antes de la demostración, especialmente coordenadas y ventanas horarias.
+Reservar con anticipación la sesión con stakeholders y compartir el guion de demostración.
 
 ### Procesos
 
-Incorporar una lista de arranque del entorno —PostgreSQL, PostGIS, `.env`, migración, seed, backend y frontend— en cada sesión de desarrollo. Mantener las migraciones repetibles desde su primera versión.
+Incorporar una lista de preparación que incluya entorno, datos, migraciones, pruebas, documentación y navegación Markdown.
 
 ### Herramientas
 
-Configurar una base `TEST_DATABASE_URL` en integración continua para ejecutar siempre la prueba PostGIS, sin depender de la máquina local.
+Automatizar PostgreSQL/PostGIS aislado en integración continua y conservar sus resultados como evidencia.
 
-## Acciones acordadas
+### Acciones a realizar
 
-| Acción | Responsable | Prioridad | Momento |
+| Acción | Responsable | Prioridad | Fecha objetivo | Indicador de cierre |
+|---|---|---|---|---|
+| Preparar datos y guion antes de cada revisión | Líder del proyecto | Alta | Inicio del Sprint 2 | Guion aprobado antes de la demostración. |
+| Verificar navegación Markdown en la Definition of Done | Responsable de calidad | Alta | Sprint 2 | Enlaces relativos validados sin rutas rotas. |
+| Automatizar la prueba PostGIS | Equipo técnico | Media | Sprint 2 | Prueba ejecutada sin omisiones. |
+
+## Historial de control de cambios
+
+| Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
-| Documentar el arranque local y las credenciales de prueba seguras | Equipo | Alta | Inicio del Sprint 2 |
-| Añadir una prueba de integración con base PostGIS en CI | Equipo | Alta | Sprint 2 |
-| Revisar datos de muestra y mensajes de validación con el usuario operativo | Equipo | Media | Refinamiento del Sprint 2 |
+| V_1_0_1 | 07/10/2026 | Plan de mejora actualizado con control de navegación Markdown. | Equipo del proyecto |
+| V_1_0_0 | 02/10/2026 | Retrospectiva y plan de acción del Sprint 1. | Equipo del proyecto |

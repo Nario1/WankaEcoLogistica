@@ -1,39 +1,56 @@
 # Informe de estado del proyecto
 
-[← Volver al README principal](../../../README.md)
+[← Índice del Sprint 1](README.md) · [Implementación](../README.md) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
 
-**Proyecto:** WankaEcoLogística Huancayo  
-**Responsable:** Equipo del proyecto  
-**Fecha del informe:** 02/10/2026  
-**Periodo:** cierre del Sprint 1
+| Campo | Información |
+|---|---|
+| Nombre del proyecto | WankaEcoLogística Huancayo |
+| Líder del proyecto | Equipo del proyecto |
+| Versión | V_1_0_1 |
+| Fecha | 02/10/2026 |
+| Periodo | Cierre del Sprint 1 |
 
-## Estado general
+## Resumen ejecutivo
 
-El Sprint 1 se encuentra completado y validado en entorno local. Se entregó la base operativa para pedidos, vehículos, conductores y asignación manual de rutas, protegida con autenticación, control de roles y validaciones geoespaciales.
+El Sprint 1 entregó una base operativa segura para gestionar pedidos, vehículos, conductores y rutas manuales. El incremento incorporó autenticación, autorización por roles, auditoría, validación geoespacial y cálculo reproducible de emisiones.
 
-| Variable de control | Estado | Descripción |
+## Estado del alcance
+
+| Ítem | Estado | Evidencia verificable |
 |---|---|---|
-| Alcance | Verde | Se completaron los cinco ítems planificados: US-001, US-002, US-003, EN-002 y EN-006. |
-| Cronograma | Verde | Los flujos comprometidos fueron implementados y verificados al cierre del sprint. |
-| Costos | Sin línea base ejecutada | No existe en el repositorio evidencia de costos reales del sprint; no se declara una variación no comprobada. |
-| Calidad | Verde | 16 pruebas aprobadas, cobertura de líneas de 87.75 %, lint, formato y build aprobados. |
-| Riesgos técnicos | Amarillo | El entorno local requiere PostgreSQL con PostGIS y una configuración de seguridad compatible. |
+| US-001 — Registrar y actualizar pedidos | Completado | API, formulario y pruebas de datos válidos, inválidos y límites. |
+| US-002 — Administrar vehículos | Completado | Alta, actualización, placa única y estado operativo. |
+| US-003 — Asignar conductores | Completado | Asignación y rechazo de solapamientos o jornadas mayores a ocho horas. |
+| EN-002 — Autenticación y RBAC | Completado | JWT, permisos por rol y bloqueo temporal de acceso. |
+| EN-006 — Integridad geoespacial | Completado | PostGIS, SRID 4326 y prueba de precisión geográfica. |
+
+## Indicadores de control
+
+| Variable | Estado | Resultado |
+|---|---|---|
+| Alcance | Verde | Cinco ítems planificados completados. |
+| Cronograma | Verde | Flujos comprometidos verificados al cierre. |
+| Calidad | Verde | 16 pruebas aprobadas, cobertura de líneas de 87,75 %, lint, formato y build aprobados. |
+| Seguridad | Verde | Credenciales fuera del repositorio y operaciones protegidas en servidor. |
+| Riesgos técnicos | Controlados | Guía de configuración, validaciones y migraciones repetibles disponibles. |
 
 ## Riesgos y mitigación
 
-| Riesgo | Responsable | Mitigación |
+| Riesgo | Responsable | Mitigación preventiva |
 |---|---|---|
-| Diferencias entre equipos al instalar PostgreSQL/PostGIS | Equipo de desarrollo | Mantener una guía de arranque y ejecutar migración, seed y prueba PostGIS al configurar cada entorno. |
-| Exposición de credenciales de desarrollo | Equipo de desarrollo | Mantener `.env` fuera del control de versiones, usar secretos por entorno y rotar credenciales antes de cualquier despliegue. |
-| Datos inválidos que afecten la planificación futura | Equipo de desarrollo y operación | Conservar validaciones de API, restricciones de base de datos y mensajes de error específicos en los formularios. |
+| Diferencias entre entornos PostgreSQL/PostGIS | Equipo técnico | Versionar requisitos, migraciones repetibles y procedimiento de verificación. |
+| Datos operativos no representativos | Equipo y stakeholder operativo | Validar datos de demostración antes de la revisión del sprint. |
+| Exposición accidental de credenciales | Equipo técnico | Excluir `.env`, publicar sólo ejemplos y usar secretos por entorno. |
 
 ## Próximos avances
 
-1. Refinar el Sprint 2 para la optimización de rutas y las reglas de capacidad/prioridad.
-2. Definir el adaptador cartográfico y preparar la visualización de rutas.
-3. Configurar una base de pruebas PostGIS en integración continua.
-4. Preparar configuración segura para un entorno de staging.
+1. Optimizar rutas respetando capacidad, prioridad y ventanas.
+2. Medir el rendimiento con 50 puntos.
+3. Mantener OpenAPI, pruebas y documentación sincronizados.
 
-## Notas
+## Historial de control de cambios
 
-El alcance de mapa, optimización automática, reoptimización, indicadores agregados y reportes no se declara completado: corresponde a historias programadas para sprints posteriores. Los datos demostrativos creados durante la validación permanecen únicamente en la base de desarrollo local.
+| Versión | Fecha | Cambio | Responsable |
+|---|---|---|---|
+| V_1_0_1 | 07/10/2026 | Mejora de navegación, trazabilidad y enfoque preventivo según retroalimentación docente. | Equipo del proyecto |
+| V_1_0_0 | 02/10/2026 | Informe final del Sprint 1. | Equipo del proyecto |

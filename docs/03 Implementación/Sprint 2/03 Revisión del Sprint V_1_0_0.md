@@ -1,12 +1,12 @@
 # Revisión del Sprint 2
 
-[← Volver al README principal](../../../README.md)
+[← Anterior: Impedimentos](<02 Registro de Impedimentos V_1_0_0.md>) · [Índice del Sprint 2](README.md) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<04 Retrospectiva del Sprint V_1_0_0.md>)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
 **Líder del proyecto:** Equipo del proyecto
 
-**Versión:** V_1_0_0
+**Versión:** V_1_0_1
 
 ## Historias de usuario completadas en este Sprint
 
@@ -38,4 +38,5 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_1 | 07/10/2026 | Navegación bidireccional incorporada. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Revisión y demostración verificable del Sprint 2. | Equipo del proyecto |

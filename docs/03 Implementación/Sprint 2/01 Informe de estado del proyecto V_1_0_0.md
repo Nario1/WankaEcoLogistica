@@ -1,12 +1,12 @@
 # Informe de estado del proyecto
 
-[← Volver al README principal](../../../README.md)
+[← Índice del Sprint 2](README.md) · [Implementación](../README.md) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_0 |
+| Versión | V_1_0_1 |
 | Fecha | 07/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
@@ -44,4 +44,5 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_1 | 07/10/2026 | Navegación documental y trazabilidad actualizadas según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Informe de cierre y estado verificable del Sprint 2. | Equipo del proyecto |

@@ -1,32 +1,43 @@
 # Revisión del Sprint 1
 
-[← Volver al README principal](../../../README.md)
+[← Anterior: Impedimentos](<02 Registro de Impedimentos V_1_0_0.md>) · [Índice del Sprint 1](README.md) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<04 Retrospectiva del Sprint V_1_0_0.md>)
 
-**Proyecto:** WankaEcoLogística Huancayo  
-**Responsable:** Equipo del proyecto  
-**Sprint goal:** disponer de una base segura para registrar pedidos, vehículos y conductores, con datos geográficos válidos y reglas operativas verificables.
+**Nombre del proyecto:** WankaEcoLogística Huancayo
 
-## Historias y enablers completados
+**Líder del proyecto:** Equipo del proyecto
+
+**Versión:** V_1_0_1
+
+## Historias de usuario completadas en este Sprint
 
 | Ítem | Resultado entregado |
 |---|---|
-| US-001 — Gestionar pedidos | Alta, listado y actualización de dirección, coordenadas, peso, prioridad y ventana horaria. Se rechazan coordenadas, pesos o ventanas inválidas. |
-| US-002 — Administrar vehículos | Registro y actualización de placa, capacidad, consumo, factor de emisión y estado. Las placas duplicadas se bloquean. |
-| US-003 — Asignar conductores | Registro de conductores, creación de rutas operativas y asignación o reasignación, con control de solapamientos y jornadas de hasta ocho horas. |
-| EN-002 — Autenticación y RBAC | Inicio de sesión con JWT, permisos por rol y bloqueo temporal después de tres intentos fallidos. |
-| EN-006 — Integridad geoespacial | PostgreSQL/PostGIS, almacenamiento de puntos con SRID 4326 y prueba de precisión para coordenadas conocidas. |
+| US-001 — Gestionar pedidos | Alta, listado y actualización de dirección, coordenadas, peso, prioridad y ventana horaria. |
+| US-002 — Administrar vehículos | Registro y actualización de placa, capacidad, consumo, factor de emisión y estado. |
+| US-003 — Asignar conductores | Registro, asignación y reasignación con control de solapamientos y jornada máxima. |
+| EN-002 — Autenticación y RBAC | JWT, permisos por rol y bloqueo temporal tras tres intentos fallidos. |
+| EN-006 — Integridad geoespacial | PostGIS, puntos SRID 4326 y cálculo reproducible de emisiones. |
 
-## Demostración realizada
+## Demostración del trabajo completado
 
-Se verificó en el entorno local el flujo completo: inicio de sesión de administrador, creación de un vehículo activo, registro de un pedido en Huancayo, alta de un conductor, creación de una ruta de cuatro horas, asignación del conductor y cálculo de emisiones. La API devolvió respuestas exitosas para cada operación válida y muestra los campos específicos cuando una validación devuelve `400`.
+Se presentó el flujo de inicio de sesión, creación de vehículo activo, registro de pedido en Huancayo, alta de conductor, creación de ruta manual, asignación sin conflictos y cálculo de emisiones. También se demostraron rechazos por datos inválidos, placa duplicada, permisos insuficientes y conflicto horario.
 
 ## Evidencia de calidad
 
-- Migración de base de datos ejecutada de forma repetible.
-- `npm test`: 16 de 16 pruebas aprobadas, incluida la integración PostGIS; cobertura de líneas: 87.75 %.
-- `npm run lint` y `npm run format:check`: aprobados en backend y frontend.
-- `npm run build`: bundle del frontend generado correctamente.
+- 16 de 16 pruebas aprobadas, incluida la integración PostGIS.
+- Cobertura de líneas de 87,75 %.
+- Lint, formato y build aprobados en backend y frontend.
+- Migración repetible, contrato OpenAPI y variables de ejemplo disponibles.
 
-## Pendientes para el siguiente sprint
+## Pendientes
 
-La optimización automática de rutas, el mapa interactivo, la reoptimización por incidencias, los indicadores consolidados y los reportes pertenecen a los sprints posteriores definidos en el backlog. Para el despliegue fuera de desarrollo se deben reemplazar las credenciales locales y configurar secretos, HTTPS y una base de datos administrada.
+- Optimización automática de rutas y benchmark de 50 puntos: Sprint 2.
+- Mapa, reoptimización, indicadores y reportes: backlog posterior.
+- Despliegue en staging: condicionado a infraestructura y secretos del entorno.
+
+## Historial de control de cambios
+
+| Versión | Fecha | Cambio | Responsable |
+|---|---|---|---|
+| V_1_0_1 | 07/10/2026 | Incorporación de navegación completa y trazabilidad de la revisión. | Equipo del proyecto |
+| V_1_0_0 | 02/10/2026 | Revisión y evidencia del Sprint 1. | Equipo del proyecto |
