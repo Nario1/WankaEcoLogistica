@@ -7,7 +7,7 @@
 | Proyecto | WankaEcoLogística Huancayo |
 | Versión | V_1_0_0 |
 | Fecha | 11/09/2026 |
-| Estado | Guía de configuración y evidencia pendiente |
+| Estado | Backlog de planificación; ejecución del Sprint 1 documentada en `docs/3. Implementación/` |
 
 Este documento especifica la configuración que debe registrarse en Jira Software para el backlog de la Fase 02. No existe evidencia visual de una instancia Jira en el repositorio; por tanto, los espacios siguientes son marcadores y no capturas fabricadas.
 
@@ -100,8 +100,21 @@ Como evidencia complementaria del espacio Jira, sin sustituir la evidencia espec
 
 Cada captura se recorto exclusivamente en el panel de Jira que demuestra el punto indicado: sin escritorio, barra de tareas, pestañas irrelevantes ni áreas externas al producto.
 
+## 7. Sprint 2
+
+**Sprint Goal:** optimizar hasta 50 pedidos sin incumplir capacidad, prioridad, ventanas ni disponibilidad, con rendimiento medido y contrato API actualizado.
+
+| Ítem Jira | SP | Estado al cierre | Evidencia en repositorio |
+|---|---:|---|---|
+| US-004 | 13 | Done | `backend/src/modules/optimization/`, interfaz de rutas y migración 002. |
+| EN-001 | 5 | Done | Prueba de rendimiento P95 con 50 puntos. |
+| EN-007 | 8 | Done local | Pruebas, cobertura, lint, formato, build y OpenAPI 0.2.0. |
+
+La actualización refleja el estado comprobable del repositorio; no afirma cambios en una instancia Jira ni un despliegue de staging sin evidencia externa.
+
 ## Historial de Control de Cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_1_0 | 07/10/2026 | Registro documental del alcance y cierre del Sprint 2. | Equipo |
 | V_1_0_0 | 11/09/2026 | Creación de la guía de artefactos Jira | Equipo |
