@@ -8,6 +8,7 @@ import { createVehicleRouter } from "./modules/vehicles/vehicle.routes.js";
 import { createDriverRouter } from "./modules/drivers/driver.routes.js";
 import { createRouteRouter } from "./modules/routes/route.routes.js";
 import { createEmissionsRouter } from "./modules/sustainability/emissions.routes.js";
+import { createOptimizationRouter } from "./modules/optimization/optimization.routes.js";
 import { errorHandler, notFoundHandler } from "./shared/http.js";
 
 export function createApp({ config, services }) {
@@ -43,6 +44,13 @@ export function createApp({ config, services }) {
     createRouteRouter({ routeService: services.routeService, authenticate }),
   );
   app.use("/api/emissions", createEmissionsRouter({ authenticate }));
+  app.use(
+    "/api/optimizations",
+    createOptimizationRouter({
+      optimizationService: services.optimizationService,
+      authenticate,
+    }),
+  );
   app.use(notFoundHandler);
   app.use(errorHandler);
   return app;

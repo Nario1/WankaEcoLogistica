@@ -2,7 +2,8 @@ import { firstRow } from "./base.js";
 
 const columns = `r.ruta_id AS id, r.conductor_id AS "driverId", r.vehiculo_id AS "vehicleId",
   r.inicio AS "startsAt", r.fin AS "endsAt", r.estado AS status,
-  u.nombre AS "driverName", v.placa AS "vehiclePlate"`;
+  r.distancia_km::float AS "distanceKm", r.peso_total_kg::float AS "totalWeightKg",
+  r.optimizada AS optimized, u.nombre AS "driverName", v.placa AS "vehiclePlate"`;
 
 export class PgRouteRepository {
   constructor(pool) {

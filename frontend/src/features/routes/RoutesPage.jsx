@@ -18,6 +18,7 @@ export default function RoutesPage() {
   const resource = useApiResource("/routes");
   const [vehicles, setVehicles] = useState([]);
   const [drivers, setDrivers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [optionsError, setOptionsError] = useState("");
   const [dialog, setDialog] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -26,47 +27,66 @@ export default function RoutesPage() {
     Promise.all([
       apiRequest("/vehicles", { token: session.token }),
       apiRequest("/drivers", { token: session.token }),
+      apiRequest("/orders", { token: session.token }),
     ])
-      .then(([vehicleData, driverData]) => {
+      .then(([vehicleData, driverData, orderData]) => {
         setVehicles(
           vehicleData.filter((vehicle) => vehicle.status === "ACTIVE"),
         );
         setDrivers(driverData.filter((driver) => driver.status === "ACTIVE"));
+        setOrders(orderData.filter((order) => order.status === "PENDING"));
       })
-      .catch((requestError) => {
-        if (requestError.status === 401) {
-          logout();
-          return;
-        }
-        setOptionsError(formatApiError(requestError));
+      .catch((error) => {
+        if (error.status === 401) return logout();
+        setOptionsError(formatApiError(error));
       });
   }, [logout, session.token]);
+
+  async function submitResource(method, path, body) {
+    setSubmitting(true);
+    try {
+      await resource.mutate(method, path, body);
+      setDialog(null);
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   async function createRoute(event) {
     event.preventDefault();
     const values = Object.fromEntries(new FormData(event.currentTarget));
     values.startsAt = new Date(values.startsAt).toISOString();
     values.endsAt = new Date(values.endsAt).toISOString();
-    setSubmitting(true);
-    try {
-      await resource.mutate("POST", "", values);
-      setDialog(null);
-    } catch {
-      /* El hook presenta el error seguro de la API. */
-    } finally {
-      setSubmitting(false);
-    }
+    await submitResource("POST", "", values).catch(() => {});
   }
 
   async function assignDriver(event) {
     event.preventDefault();
     const values = Object.fromEntries(new FormData(event.currentTarget));
+    await submitResource("PUT", `/${dialog.id}/driver`, values).catch(() => {});
+  }
+
+  async function optimizeRoute(event) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const orderIds = formData.getAll("orderIds");
     setSubmitting(true);
     try {
-      await resource.mutate("PUT", `/${dialog.id}/driver`, values);
+      await apiRequest("/optimizations", {
+        token: session.token,
+        method: "POST",
+        body: JSON.stringify({
+          orderIds,
+          startsAt: new Date(formData.get("startsAt")).toISOString(),
+        }),
+      });
+      setOrders((current) =>
+        current.filter((order) => !orderIds.includes(order.id)),
+      );
+      await resource.load();
       setDialog(null);
-    } catch {
-      /* El hook presenta el error seguro de la API. */
+    } catch (error) {
+      setOptionsError(formatApiError(error));
     } finally {
       setSubmitting(false);
     }
@@ -74,13 +94,20 @@ export default function RoutesPage() {
 
   return (
     <ResourcePage
-      title="Asignación de conductores"
-      description="Rutas operativas manuales del Sprint 1; la optimización pertenece al siguiente incremento."
+      title="Planificación de rutas"
+      description="Crea rutas manuales u optimiza hasta 50 pedidos respetando capacidad, prioridad y ventanas horarias."
       {...resource}
       error={resource.error || optionsError}
-      actionLabel="Nueva ruta operativa"
+      actionLabel="Nueva ruta manual"
       onAction={() => setDialog({ type: "route" })}
     >
+      <Button
+        sx={{ mb: 2 }}
+        variant="outlined"
+        onClick={() => setDialog({ type: "optimization" })}
+      >
+        Optimizar pedidos
+      </Button>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -88,6 +115,7 @@ export default function RoutesPage() {
             <TableCell>Inicio</TableCell>
             <TableCell>Fin</TableCell>
             <TableCell>Conductor</TableCell>
+            <TableCell>Resultado</TableCell>
             <TableCell />
           </TableRow>
         </TableHead>
@@ -102,6 +130,11 @@ export default function RoutesPage() {
                 {new Date(route.endsAt).toLocaleString("es-PE")}
               </TableCell>
               <TableCell>{route.driverName ?? "Sin asignar"}</TableCell>
+              <TableCell>
+                {route.optimized
+                  ? `${route.distanceKm ?? 0} km / ${route.totalWeightKg ?? 0} kg`
+                  : "Manual"}
+              </TableCell>
               <TableCell>
                 <Button onClick={() => setDialog({ type: "driver", ...route })}>
                   {route.driverId ? "Reasignar" : "Asignar"}
@@ -166,6 +199,40 @@ export default function RoutesPage() {
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
                 {driver.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </FormDialog>
+      )}
+      {dialog?.type === "optimization" && (
+        <FormDialog
+          open
+          title="Optimizar ruta"
+          onClose={() => setDialog(null)}
+          onSubmit={optimizeRoute}
+          submitting={submitting}
+        >
+          <TextField
+            name="startsAt"
+            label="Inicio de jornada"
+            type="datetime-local"
+            required
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            name="orderIds"
+            label="Pedidos pendientes"
+            select
+            required
+            SelectProps={{ multiple: true }}
+            defaultValue={[]}
+            helperText="Seleccione entre 1 y 50 pedidos"
+          >
+            {orders.map((order) => (
+              <MenuItem key={order.id} value={order.id}>
+                {order.priority === "HIGH" ? "Alta · " : ""}
+                {order.address} · {order.weightKg} kg · {order.windowStart}-
+                {order.windowEnd}
               </MenuItem>
             ))}
           </TextField>

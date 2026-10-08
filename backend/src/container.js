@@ -4,11 +4,13 @@ import { OrderService } from "./modules/orders/order.service.js";
 import { VehicleService } from "./modules/vehicles/vehicle.service.js";
 import { DriverService } from "./modules/drivers/driver.service.js";
 import { RouteService } from "./modules/routes/route.service.js";
+import { OptimizationService } from "./modules/optimization/optimization.service.js";
 import { PgAuditRepository } from "./infrastructure/postgres/audit.repository.js";
 import { PgOrderRepository } from "./infrastructure/postgres/order.repository.js";
 import { PgRouteRepository } from "./infrastructure/postgres/route.repository.js";
 import { PgUserRepository } from "./infrastructure/postgres/user.repository.js";
 import { PgVehicleRepository } from "./infrastructure/postgres/vehicle.repository.js";
+import { PgOptimizationRepository } from "./infrastructure/postgres/optimization.repository.js";
 
 export function createContainer(config) {
   const pool = createPool(config);
@@ -17,6 +19,7 @@ export function createContainer(config) {
   const orderRepository = new PgOrderRepository(pool);
   const vehicleRepository = new PgVehicleRepository(pool);
   const routeRepository = new PgRouteRepository(pool);
+  const optimizationRepository = new PgOptimizationRepository(pool);
   const common = { auditRepository };
 
   return {
@@ -35,6 +38,10 @@ export function createContainer(config) {
         routeRepository,
         userRepository,
         vehicleRepository,
+        ...common,
+      }),
+      optimizationService: new OptimizationService({
+        optimizationRepository,
         ...common,
       }),
     },

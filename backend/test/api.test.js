@@ -34,6 +34,7 @@ const services = {
     create: async () => ({}),
     assignDriver: async () => ({}),
   },
+  optimizationService: { optimize: async () => ({ id: "route-optimized" }) },
 };
 
 async function withServer(run) {
