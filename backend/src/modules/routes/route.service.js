@@ -4,6 +4,7 @@ import {
   requireDateTime,
   requireUuid,
 } from "../../shared/validation.js";
+import { DISPATCH_DEPOT } from "../optimization/optimization.service.js";
 
 const MAX_DRIVING_HOURS = 8;
 
@@ -13,11 +14,13 @@ export class RouteService {
     userRepository,
     vehicleRepository,
     auditRepository,
+    roadRoutingClient,
   }) {
     this.routeRepository = routeRepository;
     this.userRepository = userRepository;
     this.vehicleRepository = vehicleRepository;
     this.auditRepository = auditRepository;
+    this.roadRoutingClient = roadRoutingClient;
   }
 
   list() {
@@ -29,6 +32,20 @@ export class RouteService {
     const route = await this.routeRepository.findById(routeId);
     if (!route) throw notFound("Ruta");
     return this.routeRepository.listStops(routeId);
+  }
+
+  async getNavigation(routeId) {
+    requireUuid(routeId);
+    const route = await this.routeRepository.findById(routeId);
+    if (!route) throw notFound("Ruta");
+    const stops = await this.routeRepository.listStops(routeId);
+    if (!route.optimized || !stops.length) {
+      throw conflict("La ruta todavía no tiene paradas optimizadas");
+    }
+    return this.roadRoutingClient.calculate(
+      [DISPATCH_DEPOT, ...stops],
+      route.startsAt,
+    );
   }
 
   async create(input, actorId) {

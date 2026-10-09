@@ -18,6 +18,14 @@ export function createRouteRouter({ routeService, authenticate }) {
       response.json({ data: await routeService.listStops(request.params.id) }),
     ),
   );
+  router.get(
+    "/:id/navigation",
+    asyncHandler(async (request, response) =>
+      response.json({
+        data: await routeService.getNavigation(request.params.id),
+      }),
+    ),
+  );
   router.post(
     "/",
     asyncHandler(async (request, response) => {

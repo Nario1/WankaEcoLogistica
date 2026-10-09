@@ -38,6 +38,7 @@ export default function RoutesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [mappedRoute, setMappedRoute] = useState(null);
   const [stops, setStops] = useState([]);
+  const [navigation, setNavigation] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
 
   useEffect(() => {
@@ -90,16 +91,23 @@ export default function RoutesPage() {
     setMappedRoute(route);
     setMapLoading(true);
     setOptionsError("");
-    try {
-      setStops(
-        await apiRequest(`/routes/${route.id}/stops`, { token: session.token }),
-      );
-    } catch (error) {
-      setStops([]);
-      setOptionsError(formatApiError(error));
-    } finally {
-      setMapLoading(false);
+    setStops([]);
+    setNavigation(null);
+    const [stopsResult, navigationResult] = await Promise.allSettled([
+      apiRequest(`/routes/${route.id}/stops`, { token: session.token }),
+      apiRequest(`/routes/${route.id}/navigation`, { token: session.token }),
+    ]);
+    setStops(stopsResult.status === "fulfilled" ? stopsResult.value : []);
+    setNavigation(
+      navigationResult.status === "fulfilled" ? navigationResult.value : null,
+    );
+    const failure = [stopsResult, navigationResult].find(
+      (result) => result.status === "rejected",
+    );
+    if (failure) {
+      setOptionsError(formatApiError(failure.reason));
     }
+    setMapLoading(false);
   }
 
   async function optimizeRoute(event) {
@@ -136,15 +144,15 @@ export default function RoutesPage() {
       );
       setSelectedOrderIds([]);
       await resource.load();
-      setMappedRoute({
+      const mapped = {
         ...optimized,
         optimized: true,
         vehiclePlate:
           vehicles.find((vehicle) => vehicle.id === optimized.vehicleId)
             ?.plate ?? "Vehículo asignado",
-      });
-      setStops(optimized.orders);
+      };
       setDialog(null);
+      await showRoute(mapped);
     } catch (error) {
       setOptionsError(formatApiError(error));
     } finally {
@@ -228,7 +236,12 @@ export default function RoutesPage() {
           ))}
         </TableBody>
       </Table>
-      <RouteMap route={mappedRoute} stops={stops} loading={mapLoading} />
+      <RouteMap
+        route={mappedRoute}
+        stops={stops}
+        navigation={navigation}
+        loading={mapLoading}
+      />
       {dialog?.type === "route" && (
         <FormDialog
           open

@@ -34,6 +34,7 @@ const services = {
   routeService: {
     list: async () => [],
     listStops: async () => [],
+    getNavigation: async () => ({ geometry: [] }),
     create: async () => ({}),
     assignDriver: async () => ({}),
   },

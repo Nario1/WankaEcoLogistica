@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
 import {
   CircleMarker,
   MapContainer,
@@ -33,18 +34,21 @@ FitRoute.propTypes = {
   positions: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
 };
 
-export default function RouteMap({ route, stops, loading }) {
+export default function RouteMap({ route, stops, navigation, loading }) {
   const stopPositions = stops.map((stop) => [stop.latitude, stop.longitude]);
   const depotPosition = [DISPATCH_DEPOT.latitude, DISPATCH_DEPOT.longitude];
-  const positions = route ? [depotPosition, ...stopPositions] : [];
+  const markerPositions = route ? [depotPosition, ...stopPositions] : [];
+  const roadPositions = navigation?.geometry ?? [];
+  const positions = roadPositions.length ? roadPositions : markerPositions;
   return (
     <Box sx={{ mt: 3 }}>
       <Stack direction={{ xs: "column", sm: "row" }} gap={1} sx={{ mb: 1 }}>
         <Typography variant="h6">Mapa de la ruta optimizada</Typography>
         {route && (
           <Typography color="text.secondary">
-            {route.vehiclePlate} · {route.distanceKm ?? 0} km · {stops.length}{" "}
-            paradas
+            {route.vehiclePlate} ·{" "}
+            {navigation?.distanceKm ?? route.distanceKm ?? 0} km ·{" "}
+            {navigation?.durationMinutes ?? "—"} min · {stops.length} paradas
           </Typography>
         )}
       </Stack>
@@ -68,9 +72,9 @@ export default function RouteMap({ route, stops, loading }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <FitRoute positions={positions} />
-          {positions.length > 1 && (
+          {roadPositions.length > 1 && (
             <Polyline
-              positions={positions}
+              positions={roadPositions}
               pathOptions={{ color: "#087f5b", weight: 5, opacity: 0.8 }}
             />
           )}
@@ -117,11 +121,26 @@ export default function RouteMap({ route, stops, loading }) {
           ))}
         </MapContainer>
       </Box>
+      {route && navigation && (
+        <Alert severity={navigation.trafficConsidered ? "success" : "info"}>
+          Trazado vial calculado por {navigation.provider}; respeta la red de
+          calles y sentidos de circulación.
+          {navigation.trafficConsidered
+            ? ` Tráfico incluido; demora estimada: ${navigation.trafficDelayMinutes} min.`
+            : " El tráfico en tiempo real requiere configurar TOMTOM_API_KEY en el backend."}
+        </Alert>
+      )}
+      {route && !navigation && !loading && (
+        <Alert severity="warning">
+          No se pudo obtener el trazado vial. No se dibuja una línea recta como
+          si fuera una ruta válida.
+        </Alert>
+      )}
       <Typography variant="caption" color="text.secondary">
         {loading
           ? "Cargando paradas…"
           : route && stops.length
-            ? "La línea parte del local y conecta las paradas en el orden calculado; no representa navegación vial giro a giro."
+            ? "La línea sigue calles transitables desde el local hasta las paradas en el orden calculado."
             : "Seleccione una ruta optimizada para visualizar sus paradas."}
       </Typography>
     </Box>
@@ -146,4 +165,13 @@ RouteMap.propTypes = {
     }),
   ).isRequired,
   loading: PropTypes.bool,
+  navigation: PropTypes.shape({
+    provider: PropTypes.string.isRequired,
+    trafficConsidered: PropTypes.bool.isRequired,
+    distanceKm: PropTypes.number.isRequired,
+    durationMinutes: PropTypes.number.isRequired,
+    trafficDelayMinutes: PropTypes.number,
+    geometry: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number).isRequired)
+      .isRequired,
+  }),
 };

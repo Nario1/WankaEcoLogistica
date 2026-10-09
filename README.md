@@ -4,7 +4,7 @@ Aplicación web para gestionar la logística de última milla en Huancayo. El in
 
 ## Estado actual
 
-Los Sprints 1 y 2 están implementados para desarrollo local. El sistema gestiona pedidos, vehículos, conductores y rutas; autentica por JWT y RBAC; conserva coordenadas PostGIS; calcula emisiones; optimiza hasta 50 pedidos sobre la ruta manual seleccionada desde el local fijo `-12.07201013486951, -75.20516872975998`; y muestra la salida y sus paradas ordenadas sobre un mapa OpenStreetMap.
+Los Sprints 1 y 2 están implementados para desarrollo local. El sistema gestiona pedidos, vehículos, conductores y rutas; autentica por JWT y RBAC; conserva coordenadas PostGIS; calcula emisiones; optimiza hasta 50 pedidos sobre la ruta manual seleccionada desde el local fijo `-12.07201013486951, -75.20516872975998`; y calcula el trazado sobre calles transitables, sin diagonales entre puntos.
 
 Permanecen planificados para sprints posteriores el seguimiento móvil/offline del conductor, la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
 
@@ -13,6 +13,7 @@ Permanecen planificados para sprints posteriores el seguimiento móvil/offline d
 - `frontend/`: React 19, Vite 8 y Material UI 9.
 - `backend/`: Node.js 20+, Express 5, JWT y bcrypt; módulos, servicios y repositorios.
 - Datos: PostgreSQL 15+ con PostGIS y migraciones SQL incrementales.
+- Navegación: OSRM/OpenStreetMap para red vial o TomTom Routing para incorporar tráfico actual e histórico.
 - Calidad: Node test runner con cobertura, ESLint y Prettier.
 
 El contrato HTTP se encuentra en [backend/openapi.yaml](backend/openapi.yaml).
@@ -54,6 +55,20 @@ npm run dev
 ```
 
 Abra `http://localhost:5173`. La API responde en `http://localhost:3000` y su salud se consulta en `http://localhost:3000/health`.
+
+### Proveedor de navegación
+
+Configure una de estas opciones en `backend/.env`:
+
+```dotenv
+# Trazado vial y sentidos de circulación, sin tráfico en tiempo real:
+OSRM_BASE_URL=https://router.project-osrm.org
+
+# Opcional y recomendado para tráfico actual/histórico:
+TOMTOM_API_KEY=su_clave_tomtom
+```
+
+Si existe `TOMTOM_API_KEY`, el backend prioriza TomTom Traffic. Sin ella utiliza OSRM. En ambos casos, las coordenadas del local y las paradas se envían al proveedor configurado para calcular la geometría; use una instancia OSRM propia si la política de privacidad no permite compartirlas con terceros.
 
 ## Calidad
 

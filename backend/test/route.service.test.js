@@ -29,6 +29,7 @@ const route = {
   startsAt: "2026-10-02T08:00:00Z",
   endsAt: "2026-10-02T16:00:00Z",
   driverId: null,
+  optimized: true,
 };
 const driver = {
   id: "00000000-0000-4000-8000-000000000002",
@@ -45,6 +46,16 @@ function makeService(conflict = false) {
       { id: "00000000-0000-4000-8000-000000000001", status: "ACTIVE" },
     ]),
     auditRepository: new MemoryAuditRepository(),
+    roadRoutingClient: {
+      calculate: async (points) => ({
+        provider: "TEST",
+        trafficConsidered: false,
+        geometry: points.map(({ latitude, longitude }) => [
+          latitude,
+          longitude,
+        ]),
+      }),
+    },
   });
 }
 
@@ -83,4 +94,23 @@ test("lista las paradas ordenadas de una ruta existente", async () => {
     makeService().listStops("00000000-0000-4000-8000-000000000099"),
     { code: "NOT_FOUND" },
   );
+});
+
+test("calcula navegación vial desde el local hasta las paradas", async () => {
+  const service = makeService();
+  service.routeRepository.listStops = async () => [
+    {
+      id: "stop-1",
+      latitude: -12.063181,
+      longitude: -75.205992,
+      deliveryOrder: 1,
+    },
+  ];
+  const navigation = await service.getNavigation(route.id);
+  assert.equal(navigation.provider, "TEST");
+  assert.deepEqual(
+    navigation.geometry[0],
+    [-12.07201013486951, -75.20516872975998],
+  );
+  assert.deepEqual(navigation.geometry[1], [-12.063181, -75.205992]);
 });

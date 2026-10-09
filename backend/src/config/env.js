@@ -24,5 +24,7 @@ export function loadConfig(env = process.env) {
     jwtSecret: jwtSecret ?? "test-secret-that-is-at-least-32-chars",
     jwtExpiresIn: env.JWT_EXPIRES_IN ?? "15m",
     corsOrigin: env.CORS_ORIGIN ?? "http://localhost:5173",
+    osrmBaseUrl: env.OSRM_BASE_URL ?? "https://router.project-osrm.org",
+    tomtomApiKey: env.TOMTOM_API_KEY,
   };
 }

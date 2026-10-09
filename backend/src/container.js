@@ -11,6 +11,7 @@ import { PgRouteRepository } from "./infrastructure/postgres/route.repository.js
 import { PgUserRepository } from "./infrastructure/postgres/user.repository.js";
 import { PgVehicleRepository } from "./infrastructure/postgres/vehicle.repository.js";
 import { PgOptimizationRepository } from "./infrastructure/postgres/optimization.repository.js";
+import { RoadRoutingClient } from "./infrastructure/routing/road-routing.client.js";
 
 export function createContainer(config) {
   const pool = createPool(config);
@@ -20,6 +21,7 @@ export function createContainer(config) {
   const vehicleRepository = new PgVehicleRepository(pool);
   const routeRepository = new PgRouteRepository(pool);
   const optimizationRepository = new PgOptimizationRepository(pool);
+  const roadRoutingClient = new RoadRoutingClient(config);
   const common = { auditRepository };
 
   return {
@@ -38,6 +40,7 @@ export function createContainer(config) {
         routeRepository,
         userRepository,
         vehicleRepository,
+        roadRoutingClient,
         ...common,
       }),
       optimizationService: new OptimizationService({

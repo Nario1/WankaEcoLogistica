@@ -21,3 +21,6 @@ export const notFound = (resource) =>
   new AppError(404, "NOT_FOUND", `${resource} no encontrado`);
 
 export const conflict = (message) => new AppError(409, "CONFLICT", message);
+
+export const serviceUnavailable = (message) =>
+  new AppError(503, "SERVICE_UNAVAILABLE", message);

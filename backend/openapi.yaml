@@ -133,6 +133,20 @@ paths:
       responses:
         "200": { description: Paradas con coordenadas y orden de entrega }
         "404": { description: Ruta inexistente }
+  /api/routes/{id}/navigation:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Calcular el trazado sobre la red vial para una ruta optimizada
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Geometría vial, distancia, duración, proveedor y uso de tráfico
+        "409": { description: Ruta sin paradas optimizadas }
+        "503": { description: Proveedor de navegación no disponible }
   /api/optimizations:
     post:
       security: [{ bearerAuth: [] }]
