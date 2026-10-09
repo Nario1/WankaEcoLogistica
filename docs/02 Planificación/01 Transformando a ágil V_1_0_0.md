@@ -1,6 +1,6 @@
 # Transformando requisitos a ágil
 
-[← Volver al README Principal](../../README.md)
+[← Inicio: Restricciones](<../01 Inicio/13. Restricciones V_1_0_0.md>) · [README principal](../../README.md) · [Siguiente: Artefactos Jira →](<02 Artefactos Jira V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|

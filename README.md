@@ -57,6 +57,30 @@ El contrato HTTP está disponible en [backend/openapi.yaml](backend/openapi.yaml
 - Extensión PostGIS habilitada.
 - Una clave TomTom opcional para rutas con tráfico.
 
+## Inicio rápido en Windows
+
+El flujo resumido del README anterior se conserva. Después de configurar las variables descritas en las siguientes secciones, ejecute:
+
+```powershell
+# Terminal 1
+cd backend
+npm install
+Copy-Item .env.example .env
+npm run db:migrate
+npm run db:seed
+npm run dev
+```
+
+```powershell
+# Terminal 2
+cd frontend
+npm install
+Copy-Item .env.example .env
+npm run dev
+```
+
+Abra `http://localhost:5173`. La API responde en `http://localhost:3000` y su estado se consulta en `http://localhost:3000/health`.
+
 ## Configuración del backend
 
 Desde la raíz del proyecto:
@@ -189,13 +213,31 @@ No utilice la base de desarrollo o producción como base de pruebas.
 
 ## Estructura de documentación
 
-### Inicio y planificación
+### Inicio
 
-- [Requisitos funcionales](<docs/01 Inicio/06. Requisitos funcionales V_1_0_0.md>)
-- [Reglas de negocio](<docs/01 Inicio/09. Reglas de negocio V_1_0_0.md>)
-- [Arquitectura C4](<docs/01 Inicio/12. Modelo C4 V_1_0_0.md>)
-- [Backlog y planificación](<docs/02 Planificación/01 Transformando a ágil V_1_0_0.md>)
-- [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>)
+1. [Selección del enfoque](<docs/01 Inicio/01. Selección del enfoque del proyecto V_1_0_0.md>)
+2. [Acta de Constitución](<docs/01 Inicio/02. Acta de Constitución V_1_0_0.md>)
+3. [Declaración de la visión](<docs/01 Inicio/03. Declaración de la visión V_1_0_0.md>)
+4. [Supuestos y restricciones](<docs/01 Inicio/04. Registro de supuestos y restricciones V_1_0_0.md>)
+5. [Registro de interesados](<docs/01 Inicio/05. Registro de interesados V_1_0_0.md>)
+6. [Requisitos funcionales](<docs/01 Inicio/06. Requisitos funcionales V_1_0_0.md>)
+7. [Requisitos no funcionales](<docs/01 Inicio/07. Requisitos no funcionales V_1_0_0.md>)
+8. [Usuarios](<docs/01 Inicio/08. Usuarios V_1_0_0.md>)
+9. [Reglas de negocio](<docs/01 Inicio/09. Reglas de negocio V_1_0_0.md>)
+10. [Stack tecnológico](<docs/01 Inicio/10. Stack tecnológico V_1_0_0.md>)
+11. [Base de datos](<docs/01 Inicio/11. Base de datos V_1_0_0.md>)
+12. [Arquitectura C4](<docs/01 Inicio/12. Modelo C4 V_1_0_0.md>)
+13. [Restricciones](<docs/01 Inicio/13. Restricciones V_1_0_0.md>)
+
+### Planificación
+
+1. [Transformación a ágil y backlog](<docs/02 Planificación/01 Transformando a ágil V_1_0_0.md>)
+2. [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>)
+3. [Registro de riesgos](<docs/02 Planificación/03 Registro de riesgos V_1_0_0.md>)
+4. [Presupuesto](<docs/02 Planificación/04 Presupuesto del proyecto V_1_0_0.md>)
+
+### Estándares del repositorio
+
 - [Estándares de calidad](CODE_QUALITY.md)
 
 ### Sprint 1

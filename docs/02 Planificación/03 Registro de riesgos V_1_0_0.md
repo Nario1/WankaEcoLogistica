@@ -1,6 +1,6 @@
 # Registro de riesgos
 
-[← Volver al README Principal](../../README.md)
+[← Anterior: Artefactos Jira](<02 Artefactos Jira V_1_0_0.md>) · [README principal](../../README.md) · [Siguiente: Presupuesto →](<04 Presupuesto del proyecto V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|

@@ -1,6 +1,6 @@
 # Artefactos Jira
 
-[← Volver al README Principal](../../README.md)
+[← Anterior: Transformación ágil](<01 Transformando a ágil V_1_0_0.md>) · [README principal](../../README.md) · [Siguiente: Riesgos →](<03 Registro de riesgos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|

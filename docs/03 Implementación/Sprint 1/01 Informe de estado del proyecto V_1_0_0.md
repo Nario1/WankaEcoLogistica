@@ -1,6 +1,6 @@
 # Informe de estado del proyecto
 
-[← README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
+[← Planificación: Presupuesto](<../../02 Planificación/04 Presupuesto del proyecto V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|

@@ -1,6 +1,6 @@
 # Presupuesto del proyecto
 
-[← Volver al README Principal](../../README.md)
+[← Anterior: Riesgos](<03 Registro de riesgos V_1_0_0.md>) · [README principal](../../README.md) · [Implementación Sprint 1 →](<../03 Implementación/Sprint 1/01 Informe de estado del proyecto V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|
