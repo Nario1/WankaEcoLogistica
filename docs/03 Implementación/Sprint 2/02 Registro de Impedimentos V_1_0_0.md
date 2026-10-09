@@ -12,7 +12,7 @@
 |---|---|---|---|---|---|---|---|---|
 | IMP-S2-001 | 03/10/2026 | La ubicación operativa del depósito y el tiempo medio de atención no contaban aún con aprobación formal; podían alterar la estimación de la ruta. | Alta | Equipo y stakeholder operativo | 04/10/2026 | Resuelto | 04/10/2026 | Se acordaron parámetros controlados para el incremento y se documentó su validación definitiva como acción de refinamiento. |
 | IMP-S2-002 | 04/10/2026 | La disponibilidad limitada del stakeholder podía retrasar la validación de prioridad y ventanas horarias. | Media | Líder del proyecto | 05/10/2026 | Resuelto | 05/10/2026 | Se envió previamente la matriz de escenarios y se concentraron las decisiones en una sesión con agenda y criterios de aceptación. |
-| IMP-S2-003 | 05/10/2026 | El entorno de integración continua todavía no proporcionaba PostgreSQL/PostGIS aislado, lo que podía limitar la evidencia automática. | Media | Equipo técnico | 07/10/2026 | Mitigado | 07/10/2026 | Se ejecutó localmente la suite completa contra una base migrada, con 19 de 19 pruebas aprobadas; la automatización en CI queda como mejora planificada. |
+| IMP-S2-003 | 05/10/2026 | El entorno de integración continua todavía no proporcionaba PostgreSQL/PostGIS aislado, lo que podía limitar la evidencia automática. | Media | Equipo técnico | 07/10/2026 | Mitigado | 07/10/2026 | Se ejecutó localmente la suite completa contra una base migrada, con 24 de 24 pruebas aprobadas; la automatización en CI queda como mejora planificada. |
 
 No quedaron impedimentos que bloqueen el incremento. Las mejoras residuales tienen responsable, fecha objetivo e indicador de cierre en la retrospectiva.
 

@@ -1,15 +1,18 @@
 import { badRequest, conflict } from "../../shared/errors.js";
-import {
-  assertObject,
-  requireDateTime,
-  requireUuid,
-} from "../../shared/validation.js";
+import { assertObject, requireUuid } from "../../shared/validation.js";
 
 const MAX_ORDERS = 50;
 const AVERAGE_SPEED_KMH = 25;
 const SERVICE_MINUTES = 5;
 const MAX_ROUTE_HOURS = 8;
 const OPERATION_TIME_ZONE = "America/Lima";
+const SAFE_CAPACITY_FACTOR = 0.95;
+
+export const DISPATCH_DEPOT = Object.freeze({
+  name: "Local de despacho",
+  latitude: -12.07201013486951,
+  longitude: -75.20516872975998,
+});
 
 function minutes(time) {
   const [hours, mins] = time.split(":").map(Number);
@@ -48,17 +51,20 @@ function validateInput(input) {
     input.orderIds.length < 1 ||
     input.orderIds.length > MAX_ORDERS
   ) {
-    throw badRequest("Datos invÃ¡lidos", {
+    throw badRequest("Datos inválidos", {
       orderIds: `Debe incluir entre 1 y ${MAX_ORDERS} pedidos`,
     });
   }
   const orderIds = input.orderIds.map((id) => requireUuid(id, "orderIds"));
   if (new Set(orderIds).size !== orderIds.length) {
-    throw badRequest("Datos invÃ¡lidos", {
+    throw badRequest("Datos inválidos", {
       orderIds: "No debe contener duplicados",
     });
   }
-  return { orderIds, startsAt: requireDateTime(input.startsAt, "startsAt") };
+  return {
+    orderIds,
+    routeId: requireUuid(input.routeId, "routeId"),
+  };
 }
 
 export function buildOptimizedSequence(orders, startsAt, depot) {
@@ -78,9 +84,16 @@ export function buildOptimizedSequence(orders, startsAt, depot) {
           elapsedMinutes +
           (legDistance / AVERAGE_SPEED_KMH) * 60;
         const waiting = Math.max(0, minutes(order.windowStart) - arrival);
-        return { order, legDistance, arrival, waiting };
+        const serviceStart = arrival + waiting;
+        const windowStart = minutes(order.windowStart);
+        const windowEnd = minutes(order.windowEnd);
+        const deadline =
+          order.priority === "HIGH"
+            ? windowStart + (windowEnd - windowStart) / 2
+            : windowEnd;
+        return { order, legDistance, arrival, waiting, serviceStart, deadline };
       })
-      .filter(({ order, arrival }) => arrival <= minutes(order.windowEnd))
+      .filter(({ serviceStart, deadline }) => serviceStart <= deadline)
       .sort((left, right) => {
         const priority =
           Number(right.order.priority === "HIGH") -
@@ -124,10 +137,10 @@ export class OptimizationService {
   }
 
   async optimize(input, actorId) {
-    const { orderIds, startsAt } = validateInput(input);
+    const { orderIds, routeId } = validateInput(input);
     const resources = await this.optimizationRepository.getResources(
       orderIds,
-      startsAt,
+      routeId,
     );
     if (resources.orders.length !== orderIds.length) {
       throw conflict(
@@ -138,34 +151,58 @@ export class OptimizationService {
       (sum, order) => sum + order.weightKg,
       0,
     );
-    const vehicle = resources.vehicles.find(
-      (item) => item.capacityKg >= totalWeightKg,
-    );
-    if (!vehicle)
+    if (!resources.route) {
+      throw conflict("La ruta manual seleccionada no existe");
+    }
+    if (resources.route.optimized || resources.route.status !== "PLANNED") {
+      throw conflict("Solo se puede optimizar una ruta manual planificada");
+    }
+    if (resources.route.vehicleStatus !== "ACTIVE") {
+      throw conflict("El vehículo de la ruta no se encuentra activo");
+    }
+    if (!resources.route.driverId) {
+      throw conflict("Asigne un conductor a la ruta antes de optimizarla");
+    }
+    if (resources.route.driverStatus !== "ACTIVE") {
+      throw conflict("El conductor asignado no se encuentra activo");
+    }
+    const usableCapacityKg = resources.route.capacityKg * SAFE_CAPACITY_FACTOR;
+    if (totalWeightKg > usableCapacityKg)
       throw conflict(
-        "La capacidad disponible es insuficiente para los pedidos seleccionados",
-      );
-    if (!resources.drivers.length)
-      throw conflict(
-        "No existe un conductor disponible para el horario solicitado",
+        `El peso supera la capacidad operativa segura del vehículo (${usableCapacityKg.toFixed(2)} kg, equivalente al 95 % de su capacidad)`,
       );
 
+    const startsAt = new Date(resources.route.startsAt);
     const optimized = buildOptimizedSequence(
       resources.orders,
       startsAt,
-      resources.depot,
+      DISPATCH_DEPOT,
     );
     const endsAt = new Date(
       startsAt.getTime() + optimized.elapsedMinutes * 60_000,
     );
+    if (
+      await this.optimizationRepository.hasDriverConflict(
+        resources.route.driverId,
+        startsAt,
+        endsAt,
+        routeId,
+      )
+    ) {
+      throw conflict(
+        "El conductor asignado tiene otra ruta durante el horario calculado",
+      );
+    }
     const result = await this.optimizationRepository.save({
+      routeId,
       startsAt,
       endsAt,
-      vehicleId: vehicle.id,
-      driverId: resources.drivers[0].id,
+      vehicleId: resources.route.vehicleId,
+      driverId: resources.route.driverId,
       sequence: optimized.sequence,
       distanceKm: optimized.distanceKm,
       totalWeightKg,
+      depot: DISPATCH_DEPOT,
     });
     await this.auditRepository.record({
       userId: actorId,

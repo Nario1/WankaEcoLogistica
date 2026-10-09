@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { performance } from "node:perf_hooks";
 import {
+  DISPATCH_DEPOT,
   OptimizationService,
   buildOptimizedSequence,
 } from "../src/modules/optimization/optimization.service.js";
@@ -29,6 +30,9 @@ class OptimizationRepository {
   async getResources() {
     return this.resources;
   }
+  async hasDriverConflict() {
+    return Boolean(this.resources.driverConflict);
+  }
   async save(value) {
     this.saved = value;
     return { id: id(100), ...value };
@@ -49,13 +53,21 @@ function makeService(resources) {
 test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", async () => {
   const resources = {
     orders: [order(1), order(2, { priority: "HIGH" })],
-    vehicles: [{ id: id(80), capacityKg: 50 }],
-    drivers: [{ id: id(90) }],
-    depot: { latitude: -12.0651, longitude: -75.2049 },
+    route: {
+      id: id(70),
+      vehicleId: id(80),
+      driverId: id(90),
+      startsAt: "2026-10-08T13:00:00Z",
+      status: "PLANNED",
+      optimized: false,
+      capacityKg: 50,
+      vehicleStatus: "ACTIVE",
+      driverStatus: "ACTIVE",
+    },
   };
   const { service, repository } = makeService(resources);
   const result = await service.optimize(
-    { orderIds: [id(1), id(2)], startsAt: "2026-10-08T13:00:00Z" },
+    { routeId: id(70), orderIds: [id(1), id(2)] },
     id(99),
   );
   assert.equal(result.sequence.length, 2);
@@ -65,36 +77,37 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
     [1, 2],
   );
   assert.ok(repository.saved.distanceKm >= 0);
+  assert.equal(repository.saved.routeId, id(70));
+  assert.deepEqual(repository.saved.depot, DISPATCH_DEPOT);
 });
 
-test("rechaza duplicados, pedidos no pendientes, falta de capacidad y ventanas inviables", async () => {
+test("rechaza duplicados, pedidos no pendientes y capacidad superior al 95 %", async () => {
   const base = {
     orders: [order(1)],
-    vehicles: [{ id: id(80), capacityKg: 5 }],
-    drivers: [{ id: id(90) }],
-    depot: { latitude: -12.0651, longitude: -75.2049 },
+    route: {
+      id: id(70),
+      vehicleId: id(80),
+      driverId: id(90),
+      startsAt: "2026-10-08T13:00:00Z",
+      status: "PLANNED",
+      optimized: false,
+      capacityKg: 10.5,
+      vehicleStatus: "ACTIVE",
+      driverStatus: "ACTIVE",
+    },
   };
   const { service } = makeService(base);
   await assert.rejects(
-    service.optimize(
-      { orderIds: [id(1), id(1)], startsAt: "2026-10-08T13:00:00Z" },
-      id(99),
-    ),
+    service.optimize({ routeId: id(70), orderIds: [id(1), id(1)] }, id(99)),
     { code: "VALIDATION_ERROR" },
   );
   await assert.rejects(
-    service.optimize(
-      { orderIds: [id(1)], startsAt: "2026-10-08T13:00:00Z" },
-      id(99),
-    ),
+    service.optimize({ routeId: id(70), orderIds: [id(1)] }, id(99)),
     { code: "CONFLICT" },
   );
   const missing = makeService({ ...base, orders: [] }).service;
   await assert.rejects(
-    missing.optimize(
-      { orderIds: [id(1)], startsAt: "2026-10-08T13:00:00Z" },
-      id(99),
-    ),
+    missing.optimize({ routeId: id(70), orderIds: [id(1)] }, id(99)),
     { code: "CONFLICT" },
   );
   assert.throws(
@@ -102,8 +115,82 @@ test("rechaza duplicados, pedidos no pendientes, falta de capacidad y ventanas i
       buildOptimizedSequence(
         [order(1, { windowEnd: "07:59" })],
         new Date("2026-10-08T13:00:00Z"),
-        base.depot,
+        DISPATCH_DEPOT,
       ),
+    { code: "CONFLICT" },
+  );
+});
+
+test("exige ruta manual planificada, vehículo activo y conductor activo asignado", async () => {
+  const validRoute = {
+    id: id(70),
+    vehicleId: id(80),
+    driverId: id(90),
+    startsAt: "2026-10-08T13:00:00Z",
+    status: "PLANNED",
+    optimized: false,
+    capacityKg: 100,
+    vehicleStatus: "ACTIVE",
+    driverStatus: "ACTIVE",
+  };
+  const request = { routeId: id(70), orderIds: [id(1)] };
+  for (const route of [
+    null,
+    { ...validRoute, optimized: true },
+    { ...validRoute, status: "COMPLETED" },
+    { ...validRoute, vehicleStatus: "OUT_OF_SERVICE" },
+    { ...validRoute, driverId: null },
+    { ...validRoute, driverStatus: "INACTIVE" },
+  ]) {
+    await assert.rejects(
+      makeService({ orders: [order(1)], route }).service.optimize(
+        request,
+        id(99),
+      ),
+      { code: "CONFLICT" },
+    );
+  }
+});
+
+test("aplica la primera mitad de la ventana a pedidos de prioridad alta", () => {
+  const farHighPriority = order(1, {
+    latitude: -12.5,
+    priority: "HIGH",
+    windowStart: "08:00",
+    windowEnd: "09:00",
+  });
+  assert.throws(
+    () =>
+      buildOptimizedSequence(
+        [farHighPriority],
+        new Date("2026-10-08T13:00:00Z"),
+        DISPATCH_DEPOT,
+      ),
+    { code: "CONFLICT" },
+  );
+});
+
+test("rechaza la optimización si el nuevo horario solapa al conductor", async () => {
+  const resources = {
+    orders: [order(1)],
+    driverConflict: true,
+    route: {
+      id: id(70),
+      vehicleId: id(80),
+      driverId: id(90),
+      startsAt: "2026-10-08T13:00:00Z",
+      status: "PLANNED",
+      optimized: false,
+      capacityKg: 100,
+      vehicleStatus: "ACTIVE",
+      driverStatus: "ACTIVE",
+    },
+  };
+  await assert.rejects(
+    makeService(resources).service.optimize(
+      { routeId: id(70), orderIds: [id(1)] },
+      id(99),
+    ),
     { code: "CONFLICT" },
   );
 });
@@ -112,10 +199,11 @@ test("procesa 50 puntos por debajo del objetivo P95 de 3.5 segundos", () => {
   const orders = Array.from({ length: 50 }, (_, index) => order(index + 1));
   const durations = Array.from({ length: 20 }, () => {
     const start = performance.now();
-    buildOptimizedSequence(orders, new Date("2026-10-08T13:00:00Z"), {
-      latitude: -12.0651,
-      longitude: -75.2049,
-    });
+    buildOptimizedSequence(
+      orders,
+      new Date("2026-10-08T13:00:00Z"),
+      DISPATCH_DEPOT,
+    );
     return performance.now() - start;
   }).sort((a, b) => a - b);
   const p95 = durations[Math.ceil(durations.length * 0.95) - 1];

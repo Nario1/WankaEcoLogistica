@@ -1,13 +1,13 @@
 import { firstRow } from "./base.js";
+import { conflict } from "../../shared/errors.js";
 
 export class PgOptimizationRepository {
   constructor(pool) {
     this.pool = pool;
   }
 
-  async getResources(orderIds, startsAt) {
-    const endsAt = new Date(startsAt.getTime() + 8 * 3_600_000);
-    const [orders, vehicles, drivers, depot] = await Promise.all([
+  async getResources(orderIds, routeId) {
+    const [orders, route] = await Promise.all([
       this.pool.query(
         `SELECT pedido_id AS id, direccion AS address, ST_Y(coordenadas) AS latitude,
           ST_X(coordenadas) AS longitude, peso_kg::float AS "weightKg", prioridad AS priority,
@@ -17,31 +17,37 @@ export class PgOptimizationRepository {
         [orderIds],
       ),
       this.pool.query(
-        `SELECT vehiculo_id AS id, capacidad_kg::float AS "capacityKg"
-         FROM vehiculos WHERE estado = 'ACTIVE' ORDER BY capacidad_kg, placa`,
-      ),
-      this.pool.query(
-        `SELECT u.usuario_id AS id FROM usuarios u WHERE u.rol = 'DRIVER' AND u.estado = 'ACTIVE'
-         AND NOT EXISTS (SELECT 1 FROM rutas r WHERE r.conductor_id = u.usuario_id
-           AND r.estado <> 'CANCELLED' AND r.inicio < $2 AND r.fin > $1)
-         ORDER BY u.nombre`,
-        [startsAt, endsAt],
-      ),
-      this.pool.query(
-        `SELECT COALESCE(AVG(ST_Y(coordenadas)), -12.0651) AS latitude,
-          COALESCE(AVG(ST_X(coordenadas)), -75.2049) AS longitude FROM pedidos WHERE pedido_id = ANY($1::uuid[])`,
-        [orderIds],
+        `SELECT r.ruta_id AS id, r.vehiculo_id AS "vehicleId",
+          r.conductor_id AS "driverId", r.inicio AS "startsAt",
+          r.estado AS status, r.optimizada AS optimized,
+          v.capacidad_kg::float AS "capacityKg", v.estado AS "vehicleStatus",
+          u.estado AS "driverStatus"
+         FROM rutas r
+         JOIN vehiculos v ON v.vehiculo_id = r.vehiculo_id
+         LEFT JOIN usuarios u ON u.usuario_id = r.conductor_id
+         WHERE r.ruta_id = $1`,
+        [routeId],
       ),
     ]);
     return {
       orders: orders.rows,
-      vehicles: vehicles.rows,
-      drivers: drivers.rows,
-      depot: firstRow(depot),
+      route: firstRow(route),
     };
   }
 
+  async hasDriverConflict(driverId, startsAt, endsAt, routeId) {
+    const result = await this.pool.query(
+      `SELECT EXISTS (
+        SELECT 1 FROM rutas WHERE conductor_id = $1 AND ruta_id <> $4
+        AND estado <> 'CANCELLED' AND inicio < $3 AND fin > $2
+      ) AS conflict`,
+      [driverId, startsAt, endsAt, routeId],
+    );
+    return result.rows[0].conflict;
+  }
+
   async save({
+    routeId,
     startsAt,
     endsAt,
     vehicleId,
@@ -49,23 +55,33 @@ export class PgOptimizationRepository {
     sequence,
     distanceKm,
     totalWeightKg,
+    depot,
   }) {
     const client = await this.pool.connect();
     try {
       await client.query("BEGIN");
-      const route = firstRow(
-        await client.query(
-          `INSERT INTO rutas (vehiculo_id, conductor_id, inicio, fin, distancia_km, peso_total_kg, optimizada)
-           VALUES ($1, $2, $3, $4, $5, $6, TRUE) RETURNING ruta_id AS id`,
-          [vehicleId, driverId, startsAt, endsAt, distanceKm, totalWeightKg],
-        ),
+      const routeUpdate = await client.query(
+        `UPDATE rutas SET fin = $2, distancia_km = $3, peso_total_kg = $4,
+          optimizada = TRUE, actualizado_en = NOW()
+         WHERE ruta_id = $1 AND estado = 'PLANNED' AND optimizada = FALSE
+         RETURNING ruta_id AS id`,
+        [routeId, endsAt, distanceKm, totalWeightKg],
       );
+      if (routeUpdate.rowCount !== 1) {
+        throw conflict("La ruta ya no está disponible para optimizar");
+      }
+      const route = firstRow(routeUpdate);
       for (const order of sequence) {
-        await client.query(
+        const orderUpdate = await client.query(
           `UPDATE pedidos SET ruta_id = $2, orden_entrega = $3, estado = 'PLANNED', actualizado_en = NOW()
-           WHERE pedido_id = $1 AND ruta_id IS NULL`,
+           WHERE pedido_id = $1 AND ruta_id IS NULL AND estado = 'PENDING'`,
           [order.id, route.id, order.deliveryOrder],
         );
+        if (orderUpdate.rowCount !== 1) {
+          throw conflict(
+            "Uno de los pedidos ya no está disponible; no se realizó ninguna asignación",
+          );
+        }
       }
       await client.query("COMMIT");
       return {
@@ -76,6 +92,7 @@ export class PgOptimizationRepository {
         endsAt,
         distanceKm,
         totalWeightKg,
+        depot,
         orders: sequence,
       };
     } catch (error) {

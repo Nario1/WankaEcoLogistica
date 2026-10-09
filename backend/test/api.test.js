@@ -14,6 +14,8 @@ const tokenFor = (role) =>
     audience: "wanka-ecologistica-web",
   });
 
+let lastOptimizationCall;
+
 const services = {
   authService: {
     login: async () => ({ token: "token", user: { role: "ADMIN" } }),
@@ -35,7 +37,12 @@ const services = {
     create: async () => ({}),
     assignDriver: async () => ({}),
   },
-  optimizationService: { optimize: async () => ({ id: "route-optimized" }) },
+  optimizationService: {
+    optimize: async (body, actorId) => {
+      lastOptimizationCall = { body, actorId };
+      return { id: body.routeId, orders: [] };
+    },
+  },
 };
 
 async function withServer(run) {
@@ -120,6 +127,29 @@ test("RBAC permite pedidos al operador y restringe vehículos al administrador",
       }),
     });
     assert.equal(adminResponse.status, 201);
+  });
+});
+
+test("POST /api/optimizations optimiza la ruta manual seleccionada", async () => {
+  await withServer(async (baseUrl) => {
+    const routeId = "00000000-0000-4000-8000-000000000070";
+    const orderId = "00000000-0000-4000-8000-000000000001";
+    const response = await fetch(`${baseUrl}/api/optimizations`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${tokenFor("OPERATOR")}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ routeId, orderIds: [orderId] }),
+    });
+    const body = await response.json();
+    assert.equal(response.status, 201);
+    assert.equal(body.data.id, routeId);
+    assert.deepEqual(lastOptimizationCall.body, {
+      routeId,
+      orderIds: [orderId],
+    });
+    assert.equal(lastOptimizationCall.actorId, "OPERATOR-1");
   });
 });
 

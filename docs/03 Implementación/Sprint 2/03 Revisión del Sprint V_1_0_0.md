@@ -6,27 +6,27 @@
 
 **Líder del proyecto:** Equipo del proyecto
 
-**Versión:** V_1_0_3
+**Versión:** V_1_0_4
 
 ## Historias de usuario completadas en este Sprint
 
 | Ítem | Resultado | Criterios demostrados |
 |---|---|---|
-| US-004 | Optimización de hasta 50 pedidos pendientes y generación de una ruta secuenciada. | Capacidad suficiente, prioridad alta, ventanas horarias, jornada máxima, conductor disponible y rechazo total de lotes inviables. |
+| US-004 | Optimización de hasta 50 pedidos pendientes sobre la ruta manual seleccionada. | Salida desde local fijo, conservación de vehículo/conductor, 95 % de capacidad, prioridad alta en primera mitad de ventana, jornada máxima y rechazo total de lotes inviables. |
 | EN-001 | Benchmark automatizado del algoritmo con 50 puntos. | Medición repetida de latencia y aserción de P95 ≤ 3,5 s. |
 | EN-007 | Contrato OpenAPI 0.2.0, migración incremental y controles de calidad. | Pruebas con cobertura mínima, lint, formato y build reproducibles. |
 
 ## Demostración del trabajo completado
 
-La demostración reproducible consiste en iniciar sesión como administrador u operador, registrar pedidos seleccionando su destino sobre el mapa, abrir **Planificación de rutas**, seleccionar **Optimizar pedidos**, indicar el inicio de jornada y elegir los pedidos pendientes. El sistema crea una ruta sólo si encuentra vehículo y conductor elegibles y todas las restricciones son factibles. La tabla presenta vehículo, conductor, horario, distancia y peso; **Ver mapa** carga las coordenadas persistidas, ajusta la vista y conecta las paradas en el orden calculado. Los casos negativos muestran el motivo del conflicto y no dejan asignaciones parciales.
+La demostración reproducible consiste en iniciar sesión como administrador u operador, registrar pedidos seleccionando su destino sobre el mapa, crear una ruta manual con vehículo y horario, asignarle un conductor y pulsar **Optimizar** en esa fila. Luego se eligen hasta 50 pedidos pendientes. El sistema conserva el vehículo, conductor e inicio de la ruta; valida todas las restricciones y convierte esa misma ruta en optimizada. **Ver mapa** muestra primero el local de despacho y conecta las paradas en el orden calculado. Los casos negativos explican el conflicto y no dejan asignaciones parciales.
 
 ## Evidencia de calidad
 
-- Pruebas de prioridad, secuencia, duplicados, estado pendiente, capacidad, ventanas y rendimiento.
+- Pruebas de origen fijo, reutilización de ruta, prioridad, secuencia, duplicados, estado pendiente, límite de capacidad al 95 %, recursos, ventanas y rendimiento.
 - Pruebas de API y RBAC para operaciones existentes; el endpoint nuevo usa el mismo middleware probado.
 - Persistencia parametrizada y transaccional.
 - Contrato `backend/openapi.yaml` y migraciones actualizados.
-- Ejecución local final: 19 de 19 pruebas aprobadas, incluida la integración PostGIS; cobertura de líneas: 89,19 %.
+- Ejecución local final: 24 de 24 pruebas aprobadas, incluida PostGIS; 90,16 % de cobertura de líneas; lint, formato y build aprobados.
 
 ## Pendientes
 
@@ -38,6 +38,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_4 | 08/10/2026 | Validación de origen fijo, optimización desde la fila y reglas RN-002/RN-004. | Equipo del proyecto |
 | V_1_0_1 | 07/10/2026 | Navegación bidireccional incorporada. | Equipo del proyecto |
 | V_1_0_2 | 08/10/2026 | Evidencia del mapa de planificación y mensajes de conflicto mejorados. | Equipo del proyecto |
 | V_1_0_3 | 08/10/2026 | Evidencia de selección cartográfica y mejoras de experiencia de usuario. | Equipo del proyecto |

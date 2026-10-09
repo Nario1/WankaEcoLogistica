@@ -102,7 +102,6 @@ export default function RoutesPage() {
       setOptionsError("Seleccione al menos un pedido pendiente.");
       return;
     }
-    const startsAt = new FormData(event.currentTarget).get("startsAt");
     setSubmitting(true);
     setOptionsError("");
     try {
@@ -110,8 +109,8 @@ export default function RoutesPage() {
         token: session.token,
         method: "POST",
         body: JSON.stringify({
+          routeId: dialog.id,
           orderIds: selectedOrderIds,
-          startsAt: new Date(startsAt).toISOString(),
         }),
       });
       setOrders((current) =>
@@ -144,18 +143,6 @@ export default function RoutesPage() {
       actionLabel="Nueva ruta manual"
       onAction={() => setDialog({ type: "route" })}
     >
-      <Button
-        sx={{ mb: 2 }}
-        variant="outlined"
-        disabled={!orders.length}
-        onClick={() => {
-          setSelectedOrderIds([]);
-          setOptionsError("");
-          setDialog({ type: "optimization" });
-        }}
-      >
-        Optimizar pedidos
-      </Button>
       {!orders.length && (
         <Alert severity="info" sx={{ mb: 2 }}>
           No hay pedidos pendientes disponibles para optimizar.
@@ -191,6 +178,19 @@ export default function RoutesPage() {
               <TableCell>
                 {route.optimized && (
                   <Button onClick={() => showRoute(route)}>Ver mapa</Button>
+                )}
+                {!route.optimized && route.status === "PLANNED" && (
+                  <Button
+                    variant="contained"
+                    disabled={!orders.length || !route.driverId}
+                    onClick={() => {
+                      setSelectedOrderIds([]);
+                      setOptionsError("");
+                      setDialog({ type: "optimization", ...route });
+                    }}
+                  >
+                    Optimizar
+                  </Button>
                 )}
                 <Button onClick={() => setDialog({ type: "driver", ...route })}>
                   {route.driverId ? "Reasignar" : "Asignar"}
@@ -270,13 +270,14 @@ export default function RoutesPage() {
           submitting={submitting}
         >
           {optionsError && <Alert severity="error">{optionsError}</Alert>}
-          <TextField
-            name="startsAt"
-            label="Inicio de jornada"
-            type="datetime-local"
-            required
-            slotProps={{ inputLabel: { shrink: true } }}
-          />
+          <Alert severity="success">
+            La ruta saldrá del local de despacho (-12.07201013486951,
+            -75.20516872975998).
+          </Alert>
+          <Alert severity="info">
+            <strong>{dialog.vehiclePlate}</strong> · {dialog.driverName} ·
+            inicio {new Date(dialog.startsAt).toLocaleString("es-PE")}
+          </Alert>
           <FormControl required fullWidth>
             <InputLabel id="orders-label">Pedidos pendientes</InputLabel>
             <Select
@@ -301,8 +302,9 @@ export default function RoutesPage() {
             </Select>
           </FormControl>
           <Alert severity="info">
-            Se requiere un vehículo con capacidad suficiente, un conductor
-            disponible y ventanas compatibles con el inicio elegido.
+            Se respetará el 95 % de capacidad operativa, la prioridad, las
+            ventanas de entrega y la jornada máxima de 8 horas. Si un pedido no
+            es factible, no se asignará ninguno.
           </Alert>
         </FormDialog>
       )}

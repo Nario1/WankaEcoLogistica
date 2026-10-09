@@ -6,13 +6,13 @@
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_3 |
+| Versión | V_1_0_4 |
 | Fecha | 08/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
 ## Resumen ejecutivo
 
-El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo permite seleccionar pedidos pendientes desde React, validar la solicitud en la API, elegir capacidad y conductor disponibles, ordenar las paradas por prioridad, ventana y cercanía, persistir la ruta dentro de una transacción y visualizar la secuencia sobre OpenStreetMap.
+El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo permite seleccionar una ruta manual y sus pedidos pendientes desde React, conservar el vehículo y conductor asignados, partir siempre del local `-12.07201013486951, -75.20516872975998`, ordenar las paradas por prioridad, ventana y cercanía, convertir la misma ruta dentro de una transacción y visualizar la secuencia sobre OpenStreetMap.
 
 ## Estado del alcance
 
@@ -30,7 +30,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|
 | Alcance | Verde | Tres ítems planificados implementados y trazados. |
 | Cronograma | Verde | Incremento disponible al cierre del Sprint 2. |
-| Calidad | Verde | 19 de 19 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 89,19 %. |
+| Calidad | Verde | 24 de 24 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,16 %; lint, formato y build aprobados. |
 | Seguridad | Verde | Endpoint protegido con JWT y roles `ADMIN`/`OPERATOR`; consultas parametrizadas. |
 | Datos | Verde | Creación de ruta y asignación de pedidos atómica mediante transacción. |
 | Riesgo de entorno | Amarillo | La prueba real PostGIS requiere `TEST_DATABASE_URL` y una instancia migrada. |
@@ -38,14 +38,16 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 ## Decisiones técnicas
 
 - Se limita cada optimización a 50 pedidos y una jornada máxima de ocho horas.
-- Se rechaza el lote completo cuando falta capacidad, conductor, pedidos pendientes o factibilidad horaria; no se publica una ruta parcial.
-- Se selecciona el vehículo activo de menor capacidad suficiente y el primer conductor activo sin solapamiento.
-- La heurística prioriza pedidos de prioridad alta, vencimiento de ventana y distancia; conserva distancia, peso y orden de entrega.
+- Se rechaza el lote completo cuando la ruta no es elegible, falta capacidad, conductor, pedidos pendientes o factibilidad horaria; no se publica una asignación parcial.
+- La ruta manual seleccionada conserva su vehículo y conductor; el peso no supera el 95 % de la capacidad nominal (RN-002).
+- Todas las rutas parten del local fijo indicado por el negocio y la misma ruta pasa de manual a optimizada.
+- La heurística exige prioridad alta dentro del primer 50 % de su ventana (RN-004), luego considera vencimiento y distancia; conserva distancia, peso y orden de entrega.
 
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_4 | 08/10/2026 | Origen fijo, optimización de ruta manual seleccionada y aplicación estricta de RN-002/RN-004. | Equipo del proyecto |
 | V_1_0_1 | 07/10/2026 | Navegación documental y trazabilidad actualizadas según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_2 | 08/10/2026 | Incorporación del mapa de planificación y correcciones de compatibilidad MUI. | Equipo del proyecto |
 | V_1_0_3 | 08/10/2026 | Mejora de usabilidad y selección cartográfica de pedidos. | Equipo del proyecto |

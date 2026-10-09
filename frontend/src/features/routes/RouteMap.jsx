@@ -14,6 +14,11 @@ import {
 import "leaflet/dist/leaflet.css";
 
 const HUANCAYO_CENTER = [-12.0651, -75.2049];
+const DISPATCH_DEPOT = {
+  name: "Local de despacho",
+  latitude: -12.07201013486951,
+  longitude: -75.20516872975998,
+};
 
 function FitRoute({ positions }) {
   const map = useMap();
@@ -29,7 +34,9 @@ FitRoute.propTypes = {
 };
 
 export default function RouteMap({ route, stops, loading }) {
-  const positions = stops.map((stop) => [stop.latitude, stop.longitude]);
+  const stopPositions = stops.map((stop) => [stop.latitude, stop.longitude]);
+  const depotPosition = [DISPATCH_DEPOT.latitude, DISPATCH_DEPOT.longitude];
+  const positions = route ? [depotPosition, ...stopPositions] : [];
   return (
     <Box sx={{ mt: 3 }}>
       <Stack direction={{ xs: "column", sm: "row" }} gap={1} sx={{ mb: 1 }}>
@@ -67,15 +74,35 @@ export default function RouteMap({ route, stops, loading }) {
               pathOptions={{ color: "#087f5b", weight: 5, opacity: 0.8 }}
             />
           )}
+          {route && (
+            <CircleMarker
+              center={depotPosition}
+              radius={15}
+              pathOptions={{
+                color: "#ffffff",
+                weight: 3,
+                fillColor: "#d84315",
+                fillOpacity: 1,
+              }}
+            >
+              <Popup>
+                <strong>{DISPATCH_DEPOT.name}</strong>
+                <br />
+                Inicio de todas las rutas
+                <br />
+                {DISPATCH_DEPOT.latitude}, {DISPATCH_DEPOT.longitude}
+              </Popup>
+            </CircleMarker>
+          )}
           {stops.map((stop, index) => (
             <CircleMarker
               key={stop.id}
-              center={positions[index]}
+              center={stopPositions[index]}
               radius={13}
               pathOptions={{
                 color: "#ffffff",
                 weight: 3,
-                fillColor: index === 0 ? "#1976d2" : "#087f5b",
+                fillColor: "#087f5b",
                 fillOpacity: 1,
               }}
             >
@@ -93,8 +120,8 @@ export default function RouteMap({ route, stops, loading }) {
       <Typography variant="caption" color="text.secondary">
         {loading
           ? "Cargando paradas…"
-          : positions.length
-            ? "La línea conecta las paradas en el orden calculado; el trazado no representa navegación vial giro a giro."
+          : route && stops.length
+            ? "La línea parte del local y conecta las paradas en el orden calculado; no representa navegación vial giro a giro."
             : "Seleccione una ruta optimizada para visualizar sus paradas."}
       </Typography>
     </Box>
