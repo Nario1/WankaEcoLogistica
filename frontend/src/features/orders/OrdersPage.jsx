@@ -15,8 +15,10 @@ import FormDialog from "../shared/FormDialog";
 import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import LocationPicker from "./LocationPicker";
+import { formatTime } from "../../utils/format";
 
 const emptyOrder = {
+  productName: "",
   address: "",
   latitude: "",
   longitude: "",
@@ -82,6 +84,7 @@ export default function OrdersPage() {
         <Table size="small">
           <TableHead>
             <TableRow>
+              <TableCell>Producto o carga</TableCell>
               <TableCell>Dirección</TableCell>
               <TableCell>Ubicación</TableCell>
               <TableCell>Peso</TableCell>
@@ -93,6 +96,7 @@ export default function OrdersPage() {
           <TableBody>
             {resource.items.map((order) => (
               <TableRow key={order.id} hover>
+                <TableCell>{order.productName}</TableCell>
                 <TableCell>{order.address}</TableCell>
                 <TableCell>
                   <Box
@@ -112,7 +116,7 @@ export default function OrdersPage() {
                   />
                 </TableCell>
                 <TableCell>
-                  {order.windowStart}–{order.windowEnd}
+                  {formatTime(order.windowStart)}–{formatTime(order.windowEnd)}
                 </TableCell>
                 <TableCell>
                   <Button onClick={() => setEditing({ ...order })}>
@@ -137,6 +141,15 @@ export default function OrdersPage() {
             Complete los datos y marque con precisión el destino. Esta ubicación
             se utilizará para optimizar la ruta.
           </Alert>
+          <TextField
+            name="productName"
+            label="Producto o carga transportada"
+            value={editing.productName}
+            onChange={updateField("productName")}
+            required
+            helperText="Ejemplo: 4 cajas de productos de limpieza"
+            slotProps={{ htmlInput: { minLength: 2, maxLength: 160 } }}
+          />
           <TextField
             name="address"
             label="Dirección o referencia"

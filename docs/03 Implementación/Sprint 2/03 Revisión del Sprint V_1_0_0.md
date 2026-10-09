@@ -6,7 +6,7 @@
 
 **Líder del proyecto:** Equipo del proyecto
 
-**Versión:** V_1_0_7
+**Versión:** V_1_0_8
 
 ## Historias de usuario completadas en este Sprint
 
@@ -18,7 +18,7 @@
 
 ## Demostración del trabajo completado
 
-La demostración reproducible consiste en iniciar sesión como administrador u operador, registrar pedidos seleccionando su destino sobre el mapa, crear una ruta manual con vehículo y horario, asignarle un conductor y pulsar **Optimizar** en esa fila. Luego se eligen hasta 50 pedidos pendientes y se confirma o corrige la hora de salida para hacerla compatible con sus ventanas. La interfaz calcula el peso, recomienda la unidad activa de menor capacidad suficiente, muestra su margen libre y permite elegir otra unidad elegible. Si ninguna cumple, explica que se debe registrar una unidad, reducir el lote o reprogramarlo. El backend valida nuevamente estado, 95 % de capacidad y solapamiento antes de reasignar la misma ruta. **Ver mapa** consulta el motor vial, muestra primero el local y recorre calles transitables hasta las paradas; informa proveedor, distancia, duración y si se consideró tráfico. Nunca presenta una diagonal como ruta navegable.
+La demostración reproducible consiste en iniciar sesión como administrador u operador, registrar un pedido indicando obligatoriamente el producto o carga y seleccionando su destino sobre el mapa. En **Planificar nueva ruta**, un único formulario reúne los pedidos, recomienda la unidad activa de menor capacidad suficiente, permite elegir una alternativa, solicita conductor y horario, y ejecuta creación, asignación y optimización. Las tablas y ventanas muestran horas en formato `AM`/`PM`. Si ninguna unidad cumple, explica que se debe registrar una unidad, reducir el lote o reprogramarlo. El backend valida nuevamente estado, 95 % de capacidad y solapamientos. **Ver mapa** consulta el motor vial, muestra primero el local y recorre calles transitables hasta las paradas; informa proveedor, distancia, duración y si se consideró tráfico. Nunca presenta una diagonal como ruta navegable.
 
 ## Evidencia de calidad
 
@@ -40,6 +40,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_8 | 08/10/2026 | Evidencia del nombre de carga, presentación AM/PM y planificación integral. | Equipo del proyecto |
 | V_1_0_7 | 08/10/2026 | Demostración de recomendación de unidades y rechazo explícito cuando ninguna cumple. | Equipo del proyecto |
 | V_1_0_6 | 08/10/2026 | Evidencia de geometría vial, sentidos de circulación y tráfico configurable. | Equipo del proyecto |
 | V_1_0_5 | 08/10/2026 | Hora de salida editable y validación preventiva de peso para evitar solicitudes inviables. | Equipo del proyecto |

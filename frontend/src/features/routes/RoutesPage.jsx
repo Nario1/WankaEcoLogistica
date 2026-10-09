@@ -19,6 +19,7 @@ import FormDialog from "../shared/FormDialog";
 import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import RouteMap from "./RouteMap";
+import { formatDateTime, formatTime } from "../../utils/format";
 
 function toLocalDateTimeInput(value) {
   const date = new Date(value);
@@ -73,10 +74,59 @@ export default function RoutesPage() {
 
   async function createRoute(event) {
     event.preventDefault();
+    if (!selectedOrderIds.length || !selectedVehicleId) {
+      setOptionsError(
+        "Seleccione pedidos y una unidad que cumpla las condiciones.",
+      );
+      return;
+    }
     const values = Object.fromEntries(new FormData(event.currentTarget));
-    values.startsAt = new Date(values.startsAt).toISOString();
-    values.endsAt = new Date(values.endsAt).toISOString();
-    await submitResource("POST", "", values).catch(() => {});
+    const startsAt = new Date(values.startsAt).toISOString();
+    const endsAt = new Date(values.endsAt).toISOString();
+    setSubmitting(true);
+    setOptionsError("");
+    try {
+      const route = await apiRequest("/routes", {
+        token: session.token,
+        method: "POST",
+        body: JSON.stringify({
+          vehicleId: selectedVehicleId,
+          startsAt,
+          endsAt,
+        }),
+      });
+      await apiRequest(`/routes/${route.id}/driver`, {
+        token: session.token,
+        method: "PUT",
+        body: JSON.stringify({ driverId: values.driverId }),
+      });
+      const optimized = await apiRequest("/optimizations", {
+        token: session.token,
+        method: "POST",
+        body: JSON.stringify({
+          routeId: route.id,
+          vehicleId: selectedVehicleId,
+          orderIds: selectedOrderIds,
+          startsAt,
+        }),
+      });
+      setOrders((current) =>
+        current.filter((order) => !selectedOrderIds.includes(order.id)),
+      );
+      setDialog(null);
+      await resource.load();
+      await showRoute({
+        ...optimized,
+        optimized: true,
+        vehiclePlate:
+          vehicles.find((vehicle) => vehicle.id === selectedVehicleId)?.plate ??
+          "Vehículo asignado",
+      });
+    } catch (error) {
+      setOptionsError(formatApiError(error));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   async function assignDriver(event) {
@@ -181,14 +231,30 @@ export default function RoutesPage() {
     ? selectedVehicle.capacityKg * 0.95
     : null;
 
+  function selectOrders(ids) {
+    const weight = orders
+      .filter((order) => ids.includes(order.id))
+      .reduce((total, order) => total + order.weightKg, 0);
+    const suggestions = vehicles
+      .filter((vehicle) => vehicle.capacityKg * 0.95 >= weight)
+      .sort((left, right) => left.capacityKg - right.capacityKg);
+    setSelectedOrderIds(ids);
+    setSelectedVehicleId(suggestions[0]?.id ?? "");
+  }
+
   return (
     <ResourcePage
       title="Planificación de rutas"
       description="Optimiza hasta 50 pedidos y visualiza la secuencia geográfica calculada."
       {...resource}
       error={resource.error || optionsError}
-      actionLabel="Nueva ruta manual"
-      onAction={() => setDialog({ type: "route" })}
+      actionLabel="Planificar nueva ruta"
+      onAction={() => {
+        setSelectedOrderIds([]);
+        setSelectedVehicleId("");
+        setOptionsError("");
+        setDialog({ type: "route" });
+      }}
     >
       {!orders.length && (
         <Alert severity="info" sx={{ mb: 2 }}>
@@ -210,12 +276,8 @@ export default function RoutesPage() {
           {resource.items.map((route) => (
             <TableRow key={route.id} selected={mappedRoute?.id === route.id}>
               <TableCell>{route.vehiclePlate}</TableCell>
-              <TableCell>
-                {new Date(route.startsAt).toLocaleString("es-PE")}
-              </TableCell>
-              <TableCell>
-                {new Date(route.endsAt).toLocaleString("es-PE")}
-              </TableCell>
+              <TableCell>{formatDateTime(route.startsAt)}</TableCell>
+              <TableCell>{formatDateTime(route.endsAt)}</TableCell>
               <TableCell>{route.driverName ?? "Sin asignar"}</TableCell>
               <TableCell>
                 {route.optimized
@@ -262,16 +324,66 @@ export default function RoutesPage() {
           onSubmit={createRoute}
           submitting={submitting}
         >
+          {optionsError && <Alert severity="error">{optionsError}</Alert>}
+          <Alert severity="info">
+            Complete el horario, conductor y pedidos. El sistema recomendará
+            automáticamente el vehículo y generará la ruta optimizada.
+          </Alert>
+          <FormControl required fullWidth>
+            <InputLabel id="new-route-orders-label">Pedidos</InputLabel>
+            <Select
+              labelId="new-route-orders-label"
+              label="Pedidos"
+              multiple
+              value={selectedOrderIds}
+              onChange={(event) => selectOrders(event.target.value)}
+              renderValue={(values) =>
+                `${values.length} pedido${values.length === 1 ? "" : "s"}`
+              }
+            >
+              {orders.map((order) => (
+                <MenuItem key={order.id} value={order.id}>
+                  <Checkbox checked={selectedOrderIds.includes(order.id)} />
+                  <ListItemText
+                    primary={order.productName}
+                    secondary={`${order.address} · ${order.weightKg} kg · ${formatTime(order.windowStart)}-${formatTime(order.windowEnd)}`}
+                  />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {!!selectedOrderIds.length && !!eligibleVehicles.length && (
+            <TextField
+              select
+              label="Vehículo recomendado"
+              value={selectedVehicleId}
+              onChange={(event) => setSelectedVehicleId(event.target.value)}
+              required
+            >
+              {eligibleVehicles.map((vehicle, index) => (
+                <MenuItem key={vehicle.id} value={vehicle.id}>
+                  {index === 0 ? "Recomendado · " : ""}
+                  {vehicle.plate} · {(vehicle.capacityKg * 0.95).toFixed(2)} kg
+                  útiles
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+          {!!selectedOrderIds.length && !eligibleVehicles.length && (
+            <Alert severity="error">
+              No hay unidades que soporten {selectedWeightKg.toFixed(2)} kg.
+            </Alert>
+          )}
           <TextField
-            name="vehicleId"
-            label="Vehículo disponible"
+            name="driverId"
+            label="Conductor"
             select
             required
             defaultValue=""
           >
-            {vehicles.map((vehicle) => (
-              <MenuItem key={vehicle.id} value={vehicle.id}>
-                {vehicle.plate}
+            {drivers.map((driver) => (
+              <MenuItem key={driver.id} value={driver.id}>
+                {driver.name}
               </MenuItem>
             ))}
           </TextField>
@@ -346,17 +458,7 @@ export default function RoutesPage() {
               label="Pedidos pendientes"
               multiple
               value={selectedOrderIds}
-              onChange={(event) => {
-                const ids = event.target.value;
-                const weight = orders
-                  .filter((order) => ids.includes(order.id))
-                  .reduce((total, order) => total + order.weightKg, 0);
-                const suggestions = vehicles
-                  .filter((vehicle) => vehicle.capacityKg * 0.95 >= weight)
-                  .sort((left, right) => left.capacityKg - right.capacityKg);
-                setSelectedOrderIds(ids);
-                setSelectedVehicleId(suggestions[0]?.id ?? "");
-              }}
+              onChange={(event) => selectOrders(event.target.value)}
               renderValue={(values) =>
                 `${values.length} pedido${values.length === 1 ? "" : "s"} seleccionado${values.length === 1 ? "" : "s"}`
               }
@@ -365,8 +467,8 @@ export default function RoutesPage() {
                 <MenuItem key={order.id} value={order.id}>
                   <Checkbox checked={selectedOrderIds.includes(order.id)} />
                   <ListItemText
-                    primary={`${order.priority === "HIGH" ? "Alta · " : ""}${order.address}`}
-                    secondary={`${order.weightKg} kg · ${order.windowStart}-${order.windowEnd}`}
+                    primary={`${order.priority === "HIGH" ? "Alta · " : ""}${order.productName}`}
+                    secondary={`${order.address} · ${order.weightKg} kg · ${formatTime(order.windowStart)}-${formatTime(order.windowEnd)}`}
                   />
                 </MenuItem>
               ))}

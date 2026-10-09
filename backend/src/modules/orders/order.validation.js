@@ -11,6 +11,10 @@ import { badRequest } from "../../shared/errors.js";
 export function validateOrder(input) {
   assertObject(input);
   const order = {
+    productName: requireString(input.productName, "productName", {
+      min: 2,
+      max: 160,
+    }),
     address: requireString(input.address, "address", { min: 5, max: 255 }),
     latitude: requireNumber(input.latitude, "latitude", { min: -90, max: 90 }),
     longitude: requireNumber(input.longitude, "longitude", {
@@ -42,6 +46,7 @@ export function validateOrderUpdate(input) {
   assertObject(input);
   const allowed = [
     "address",
+    "productName",
     "latitude",
     "longitude",
     "weightKg",

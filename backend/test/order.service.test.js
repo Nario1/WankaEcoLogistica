@@ -4,6 +4,7 @@ import { OrderService } from "../src/modules/orders/order.service.js";
 import { MemoryAuditRepository, MemoryRepository } from "./helpers/fakes.js";
 
 const validOrder = {
+  productName: "Caja de productos locales",
   address: "Av. Ferrocarril 123, Huancayo",
   latitude: -12.0651,
   longitude: -75.2049,

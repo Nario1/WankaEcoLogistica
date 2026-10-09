@@ -13,6 +13,7 @@ import {
   useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { formatTime } from "../../utils/format";
 
 const HUANCAYO_CENTER = [-12.0651, -75.2049];
 const DISPATCH_DEPOT = {
@@ -113,9 +114,12 @@ export default function RouteMap({ route, stops, navigation, loading }) {
               <Popup>
                 <strong>Parada {stop.deliveryOrder}</strong>
                 <br />
+                {stop.productName}
+                <br />
                 {stop.address}
                 <br />
-                {stop.weightKg} kg · {stop.windowStart}-{stop.windowEnd}
+                {stop.weightKg} kg · {formatTime(stop.windowStart)}-
+                {formatTime(stop.windowEnd)}
               </Popup>
             </CircleMarker>
           ))}
@@ -159,6 +163,7 @@ RouteMap.propTypes = {
       longitude: PropTypes.number.isRequired,
       deliveryOrder: PropTypes.number,
       address: PropTypes.string,
+      productName: PropTypes.string,
       weightKg: PropTypes.number,
       windowStart: PropTypes.string,
       windowEnd: PropTypes.string,

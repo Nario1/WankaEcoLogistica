@@ -9,7 +9,7 @@ export class PgOptimizationRepository {
   async getResources(orderIds, routeId, vehicleId) {
     const [orders, route, vehicle] = await Promise.all([
       this.pool.query(
-        `SELECT pedido_id AS id, direccion AS address, ST_Y(coordenadas) AS latitude,
+        `SELECT pedido_id AS id, nombre_producto AS "productName", direccion AS address, ST_Y(coordenadas) AS latitude,
           ST_X(coordenadas) AS longitude, peso_kg::float AS "weightKg", prioridad AS priority,
           to_char(ventana_inicio, 'HH24:MI') AS "windowStart",
           to_char(ventana_fin, 'HH24:MI') AS "windowEnd"

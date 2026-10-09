@@ -37,6 +37,30 @@ paths:
     post:
       security: [{ bearerAuth: [] }]
       summary: Registrar pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                [
+                  productName,
+                  address,
+                  latitude,
+                  longitude,
+                  weightKg,
+                  windowStart,
+                  windowEnd,
+                ]
+              properties:
+                productName: { type: string, minLength: 2, maxLength: 160 }
+                address: { type: string }
+                latitude: { type: number }
+                longitude: { type: number }
+                weightKg: { type: number, exclusiveMinimum: 0 }
+                windowStart: { type: string }
+                windowEnd: { type: string }
       responses:
         "201": { description: Pedido registrado }
         "400": { description: Datos inválidos }

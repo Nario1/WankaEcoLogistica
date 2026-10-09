@@ -12,6 +12,7 @@ const id = (number) =>
   `00000000-0000-4000-8000-${String(number).padStart(12, "0")}`;
 const order = (number, overrides = {}) => ({
   id: id(number),
+  productName: `Carga ${number}`,
   address: `Parada ${number}`,
   latitude: -12.0651 + number / 10_000,
   longitude: -75.2049 + number / 10_000,

@@ -73,6 +73,7 @@ test("POST /api/orders identifica el campo inválido con respuesta 400", async (
         "content-type": "application/json",
       },
       body: JSON.stringify({
+        productName: "Caja de limpieza",
         address: "Av. Ferrocarril 123, Huancayo",
         latitude: -12.0651,
         longitude: -75.2049,
@@ -98,6 +99,7 @@ test("RBAC permite pedidos al operador y restringe vehículos al administrador",
       method: "POST",
       headers: operatorHeaders,
       body: JSON.stringify({
+        productName: "Caja de limpieza",
         address: "Av. Ferrocarril 123, Huancayo",
         latitude: -12.0651,
         longitude: -75.2049,

@@ -34,7 +34,7 @@ export class PgRouteRepository {
   async listStops(routeId) {
     return (
       await this.pool.query(
-        `SELECT pedido_id AS id, direccion AS address,
+        `SELECT pedido_id AS id, nombre_producto AS "productName", direccion AS address,
           ST_Y(coordenadas)::float AS latitude,
           ST_X(coordenadas)::float AS longitude,
           peso_kg::float AS "weightKg", prioridad AS priority,
