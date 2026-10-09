@@ -157,12 +157,16 @@ paths:
           application/json:
             schema:
               type: object
-              required: [routeId, orderIds, startsAt]
+              required: [routeId, vehicleId, orderIds, startsAt]
               properties:
                 routeId:
                   type: string
                   format: uuid
                   description: Ruta manual planificada que se convertirá en optimizada
+                vehicleId:
+                  type: string
+                  format: uuid
+                  description: Vehículo sugerido o elegido para la ruta
                 orderIds:
                   type: array
                   minItems: 1

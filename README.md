@@ -27,7 +27,7 @@ El contrato HTTP se encuentra en [backend/openapi.yaml](backend/openapi.yaml).
 | 1 | US-003 | Gestionar conductores y asignaciones sin solapamientos. |
 | 1 | EN-002 | Autenticación, RBAC y bloqueo temporal. |
 | 1 | EN-006 | Persistencia PostGIS y cálculo reproducible de emisiones. |
-| 2 | US-004 | Optimizar rutas para entre 1 y 50 pedidos pendientes. |
+| 2 | US-004 | Optimizar entre 1 y 50 pedidos, sugerir unidades por capacidad segura y calcular el trazado vial. |
 | 2 | EN-001 | Medir el rendimiento con 50 puntos y límite P95 de 3,5 s. |
 | 2 | EN-007 | Actualizar pruebas, cobertura, migraciones y OpenAPI. |
 

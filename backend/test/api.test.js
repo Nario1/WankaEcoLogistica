@@ -143,6 +143,7 @@ test("POST /api/optimizations optimiza la ruta manual seleccionada", async () =>
       },
       body: JSON.stringify({
         routeId,
+        vehicleId: "00000000-0000-4000-8000-000000000080",
         orderIds: [orderId],
         startsAt: "2026-10-08T13:00:00Z",
       }),
@@ -152,6 +153,7 @@ test("POST /api/optimizations optimiza la ruta manual seleccionada", async () =>
     assert.equal(body.data.id, routeId);
     assert.deepEqual(lastOptimizationCall.body, {
       routeId,
+      vehicleId: "00000000-0000-4000-8000-000000000080",
       orderIds: [orderId],
       startsAt: "2026-10-08T13:00:00Z",
     });

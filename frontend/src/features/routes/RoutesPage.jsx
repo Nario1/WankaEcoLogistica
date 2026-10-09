@@ -33,6 +33,7 @@ export default function RoutesPage() {
   const [drivers, setDrivers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [selectedOrderIds, setSelectedOrderIds] = useState([]);
+  const [selectedVehicleId, setSelectedVehicleId] = useState("");
   const [optionsError, setOptionsError] = useState("");
   const [dialog, setDialog] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -116,13 +117,19 @@ export default function RoutesPage() {
       setOptionsError("Seleccione al menos un pedido pendiente.");
       return;
     }
-    const vehicle = vehicles.find((item) => item.id === dialog.vehicleId);
+    const vehicle = vehicles.find((item) => item.id === selectedVehicleId);
     const totalWeightKg = orders
       .filter((order) => selectedOrderIds.includes(order.id))
       .reduce((total, order) => total + order.weightKg, 0);
     if (vehicle && totalWeightKg > vehicle.capacityKg * 0.95) {
       setOptionsError(
         `El peso seleccionado supera los ${(vehicle.capacityKg * 0.95).toFixed(2)} kg permitidos para ${vehicle.plate}.`,
+      );
+      return;
+    }
+    if (!vehicle) {
+      setOptionsError(
+        "No hay unidades activas que cumplan las condiciones de capacidad.",
       );
       return;
     }
@@ -135,6 +142,7 @@ export default function RoutesPage() {
         method: "POST",
         body: JSON.stringify({
           routeId: dialog.id,
+          vehicleId: selectedVehicleId,
           orderIds: selectedOrderIds,
           startsAt: new Date(startsAt).toISOString(),
         }),
@@ -163,8 +171,11 @@ export default function RoutesPage() {
   const selectedWeightKg = orders
     .filter((order) => selectedOrderIds.includes(order.id))
     .reduce((total, order) => total + order.weightKg, 0);
-  const selectedVehicle = dialog?.vehicleId
-    ? vehicles.find((vehicle) => vehicle.id === dialog.vehicleId)
+  const eligibleVehicles = vehicles
+    .filter((vehicle) => vehicle.capacityKg * 0.95 >= selectedWeightKg)
+    .sort((left, right) => left.capacityKg - right.capacityKg);
+  const selectedVehicle = selectedVehicleId
+    ? vehicles.find((vehicle) => vehicle.id === selectedVehicleId)
     : null;
   const safeCapacityKg = selectedVehicle
     ? selectedVehicle.capacityKg * 0.95
@@ -221,6 +232,7 @@ export default function RoutesPage() {
                     disabled={!orders.length || !route.driverId}
                     onClick={() => {
                       setSelectedOrderIds([]);
+                      setSelectedVehicleId(route.vehicleId);
                       setOptionsError("");
                       setDialog({ type: "optimization", ...route });
                     }}
@@ -334,7 +346,17 @@ export default function RoutesPage() {
               label="Pedidos pendientes"
               multiple
               value={selectedOrderIds}
-              onChange={(event) => setSelectedOrderIds(event.target.value)}
+              onChange={(event) => {
+                const ids = event.target.value;
+                const weight = orders
+                  .filter((order) => ids.includes(order.id))
+                  .reduce((total, order) => total + order.weightKg, 0);
+                const suggestions = vehicles
+                  .filter((vehicle) => vehicle.capacityKg * 0.95 >= weight)
+                  .sort((left, right) => left.capacityKg - right.capacityKg);
+                setSelectedOrderIds(ids);
+                setSelectedVehicleId(suggestions[0]?.id ?? "");
+              }}
               renderValue={(values) =>
                 `${values.length} pedido${values.length === 1 ? "" : "s"} seleccionado${values.length === 1 ? "" : "s"}`
               }
@@ -350,6 +372,31 @@ export default function RoutesPage() {
               ))}
             </Select>
           </FormControl>
+          {selectedOrderIds.length > 0 && eligibleVehicles.length > 0 && (
+            <TextField
+              select
+              label="Vehículo sugerido"
+              value={selectedVehicleId}
+              onChange={(event) => setSelectedVehicleId(event.target.value)}
+              helperText="Se recomienda la unidad activa de menor capacidad suficiente para aprovechar mejor la flota."
+            >
+              {eligibleVehicles.map((vehicle, index) => (
+                <MenuItem key={vehicle.id} value={vehicle.id}>
+                  {index === 0 ? "Recomendado · " : ""}
+                  {vehicle.plate} · {vehicle.capacityKg.toFixed(2)} kg nominales
+                  · {(vehicle.capacityKg * 0.95 - selectedWeightKg).toFixed(2)}{" "}
+                  kg libres
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+          {selectedOrderIds.length > 0 && !eligibleVehicles.length && (
+            <Alert severity="error">
+              No hay unidades activas que cumplan la capacidad requerida de{" "}
+              {selectedWeightKg.toFixed(2)} kg. Registre una unidad adecuada,
+              reduzca el lote o reprograme los pedidos.
+            </Alert>
+          )}
           {safeCapacityKg !== null && (
             <Alert
               severity={selectedWeightKg > safeCapacityKg ? "error" : "info"}

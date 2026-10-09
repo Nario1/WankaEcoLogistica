@@ -33,6 +33,9 @@ class OptimizationRepository {
   async hasDriverConflict() {
     return Boolean(this.resources.driverConflict);
   }
+  async hasVehicleConflict() {
+    return Boolean(this.resources.vehicleConflict);
+  }
   async save(value) {
     this.saved = value;
     return { id: id(100), ...value };
@@ -53,6 +56,7 @@ function makeService(resources) {
 test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", async () => {
   const resources = {
     orders: [order(1), order(2, { priority: "HIGH" })],
+    vehicle: { id: id(81), capacityKg: 50, status: "ACTIVE" },
     route: {
       id: id(70),
       vehicleId: id(80),
@@ -69,6 +73,7 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
   const result = await service.optimize(
     {
       routeId: id(70),
+      vehicleId: id(81),
       orderIds: [id(1), id(2)],
       startsAt: "2026-10-08T13:00:00Z",
     },
@@ -82,6 +87,7 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
   );
   assert.ok(repository.saved.distanceKm >= 0);
   assert.equal(repository.saved.routeId, id(70));
+  assert.equal(repository.saved.vehicleId, id(81));
   assert.equal(
     repository.saved.startsAt.toISOString(),
     "2026-10-08T13:00:00.000Z",
@@ -92,6 +98,7 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
 test("rechaza duplicados, pedidos no pendientes y capacidad superior al 95 %", async () => {
   const base = {
     orders: [order(1)],
+    vehicle: { id: id(81), capacityKg: 10.5, status: "ACTIVE" },
     route: {
       id: id(70),
       vehicleId: id(80),
@@ -109,6 +116,7 @@ test("rechaza duplicados, pedidos no pendientes y capacidad superior al 95 %", a
     service.optimize(
       {
         routeId: id(70),
+        vehicleId: id(81),
         orderIds: [id(1), id(1)],
         startsAt: "2026-10-08T13:00:00Z",
       },
@@ -120,6 +128,7 @@ test("rechaza duplicados, pedidos no pendientes y capacidad superior al 95 %", a
     service.optimize(
       {
         routeId: id(70),
+        vehicleId: id(81),
         orderIds: [id(1)],
         startsAt: "2026-10-08T13:00:00Z",
       },
@@ -132,6 +141,7 @@ test("rechaza duplicados, pedidos no pendientes y capacidad superior al 95 %", a
     missing.optimize(
       {
         routeId: id(70),
+        vehicleId: id(81),
         orderIds: [id(1)],
         startsAt: "2026-10-08T13:00:00Z",
       },
@@ -164,6 +174,7 @@ test("exige ruta manual planificada, vehículo activo y conductor activo asignad
   };
   const request = {
     routeId: id(70),
+    vehicleId: id(81),
     orderIds: [id(1)],
     startsAt: "2026-10-08T13:00:00Z",
   };
@@ -171,18 +182,26 @@ test("exige ruta manual planificada, vehículo activo y conductor activo asignad
     null,
     { ...validRoute, optimized: true },
     { ...validRoute, status: "COMPLETED" },
-    { ...validRoute, vehicleStatus: "OUT_OF_SERVICE" },
     { ...validRoute, driverId: null },
     { ...validRoute, driverStatus: "INACTIVE" },
   ]) {
     await assert.rejects(
-      makeService({ orders: [order(1)], route }).service.optimize(
-        request,
-        id(99),
-      ),
+      makeService({
+        orders: [order(1)],
+        route,
+        vehicle: { id: id(81), capacityKg: 100, status: "ACTIVE" },
+      }).service.optimize(request, id(99)),
       { code: "CONFLICT" },
     );
   }
+  await assert.rejects(
+    makeService({
+      orders: [order(1)],
+      route: validRoute,
+      vehicle: { id: id(81), capacityKg: 100, status: "OUT_OF_SERVICE" },
+    }).service.optimize(request, id(99)),
+    { code: "CONFLICT" },
+  );
 });
 
 test("aplica la primera mitad de la ventana a pedidos de prioridad alta", () => {
@@ -206,6 +225,7 @@ test("aplica la primera mitad de la ventana a pedidos de prioridad alta", () => 
 test("rechaza la optimización si el nuevo horario solapa al conductor", async () => {
   const resources = {
     orders: [order(1)],
+    vehicle: { id: id(81), capacityKg: 100, status: "ACTIVE" },
     driverConflict: true,
     route: {
       id: id(70),
@@ -223,6 +243,36 @@ test("rechaza la optimización si el nuevo horario solapa al conductor", async (
     makeService(resources).service.optimize(
       {
         routeId: id(70),
+        vehicleId: id(81),
+        orderIds: [id(1)],
+        startsAt: "2026-10-08T13:00:00Z",
+      },
+      id(99),
+    ),
+    { code: "CONFLICT" },
+  );
+});
+
+test("rechaza una unidad con conflicto de horario", async () => {
+  const resources = {
+    orders: [order(1)],
+    vehicle: { id: id(81), capacityKg: 100, status: "ACTIVE" },
+    vehicleConflict: true,
+    route: {
+      id: id(70),
+      vehicleId: id(80),
+      driverId: id(90),
+      startsAt: "2026-10-08T13:00:00Z",
+      status: "PLANNED",
+      optimized: false,
+      driverStatus: "ACTIVE",
+    },
+  };
+  await assert.rejects(
+    makeService(resources).service.optimize(
+      {
+        routeId: id(70),
+        vehicleId: id(81),
         orderIds: [id(1)],
         startsAt: "2026-10-08T13:00:00Z",
       },

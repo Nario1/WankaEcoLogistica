@@ -68,6 +68,7 @@ function validateInput(input) {
   return {
     orderIds,
     routeId: requireUuid(input.routeId, "routeId"),
+    vehicleId: requireUuid(input.vehicleId, "vehicleId"),
     startsAt: requireDateTime(input.startsAt, "startsAt"),
   };
 }
@@ -142,10 +143,11 @@ export class OptimizationService {
   }
 
   async optimize(input, actorId) {
-    const { orderIds, routeId, startsAt } = validateInput(input);
+    const { orderIds, routeId, vehicleId, startsAt } = validateInput(input);
     const resources = await this.optimizationRepository.getResources(
       orderIds,
       routeId,
+      vehicleId,
     );
     if (resources.orders.length !== orderIds.length) {
       throw conflict(
@@ -162,8 +164,8 @@ export class OptimizationService {
     if (resources.route.optimized || resources.route.status !== "PLANNED") {
       throw conflict("Solo se puede optimizar una ruta manual planificada");
     }
-    if (resources.route.vehicleStatus !== "ACTIVE") {
-      throw conflict("El vehículo de la ruta no se encuentra activo");
+    if (!resources.vehicle || resources.vehicle.status !== "ACTIVE") {
+      throw conflict("El vehículo seleccionado no se encuentra activo");
     }
     if (!resources.route.driverId) {
       throw conflict("Asigne un conductor a la ruta antes de optimizarla");
@@ -171,7 +173,8 @@ export class OptimizationService {
     if (resources.route.driverStatus !== "ACTIVE") {
       throw conflict("El conductor asignado no se encuentra activo");
     }
-    const usableCapacityKg = resources.route.capacityKg * SAFE_CAPACITY_FACTOR;
+    const usableCapacityKg =
+      resources.vehicle.capacityKg * SAFE_CAPACITY_FACTOR;
     if (totalWeightKg > usableCapacityKg)
       throw conflict(
         `El peso supera la capacidad operativa segura del vehículo (${usableCapacityKg.toFixed(2)} kg, equivalente al 95 % de su capacidad)`,
@@ -197,11 +200,23 @@ export class OptimizationService {
         "El conductor asignado tiene otra ruta durante el horario calculado",
       );
     }
+    if (
+      await this.optimizationRepository.hasVehicleConflict(
+        vehicleId,
+        startsAt,
+        endsAt,
+        routeId,
+      )
+    ) {
+      throw conflict(
+        "El vehículo seleccionado tiene otra ruta durante el horario calculado",
+      );
+    }
     const result = await this.optimizationRepository.save({
       routeId,
       startsAt,
       endsAt,
-      vehicleId: resources.route.vehicleId,
+      vehicleId,
       driverId: resources.route.driverId,
       sequence: optimized.sequence,
       distanceKm: optimized.distanceKm,
@@ -216,6 +231,7 @@ export class OptimizationService {
       metadata: {
         orderCount: orderIds.length,
         distanceKm: optimized.distanceKm,
+        vehicleId,
       },
     });
     return result;

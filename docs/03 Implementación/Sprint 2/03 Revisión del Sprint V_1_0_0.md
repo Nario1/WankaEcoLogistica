@@ -6,7 +6,7 @@
 
 **Líder del proyecto:** Equipo del proyecto
 
-**Versión:** V_1_0_6
+**Versión:** V_1_0_7
 
 ## Historias de usuario completadas en este Sprint
 
@@ -18,16 +18,17 @@
 
 ## Demostración del trabajo completado
 
-La demostración reproducible consiste en iniciar sesión como administrador u operador, registrar pedidos seleccionando su destino sobre el mapa, crear una ruta manual con vehículo y horario, asignarle un conductor y pulsar **Optimizar** en esa fila. Luego se eligen hasta 50 pedidos pendientes y se confirma o corrige la hora de salida para hacerla compatible con sus ventanas. La interfaz presenta el peso acumulado y la capacidad segura antes del envío. El sistema conserva vehículo y conductor, valida todas las restricciones y convierte esa misma ruta en optimizada. **Ver mapa** consulta el motor vial, muestra primero el local y recorre calles transitables hasta las paradas; informa proveedor, distancia, duración y si se consideró tráfico. Nunca presenta una diagonal como ruta navegable.
+La demostración reproducible consiste en iniciar sesión como administrador u operador, registrar pedidos seleccionando su destino sobre el mapa, crear una ruta manual con vehículo y horario, asignarle un conductor y pulsar **Optimizar** en esa fila. Luego se eligen hasta 50 pedidos pendientes y se confirma o corrige la hora de salida para hacerla compatible con sus ventanas. La interfaz calcula el peso, recomienda la unidad activa de menor capacidad suficiente, muestra su margen libre y permite elegir otra unidad elegible. Si ninguna cumple, explica que se debe registrar una unidad, reducir el lote o reprogramarlo. El backend valida nuevamente estado, 95 % de capacidad y solapamiento antes de reasignar la misma ruta. **Ver mapa** consulta el motor vial, muestra primero el local y recorre calles transitables hasta las paradas; informa proveedor, distancia, duración y si se consideró tráfico. Nunca presenta una diagonal como ruta navegable.
 
 ## Evidencia de calidad
 
 - Pruebas de origen fijo, reutilización de ruta, prioridad, secuencia, duplicados, estado pendiente, límite de capacidad al 95 %, recursos, ventanas y rendimiento.
 - Pruebas de transformación de geometría OSRM, selección de TomTom Traffic y navegación desde el local.
+- Pruebas de selección de vehículo, estado, capacidad segura y conflicto horario de la unidad.
 - Pruebas de API y RBAC para operaciones existentes; el endpoint nuevo usa el mismo middleware probado.
 - Persistencia parametrizada y transaccional.
 - Contrato `backend/openapi.yaml` y migraciones actualizados.
-- Ejecución local final: 27 de 27 pruebas aprobadas, incluida PostGIS; 89,87 % de cobertura de líneas; lint, formato y build aprobados.
+- Ejecución local final: 28 de 28 pruebas aprobadas, incluida PostGIS; 90,00 % de cobertura de líneas; lint, formato y build aprobados.
 
 ## Pendientes
 
@@ -39,6 +40,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_7 | 08/10/2026 | Demostración de recomendación de unidades y rechazo explícito cuando ninguna cumple. | Equipo del proyecto |
 | V_1_0_6 | 08/10/2026 | Evidencia de geometría vial, sentidos de circulación y tráfico configurable. | Equipo del proyecto |
 | V_1_0_5 | 08/10/2026 | Hora de salida editable y validación preventiva de peso para evitar solicitudes inviables. | Equipo del proyecto |
 | V_1_0_4 | 08/10/2026 | Validación de origen fijo, optimización desde la fila y reglas RN-002/RN-004. | Equipo del proyecto |

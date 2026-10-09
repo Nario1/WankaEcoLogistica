@@ -6,7 +6,7 @@
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_6 |
+| Versión | V_1_0_7 |
 | Fecha | 08/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
@@ -23,6 +23,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 | EN-007 — Calidad y API | Completado localmente | OpenAPI 0.2.0, lint, formato, build y cobertura automatizados mediante scripts npm. |
 | Extensión visual del incremento | Completado | Mapa interactivo con paradas ordenadas, ajuste automático de vista y consulta persistida de coordenadas. |
 | Navegación vial | Completado y configurable | Geometría sobre calles mediante OSRM; integración TomTom habilitable para tráfico actual e histórico. |
+| Recomendación de unidad | Completado | Unidades activas filtradas por el 95 % de capacidad, ordenadas por menor capacidad suficiente y validadas nuevamente en el backend. |
 | Captura geográfica de pedidos | Completado | Selección del punto de entrega por clic o geolocalización, con coordenadas editables y marcador visible. |
 
 ## Indicadores de control
@@ -31,7 +32,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|
 | Alcance | Verde | Tres ítems planificados implementados y trazados. |
 | Cronograma | Verde | Incremento disponible al cierre del Sprint 2. |
-| Calidad | Verde | 27 de 27 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 89,87 %; lint, formato y build aprobados. |
+| Calidad | Verde | 28 de 28 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,00 %; lint, formato y build aprobados. |
 | Seguridad | Verde | Endpoint protegido con JWT y roles `ADMIN`/`OPERATOR`; consultas parametrizadas. |
 | Datos | Verde | Creación de ruta y asignación de pedidos atómica mediante transacción. |
 | Riesgo de entorno | Amarillo | La prueba real PostGIS requiere `TEST_DATABASE_URL` y una instancia migrada. |
@@ -44,6 +45,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 - La hora de salida se confirma o corrige al optimizar para hacerla compatible con las ventanas de entrega; el frontend anticipa excesos de peso antes de invocar la API.
 - El mapa consume `GET /api/routes/{id}/navigation`; sólo dibuja geometría devuelta por un motor vial y declara si el cálculo incorporó tráfico.
 - OSRM considera la red OpenStreetMap y los sentidos/restricciones publicados; TomTom se activa con `TOMTOM_API_KEY` para calcular la ruta rápida con tráfico. Sin esa clave no se afirma que exista información de tráfico en tiempo real.
+- La interfaz recomienda la unidad activa de menor capacidad suficiente, muestra el margen libre y explica cuando ninguna cumple. El backend valida nuevamente estado, capacidad y solapamiento horario antes de reasignar la ruta.
 - Todas las rutas parten del local fijo indicado por el negocio y la misma ruta pasa de manual a optimizada.
 - La heurística exige prioridad alta dentro del primer 50 % de su ventana (RN-004), luego considera vencimiento y distancia; conserva distancia, peso y orden de entrega.
 
@@ -51,6 +53,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_7 | 08/10/2026 | Recomendación inteligente de vehículos y mensajes ante falta de unidades elegibles. | Equipo del proyecto |
 | V_1_0_6 | 08/10/2026 | Trazado vial real, soporte configurable de tráfico y eliminación de líneas rectas engañosas. | Equipo del proyecto |
 | V_1_0_5 | 08/10/2026 | Corrección guiada de la hora de salida y validación previa de capacidad en la interfaz. | Equipo del proyecto |
 | V_1_0_4 | 08/10/2026 | Origen fijo, optimización de ruta manual seleccionada y aplicación estricta de RN-002/RN-004. | Equipo del proyecto |
