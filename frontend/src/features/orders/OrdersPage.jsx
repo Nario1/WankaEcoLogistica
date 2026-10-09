@@ -16,6 +16,7 @@ import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import LocationPicker from "./LocationPicker";
 import { formatTime } from "../../utils/format";
+import Time12Field from "../shared/Time12Field";
 
 const emptyOrder = {
   productName: "",
@@ -210,25 +211,27 @@ export default function OrdersPage() {
             </TextField>
           </Stack>
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-            <TextField
+            <input
+              type="hidden"
               name="windowStart"
-              label="Inicio de ventana"
-              type="time"
               value={editing.windowStart}
-              onChange={updateField("windowStart")}
-              required
-              fullWidth
-              slotProps={{ inputLabel: { shrink: true } }}
             />
-            <TextField
-              name="windowEnd"
-              label="Fin de ventana"
-              type="time"
+            <Time12Field
+              label="Inicio"
+              value={editing.windowStart}
+              onChange={(value) =>
+                setEditing((current) => ({ ...current, windowStart: value }))
+              }
+            />
+          </Stack>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <input type="hidden" name="windowEnd" value={editing.windowEnd} />
+            <Time12Field
+              label="Fin"
               value={editing.windowEnd}
-              onChange={updateField("windowEnd")}
-              required
-              fullWidth
-              slotProps={{ inputLabel: { shrink: true } }}
+              onChange={(value) =>
+                setEditing((current) => ({ ...current, windowEnd: value }))
+              }
             />
           </Stack>
         </FormDialog>

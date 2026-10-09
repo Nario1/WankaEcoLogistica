@@ -20,11 +20,18 @@ import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import RouteMap from "./RouteMap";
 import { formatDateTime, formatTime } from "../../utils/format";
+import DateTime12Field from "../shared/DateTime12Field";
 
 function toLocalDateTimeInput(value) {
   const date = new Date(value);
   const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
   return local.toISOString().slice(0, 16);
+}
+
+function todayAt(hour) {
+  const now = new Date();
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60_000);
+  return `${local.toISOString().slice(0, 10)}T${String(hour).padStart(2, "0")}:00`;
 }
 
 export default function RoutesPage() {
@@ -387,19 +394,15 @@ export default function RoutesPage() {
               </MenuItem>
             ))}
           </TextField>
-          <TextField
+          <DateTime12Field
             name="startsAt"
             label="Inicio"
-            type="datetime-local"
-            required
-            slotProps={{ inputLabel: { shrink: true } }}
+            defaultValue={todayAt(8)}
           />
-          <TextField
+          <DateTime12Field
             name="endsAt"
             label="Fin (máximo 8 horas)"
-            type="datetime-local"
-            required
-            slotProps={{ inputLabel: { shrink: true } }}
+            defaultValue={todayAt(16)}
           />
         </FormDialog>
       )}
@@ -442,14 +445,10 @@ export default function RoutesPage() {
           <Alert severity="info">
             <strong>{dialog.vehiclePlate}</strong> · {dialog.driverName}
           </Alert>
-          <TextField
+          <DateTime12Field
             name="startsAt"
-            label="Hora de salida"
-            type="datetime-local"
-            required
+            label="Salida"
             defaultValue={toLocalDateTimeInput(dialog.startsAt)}
-            slotProps={{ inputLabel: { shrink: true } }}
-            helperText="Ajústela para que coincida con las ventanas de los pedidos."
           />
           <FormControl required fullWidth>
             <InputLabel id="orders-label">Pedidos pendientes</InputLabel>

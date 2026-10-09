@@ -6,7 +6,7 @@
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_8 |
+| Versión | V_1_0_9 |
 | Fecha | 08/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
@@ -25,7 +25,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 | Navegación vial | Completado y configurable | Geometría sobre calles mediante OSRM; integración TomTom habilitable para tráfico actual e histórico. |
 | Recomendación de unidad | Completado | Unidades activas filtradas por el 95 % de capacidad, ordenadas por menor capacidad suficiente y validadas nuevamente en el backend. |
 | Planificación integrada | Completado | Un formulario reúne pedidos identificados, vehículo recomendado, conductor y horario antes de crear y optimizar. |
-| Presentación horaria | Completado | Fechas y horas visibles normalizadas al reloj de 12 horas con indicadores `AM`/`PM`. |
+| Presentación horaria | Completado | Fechas y horas visibles normalizadas al reloj de 12 horas; formularios con controles separados de hora, minutos y `AM`/`PM`. |
 | Captura geográfica de pedidos | Completado | Selección del punto de entrega por clic o geolocalización, con coordenadas editables y marcador visible. |
 
 ## Indicadores de control
@@ -51,6 +51,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 - Cada pedido exige el nombre del producto o carga y lo presenta en tablas, selectores y mapa; la migración conserva registros anteriores como `Carga general`.
 - **Planificar nueva ruta** integra pedidos, recomendación de vehículo, conductor y horario, y encadena creación, asignación y optimización desde una sola acción del usuario.
 - Todas las fechas y horas de lectura se muestran en formato de 12 horas con `AM`/`PM`.
+- Los formularios de pedidos y rutas sustituyen controles horarios dependientes del navegador por selectores explícitos de hora, minutos y periodo; la API continúa recibiendo valores normalizados de 24 horas.
 - Todas las rutas parten del local fijo indicado por el negocio y la misma ruta pasa de manual a optimizada.
 - La heurística exige prioridad alta dentro del primer 50 % de su ventana (RN-004), luego considera vencimiento y distancia; conserva distancia, peso y orden de entrega.
 
@@ -58,6 +59,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_9 | 08/10/2026 | Selectores horarios explícitos y accesibles con hora, minutos y AM/PM. | Equipo del proyecto |
 | V_1_0_8 | 08/10/2026 | Identificación de carga, horario AM/PM y formulario integral de planificación. | Equipo del proyecto |
 | V_1_0_7 | 08/10/2026 | Recomendación inteligente de vehículos y mensajes ante falta de unidades elegibles. | Equipo del proyecto |
 | V_1_0_6 | 08/10/2026 | Trazado vial real, soporte configurable de tráfico y eliminación de líneas rectas engañosas. | Equipo del proyecto |
