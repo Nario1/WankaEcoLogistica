@@ -12,7 +12,7 @@
 
 ## Resumen ejecutivo
 
-El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo permite seleccionar una ruta manual y sus pedidos pendientes desde React, conservar el vehículo y conductor asignados, partir siempre del local `-12.07201013486951, -75.20516872975998`, ordenar las paradas por prioridad, ventana y cercanía, convertir la misma ruta dentro de una transacción y visualizar la secuencia sobre OpenStreetMap.
+El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo principal integra selección de pedidos identificados, recomendación de vehículo, conductor y horario sugerido; también permite optimizar rutas manuales existentes. Todas parten del local `-12.07201013486951, -75.20516872975998`, aplican prioridad, ventanas y cercanía, y muestran el recorrido sobre la red vial.
 
 ## Estado del alcance
 
@@ -35,16 +35,16 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|
 | Alcance | Verde | Tres ítems planificados implementados y trazados. |
 | Cronograma | Verde | Incremento disponible al cierre del Sprint 2. |
-| Calidad | Verde | 28 de 28 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,00 %; lint, formato y build aprobados. |
+| Calidad | Verde | 28 de 28 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,04 %; lint, formato y build aprobados. |
 | Seguridad | Verde | Endpoint protegido con JWT y roles `ADMIN`/`OPERATOR`; consultas parametrizadas. |
-| Datos | Verde | Creación de ruta y asignación de pedidos atómica mediante transacción. |
+| Datos | Verde | Conversión de ruta y asignación de todos los pedidos atómica mediante transacción y controles de concurrencia. |
 | Riesgo de entorno | Amarillo | La prueba real PostGIS requiere `TEST_DATABASE_URL` y una instancia migrada. |
 
 ## Decisiones técnicas
 
 - Se limita cada optimización a 50 pedidos y una jornada máxima de ocho horas.
 - Se rechaza el lote completo cuando la ruta no es elegible, falta capacidad, conductor, pedidos pendientes o factibilidad horaria; no se publica una asignación parcial.
-- La ruta manual seleccionada conserva su vehículo y conductor; el peso no supera el 95 % de la capacidad nominal (RN-002).
+- Una ruta manual conserva su conductor y puede adoptar la unidad recomendada; el flujo integral crea la planificación con esos recursos. En ambos casos el peso no supera el 95 % de la capacidad nominal (RN-002).
 - La hora de salida se confirma o corrige al optimizar para hacerla compatible con las ventanas de entrega; el frontend anticipa excesos de peso antes de invocar la API.
 - El mapa consume `GET /api/routes/{id}/navigation`; sólo dibuja geometría devuelta por un motor vial y declara si el cálculo incorporó tráfico.
 - OSRM considera la red OpenStreetMap y los sentidos/restricciones publicados; TomTom se activa con `TOMTOM_API_KEY` para calcular la ruta rápida con tráfico. Sin esa clave no se afirma que exista información de tráfico en tiempo real.

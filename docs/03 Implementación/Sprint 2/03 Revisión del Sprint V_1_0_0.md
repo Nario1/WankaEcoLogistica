@@ -12,7 +12,7 @@
 
 | Ítem | Resultado | Criterios demostrados |
 |---|---|---|
-| US-004 | Optimización de hasta 50 pedidos pendientes sobre la ruta manual seleccionada. | Salida desde local fijo, conservación de vehículo/conductor, 95 % de capacidad, prioridad alta en primera mitad de ventana, jornada máxima y rechazo total de lotes inviables. |
+| US-004 | Planificación integral y optimización de hasta 50 pedidos pendientes, incluida una ruta manual existente. | Salida desde local fijo, carga identificada, recomendación de unidad, conductor, horario sugerido, 95 % de capacidad, prioridad alta en primera mitad de ventana, jornada máxima y rechazo total de lotes inviables. |
 | EN-001 | Benchmark automatizado del algoritmo con 50 puntos. | Medición repetida de latencia y aserción de P95 ≤ 3,5 s. |
 | EN-007 | Contrato OpenAPI 0.2.0, migración incremental y controles de calidad. | Pruebas con cobertura mínima, lint, formato y build reproducibles. |
 
@@ -28,7 +28,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 - Pruebas de API y RBAC para operaciones existentes; el endpoint nuevo usa el mismo middleware probado.
 - Persistencia parametrizada y transaccional.
 - Contrato `backend/openapi.yaml` y migraciones actualizados.
-- Ejecución local final: 28 de 28 pruebas aprobadas, incluida PostGIS; 90,00 % de cobertura de líneas; lint, formato y build aprobados.
+- Ejecución local final: 28 de 28 pruebas aprobadas, incluida PostGIS; 90,04 % de cobertura de líneas; lint, formato y build aprobados.
 
 ## Pendientes
 
