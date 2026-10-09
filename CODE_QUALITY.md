@@ -1,6 +1,6 @@
 # Estándares de calidad de código
 
-[← README principal](README.md) · [Inicio de la documentación →](<docs/01 Inicio/01. Selección del enfoque del proyecto V_1_0_0.md>)
+[← README principal](README.md) · [Índice documental](<docs/00 Índice de documentación.md>) · [Inicio de la documentación →](<docs/01 Inicio/01. Selección del enfoque del proyecto V_1_0_0.md>)
 
 Estas reglas aplican a WankaEcoLogística y toman ISO/IEC 25010 como referencia de calidad; no implican certificación.
 

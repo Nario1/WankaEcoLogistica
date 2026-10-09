@@ -4,6 +4,8 @@ Aplicación web para gestionar la logística de última milla en Huancayo. El si
 
 Este es el único README general del proyecto. Los entregables específicos se encuentran organizados por sprint dentro de [`docs/03 Implementación/`](<docs/03 Implementación/>).
 
+Para recorrer toda la documentación en orden, consulte el [índice central de documentación](<docs/00 Índice de documentación.md>).
+
 ## Estado actual
 
 Los Sprints 1 y 2 están implementados para desarrollo local:
@@ -48,6 +50,51 @@ US-005 a US-008 pertenecen a sprints posteriores y no se declaran como terminada
 - `docs/`: documentación de inicio, planificación e implementación.
 
 El contrato HTTP está disponible en [backend/openapi.yaml](backend/openapi.yaml) y corresponde a OpenAPI `3.1.0`, versión documental `0.3.0`.
+
+## Estructura del proyecto
+
+```text
+WankaEcoLogistica/
+├── README.md                    # Guía general, estado e instalación
+├── CODE_QUALITY.md              # Estándares técnicos y de calidad
+├── docs/
+│   ├── 00 Índice de documentación.md
+│   ├── 01 Inicio/               # Alcance, requisitos, usuarios y arquitectura
+│   ├── 02 Planificación/        # Backlog, Jira, riesgos y presupuesto
+│   └── 03 Implementación/
+│       ├── Sprint 1/            # Base operativa y seguridad
+│       └── Sprint 2/            # Optimización, evidencia y retrospectiva
+├── backend/
+│   ├── migrations/              # Migraciones SQL incrementales
+│   ├── scripts/                 # Migración y creación del administrador
+│   ├── src/
+│   │   ├── config/              # Entorno y conexión PostgreSQL
+│   │   ├── infrastructure/      # Repositorios PostgreSQL y proveedores viales
+│   │   ├── modules/             # Auth, pedidos, flota, rutas y optimización
+│   │   └── shared/              # Errores, validación y utilidades HTTP
+│   ├── test/                    # Pruebas unitarias, API e integración
+│   └── openapi.yaml             # Contrato HTTP OpenAPI 3.1
+└── frontend/
+    └── src/
+        ├── api/                 # Cliente HTTP
+        ├── auth/                # Sesión e inicio de sesión
+        ├── dashboard/           # Navegación y estructura visual
+        ├── features/            # Pedidos, vehículos, conductores y rutas
+        ├── shared-theme/        # Tema y componentes visuales MUI
+        └── utils/               # Formatos de fecha y hora
+```
+
+### Responsabilidad de las carpetas
+
+| Ruta | Responsabilidad |
+|---|---|
+| `docs/01 Inicio/` | Define el proyecto y sus requisitos. |
+| `docs/02 Planificación/` | Organiza backlog, riesgos, presupuesto y sprints. |
+| `docs/03 Implementación/Sprint N/` | Conserva la evidencia documental de cada sprint. |
+| `backend/src/modules/` | Implementa casos de uso y endpoints por dominio. |
+| `backend/src/infrastructure/` | Conecta servicios con PostgreSQL, OSRM y TomTom. |
+| `backend/test/` | Verifica reglas, permisos, rendimiento e integraciones. |
+| `frontend/src/features/` | Implementa las pantallas funcionales del sistema. |
 
 ## Requisitos
 
@@ -212,6 +259,8 @@ TEST_DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/wanka_ecologi
 No utilice la base de desarrollo o producción como base de pruebas.
 
 ## Estructura de documentación
+
+También puede utilizar el [índice documental central](<docs/00 Índice de documentación.md>) para seguir el recorrido completo entre fases y sprints.
 
 ### Inicio
 
