@@ -1,6 +1,6 @@
 # Revisión del Sprint 1
 
-[← Anterior: Impedimentos](<02 Registro de Impedimentos V_1_0_0.md>) · [Índice del Sprint 1](README.md) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<04 Retrospectiva del Sprint V_1_0_0.md>)
+[← Anterior: Impedimentos](<02 Registro de Impedimentos V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<04 Retrospectiva del Sprint V_1_0_0.md>)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 

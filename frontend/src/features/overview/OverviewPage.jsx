@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 const capabilities = [
   [
     "Pedidos",
-    "Registra direcciones, coordenadas, peso, prioridad y ventanas de entrega.",
+    "Registra entregas y selecciona su ubicación directamente en el mapa.",
   ],
   [
     "Vehículos",
@@ -18,8 +18,8 @@ const capabilities = [
     "Registra personal y evita asignaciones con conflictos de horario.",
   ],
   [
-    "Seguridad",
-    "Autenticación, roles y bloqueo temporal protegen cada operación.",
+    "Rutas optimizadas",
+    "Ordena hasta 50 pedidos por capacidad, prioridad y ventanas, y muestra la secuencia en OpenStreetMap.",
   ],
 ];
 
@@ -31,13 +31,13 @@ export default function OverviewPage() {
           Operación logística
         </Typography>
         <Typography color="text.secondary">
-          Incremento funcional correspondiente al Sprint 1.
+          Gestión y planificación visual correspondientes a los Sprints 1 y 2.
         </Typography>
       </Grid>
       <Grid size={12}>
         <Alert severity="info">
-          La optimización automática de rutas, mapas y reportes corresponden a
-          próximos sprints.
+          Flujo recomendado: registre vehículos y conductores, ubique los
+          pedidos en el mapa y optimice la jornada desde Planificación de rutas.
         </Alert>
       </Grid>
       {capabilities.map(([title, description]) => (

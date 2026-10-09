@@ -24,7 +24,7 @@ export default function Dashboard(props) {
     orders: { label: "Pedidos", component: <OrdersPage /> },
     vehicles: { label: "Vehículos", component: <VehiclesPage /> },
     drivers: { label: "Conductores", component: <DriversPage /> },
-    routes: { label: "Asignaciones", component: <RoutesPage /> },
+    routes: { label: "Planificación de rutas", component: <RoutesPage /> },
   };
   const activePage = pages[page] ?? pages.overview;
   return (
@@ -61,7 +61,7 @@ export default function Dashboard(props) {
             sx={{
               alignItems: "center",
               width: "100%",
-              mx: { xs: 2, sm: 3 },
+              px: { xs: 2, sm: 3 },
               pb: 5,
               mt: { xs: "72px", md: 0 },
             }}

@@ -1,6 +1,6 @@
 # Informe de estado del proyecto
 
-[← Índice del Sprint 1](README.md) · [Implementación](../README.md) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
+[← README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|

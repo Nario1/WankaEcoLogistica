@@ -38,7 +38,7 @@ const mainListItems = [
   },
   {
     id: "routes",
-    text: "Asignaciones",
+    text: "Rutas",
     icon: <RouteRoundedIcon />,
     roles: ["ADMIN", "OPERATOR"],
   },

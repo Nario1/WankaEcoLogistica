@@ -1,6 +1,6 @@
 # Registro de impedimentos
 
-[← Anterior: Informe](<01 Informe de estado del proyecto V_1_0_0.md>) · [Índice del Sprint 2](README.md) · [README principal](../../../README.md) · [Siguiente: Revisión →](<03 Revisión del Sprint V_1_0_0.md>)
+[← Anterior: Informe](<01 Informe de estado del proyecto V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Revisión →](<03 Revisión del Sprint V_1_0_0.md>)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 

@@ -13,13 +13,14 @@ export default function FormDialog({
   onSubmit,
   children,
   submitting,
+  maxWidth = "sm",
 }) {
   return (
     <Dialog
       open={open}
       onClose={submitting ? undefined : onClose}
       fullWidth
-      maxWidth="sm"
+      maxWidth={maxWidth}
     >
       <Stack component="form" onSubmit={onSubmit}>
         <DialogTitle>{title}</DialogTitle>
@@ -46,4 +47,5 @@ FormDialog.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   submitting: PropTypes.bool,
+  maxWidth: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
 };

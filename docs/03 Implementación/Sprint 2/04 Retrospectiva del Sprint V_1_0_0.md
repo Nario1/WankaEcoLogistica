@@ -1,6 +1,6 @@
 # Retrospectiva del Sprint 2
 
-[← Anterior: Revisión](<03 Revisión del Sprint V_1_0_0.md>) · [Índice del Sprint 2](README.md) · [README principal](../../../README.md)
+[← Anterior: Revisión](<03 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 

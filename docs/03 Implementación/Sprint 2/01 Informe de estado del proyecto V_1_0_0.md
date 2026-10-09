@@ -1,12 +1,12 @@
 # Informe de estado del proyecto
 
-[← Índice del Sprint 2](README.md) · [Implementación](../README.md) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
+[← Sprint 1](<../Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_2 |
+| Versión | V_1_0_3 |
 | Fecha | 08/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
@@ -22,6 +22,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 | EN-001 — Rendimiento de ruteo | Completado | Benchmark automatizado con 50 puntos y umbral P95 ≤ 3,5 s. |
 | EN-007 — Calidad y API | Completado localmente | OpenAPI 0.2.0, lint, formato, build y cobertura automatizados mediante scripts npm. |
 | Extensión visual del incremento | Completado | Mapa interactivo con paradas ordenadas, ajuste automático de vista y consulta persistida de coordenadas. |
+| Captura geográfica de pedidos | Completado | Selección del punto de entrega por clic o geolocalización, con coordenadas editables y marcador visible. |
 
 ## Indicadores de control
 
@@ -47,4 +48,5 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|---|
 | V_1_0_1 | 07/10/2026 | Navegación documental y trazabilidad actualizadas según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_2 | 08/10/2026 | Incorporación del mapa de planificación y correcciones de compatibilidad MUI. | Equipo del proyecto |
+| V_1_0_3 | 08/10/2026 | Mejora de usabilidad y selección cartográfica de pedidos. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Informe de cierre y estado verificable del Sprint 2. | Equipo del proyecto |
