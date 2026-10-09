@@ -34,6 +34,39 @@ function todayAt(hour) {
   return `${local.toISOString().slice(0, 10)}T${String(hour).padStart(2, "0")}:00`;
 }
 
+function suggestSchedule(selectedOrders) {
+  if (!selectedOrders.length) {
+    return { startsAt: todayAt(8), endsAt: todayAt(16) };
+  }
+  const toMinutes = (value) => {
+    const [hour, minute] = value.split(":").map(Number);
+    return hour * 60 + minute;
+  };
+  const earliest = Math.min(
+    ...selectedOrders.map((order) => toMinutes(order.windowStart)),
+  );
+  const latest = Math.max(
+    ...selectedOrders.map((order) => toMinutes(order.windowEnd)),
+  );
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const planningDate = new Date(now);
+  if (currentMinutes >= earliest)
+    planningDate.setDate(planningDate.getDate() + 1);
+  const localDate = new Date(
+    planningDate.getTime() - planningDate.getTimezoneOffset() * 60_000,
+  )
+    .toISOString()
+    .slice(0, 10);
+  const format = (minutes) =>
+    `${localDate}T${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+  const end = Math.min(latest, earliest + 8 * 60);
+  return {
+    startsAt: format(earliest),
+    endsAt: format(Math.max(earliest + 1, end)),
+  };
+}
+
 export default function RoutesPage() {
   const { session, logout } = useAuth();
   const resource = useApiResource("/routes");
@@ -42,6 +75,9 @@ export default function RoutesPage() {
   const [orders, setOrders] = useState([]);
   const [selectedOrderIds, setSelectedOrderIds] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
+  const [suggestedSchedule, setSuggestedSchedule] = useState(() =>
+    suggestSchedule([]),
+  );
   const [optionsError, setOptionsError] = useState("");
   const [dialog, setDialog] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -239,6 +275,7 @@ export default function RoutesPage() {
     : null;
 
   function selectOrders(ids) {
+    const selected = orders.filter((order) => ids.includes(order.id));
     const weight = orders
       .filter((order) => ids.includes(order.id))
       .reduce((total, order) => total + order.weightKg, 0);
@@ -247,6 +284,7 @@ export default function RoutesPage() {
       .sort((left, right) => left.capacityKg - right.capacityKg);
     setSelectedOrderIds(ids);
     setSelectedVehicleId(suggestions[0]?.id ?? "");
+    setSuggestedSchedule(suggestSchedule(selected));
   }
 
   return (
@@ -259,6 +297,7 @@ export default function RoutesPage() {
       onAction={() => {
         setSelectedOrderIds([]);
         setSelectedVehicleId("");
+        setSuggestedSchedule(suggestSchedule([]));
         setOptionsError("");
         setDialog({ type: "route" });
       }}
@@ -395,15 +434,25 @@ export default function RoutesPage() {
             ))}
           </TextField>
           <DateTime12Field
+            key={`start-${suggestedSchedule.startsAt}`}
             name="startsAt"
             label="Inicio"
-            defaultValue={todayAt(8)}
+            defaultValue={suggestedSchedule.startsAt}
           />
           <DateTime12Field
+            key={`end-${suggestedSchedule.endsAt}`}
             name="endsAt"
             label="Fin (máximo 8 horas)"
-            defaultValue={todayAt(16)}
+            defaultValue={suggestedSchedule.endsAt}
           />
+          {!!selectedOrderIds.length && (
+            <Alert severity="success">
+              Horario sugerido según las ventanas de los pedidos seleccionados.
+              Inicio: {formatDateTime(suggestedSchedule.startsAt)} · fin:{" "}
+              {formatDateTime(suggestedSchedule.endsAt)}. Puede ajustarlo antes
+              de confirmar.
+            </Alert>
+          )}
         </FormDialog>
       )}
       {dialog?.type === "driver" && (
@@ -446,9 +495,14 @@ export default function RoutesPage() {
             <strong>{dialog.vehiclePlate}</strong> · {dialog.driverName}
           </Alert>
           <DateTime12Field
+            key={`optimization-${suggestedSchedule.startsAt}`}
             name="startsAt"
             label="Salida"
-            defaultValue={toLocalDateTimeInput(dialog.startsAt)}
+            defaultValue={
+              selectedOrderIds.length
+                ? suggestedSchedule.startsAt
+                : toLocalDateTimeInput(dialog.startsAt)
+            }
           />
           <FormControl required fullWidth>
             <InputLabel id="orders-label">Pedidos pendientes</InputLabel>
