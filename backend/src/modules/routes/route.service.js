@@ -24,6 +24,13 @@ export class RouteService {
     return this.routeRepository.list();
   }
 
+  async listStops(routeId) {
+    requireUuid(routeId);
+    const route = await this.routeRepository.findById(routeId);
+    if (!route) throw notFound("Ruta");
+    return this.routeRepository.listStops(routeId);
+  }
+
   async create(input, actorId) {
     assertObject(input);
     const vehicleId = requireUuid(input.vehicleId, "vehicleId");

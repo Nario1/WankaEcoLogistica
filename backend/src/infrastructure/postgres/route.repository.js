@@ -31,6 +31,22 @@ export class PgRouteRepository {
     );
   }
 
+  async listStops(routeId) {
+    return (
+      await this.pool.query(
+        `SELECT pedido_id AS id, direccion AS address,
+          ST_Y(coordenadas)::float AS latitude,
+          ST_X(coordenadas)::float AS longitude,
+          peso_kg::float AS "weightKg", prioridad AS priority,
+          to_char(ventana_inicio, 'HH24:MI') AS "windowStart",
+          to_char(ventana_fin, 'HH24:MI') AS "windowEnd",
+          orden_entrega AS "deliveryOrder"
+         FROM pedidos WHERE ruta_id = $1 ORDER BY orden_entrega`,
+        [routeId],
+      )
+    ).rows;
+  }
+
   async create({ vehicleId, startsAt, endsAt }) {
     const result = await this.pool.query(
       `INSERT INTO rutas (vehiculo_id, inicio, fin) VALUES ($1, $2, $3) RETURNING ruta_id`,

@@ -20,9 +20,9 @@ export default function ResourcePage({
     <Box sx={{ width: "100%", maxWidth: 1700 }}>
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
         gap={2}
         mb={2}
+        sx={{ justifyContent: "space-between" }}
       >
         <Box>
           <Typography component="h1" variant="h5" fontWeight={700}>
@@ -43,7 +43,7 @@ export default function ResourcePage({
       )}
       <Card sx={{ p: 2, overflowX: "auto" }}>
         {loading ? (
-          <Stack alignItems="center" p={4}>
+          <Stack sx={{ alignItems: "center", p: 4 }}>
             <CircularProgress aria-label="Cargando" />
           </Stack>
         ) : (

@@ -31,6 +31,7 @@ const services = {
   driverService: { list: async () => [], create: async () => ({}) },
   routeService: {
     list: async () => [],
+    listStops: async () => [],
     create: async () => ({}),
     assignDriver: async () => ({}),
   },

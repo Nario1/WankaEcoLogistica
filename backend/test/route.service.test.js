@@ -18,6 +18,9 @@ class RouteRepository extends MemoryRepository {
   async assignDriver(routeId, driverId) {
     return this.update(routeId, { driverId });
   }
+  async listStops(routeId) {
+    return [{ id: "stop-1", routeId, deliveryOrder: 1 }];
+  }
 }
 
 const route = {
@@ -69,5 +72,15 @@ test("bloquea conflictos horarios y jornadas mayores a ocho horas", async () => 
       "operator-1",
     ),
     { code: "CONFLICT" },
+  );
+});
+
+test("lista las paradas ordenadas de una ruta existente", async () => {
+  const stops = await makeService().listStops(route.id);
+  assert.equal(stops.length, 1);
+  assert.equal(stops[0].deliveryOrder, 1);
+  await assert.rejects(
+    makeService().listStops("00000000-0000-4000-8000-000000000099"),
+    { code: "NOT_FOUND" },
   );
 });

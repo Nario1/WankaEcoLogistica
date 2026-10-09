@@ -110,10 +110,12 @@ export default function VehiclesPage() {
             defaultValue={editing.plate}
             required
             helperText="De 5 a 10 caracteres: letras, números y guiones."
-            inputProps={{
-              minLength: 5,
-              maxLength: 10,
-              pattern: "[A-Za-z0-9-]+",
+            slotProps={{
+              htmlInput: {
+                minLength: 5,
+                maxLength: 10,
+                pattern: "[A-Za-z0-9-]+",
+              },
             }}
           />
           <TextField
@@ -122,7 +124,7 @@ export default function VehiclesPage() {
             type="number"
             defaultValue={editing.capacityKg}
             required
-            inputProps={{ min: 0.01, step: 0.01 }}
+            slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
           />
           <TextField
             name="consumptionPerKm"
@@ -130,7 +132,7 @@ export default function VehiclesPage() {
             type="number"
             defaultValue={editing.consumptionPerKm}
             required
-            inputProps={{ min: 0, step: 0.01 }}
+            slotProps={{ htmlInput: { min: 0, step: 0.01 } }}
           />
           <TextField
             name="emissionFactor"
@@ -138,7 +140,7 @@ export default function VehiclesPage() {
             type="number"
             defaultValue={editing.emissionFactor}
             required
-            inputProps={{ min: 0, step: 0.0001 }}
+            slotProps={{ htmlInput: { min: 0, step: 0.0001 } }}
           />
           <TextField
             name="status"

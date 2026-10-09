@@ -103,7 +103,7 @@ export default function OrdersPage() {
             defaultValue={editing.address}
             required
             helperText="Mínimo 5 caracteres."
-            inputProps={{ minLength: 5, maxLength: 255 }}
+            slotProps={{ htmlInput: { minLength: 5, maxLength: 255 } }}
           />
           <TextField
             name="latitude"
@@ -111,7 +111,7 @@ export default function OrdersPage() {
             type="number"
             defaultValue={editing.latitude}
             required
-            inputProps={{ min: -90, max: 90, step: "any" }}
+            slotProps={{ htmlInput: { min: -90, max: 90, step: "any" } }}
           />
           <TextField
             name="longitude"
@@ -119,7 +119,7 @@ export default function OrdersPage() {
             type="number"
             defaultValue={editing.longitude}
             required
-            inputProps={{ min: -180, max: 180, step: "any" }}
+            slotProps={{ htmlInput: { min: -180, max: 180, step: "any" } }}
           />
           <TextField
             name="weightKg"
@@ -127,7 +127,7 @@ export default function OrdersPage() {
             type="number"
             defaultValue={editing.weightKg}
             required
-            inputProps={{ min: 0.01, step: 0.01 }}
+            slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
           />
           <TextField
             name="priority"
@@ -144,7 +144,7 @@ export default function OrdersPage() {
             type="time"
             defaultValue={editing.windowStart}
             required
-            InputLabelProps={{ shrink: true }}
+            slotProps={{ inputLabel: { shrink: true } }}
           />
           <TextField
             name="windowEnd"
@@ -152,7 +152,7 @@ export default function OrdersPage() {
             type="time"
             defaultValue={editing.windowEnd}
             required
-            InputLabelProps={{ shrink: true }}
+            slotProps={{ inputLabel: { shrink: true } }}
           />
         </FormDialog>
       )}

@@ -76,7 +76,7 @@ export default function DriversPage() {
           name="name"
           label="Nombre completo"
           required
-          inputProps={{ minLength: 3, maxLength: 120 }}
+          slotProps={{ htmlInput: { minLength: 3, maxLength: 120 } }}
         />
         <TextField
           name="email"
@@ -90,7 +90,7 @@ export default function DriversPage() {
           type="password"
           required
           helperText="Mínimo 12 caracteres; entréguela por un canal seguro."
-          inputProps={{ minLength: 12, maxLength: 128 }}
+          slotProps={{ htmlInput: { minLength: 12, maxLength: 128 } }}
         />
       </FormDialog>
     </ResourcePage>

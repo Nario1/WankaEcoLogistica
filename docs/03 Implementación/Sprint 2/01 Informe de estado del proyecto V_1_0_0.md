@@ -6,13 +6,13 @@
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_1 |
-| Fecha | 07/10/2026 |
+| Versión | V_1_0_2 |
+| Fecha | 08/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
 ## Resumen ejecutivo
 
-El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo permite seleccionar pedidos pendientes desde React, validar la solicitud en la API, elegir capacidad y conductor disponibles, ordenar las paradas por prioridad, ventana y cercanía, y persistir la ruta y sus asignaciones dentro de una transacción.
+El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo permite seleccionar pedidos pendientes desde React, validar la solicitud en la API, elegir capacidad y conductor disponibles, ordenar las paradas por prioridad, ventana y cercanía, persistir la ruta dentro de una transacción y visualizar la secuencia sobre OpenStreetMap.
 
 ## Estado del alcance
 
@@ -21,6 +21,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 | US-004 — Optimizar rutas | Completado | `POST /api/optimizations`, módulo React de rutas, migración `002_sprint_2.sql` y pruebas de servicio. |
 | EN-001 — Rendimiento de ruteo | Completado | Benchmark automatizado con 50 puntos y umbral P95 ≤ 3,5 s. |
 | EN-007 — Calidad y API | Completado localmente | OpenAPI 0.2.0, lint, formato, build y cobertura automatizados mediante scripts npm. |
+| Extensión visual del incremento | Completado | Mapa interactivo con paradas ordenadas, ajuste automático de vista y consulta persistida de coordenadas. |
 
 ## Indicadores de control
 
@@ -45,4 +46,5 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
 | V_1_0_1 | 07/10/2026 | Navegación documental y trazabilidad actualizadas según retroalimentación docente. | Equipo del proyecto |
+| V_1_0_2 | 08/10/2026 | Incorporación del mapa de planificación y correcciones de compatibilidad MUI. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Informe de cierre y estado verificable del Sprint 2. | Equipo del proyecto |

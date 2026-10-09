@@ -121,6 +121,18 @@ paths:
       responses:
         "200": { description: Conductor asignado }
         "409": { description: Conflicto horario o jornada mayor de ocho horas }
+  /api/routes/{id}/stops:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Listar las paradas ordenadas de una ruta
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: Paradas con coordenadas y orden de entrega }
+        "404": { description: Ruta inexistente }
   /api/optimizations:
     post:
       security: [{ bearerAuth: [] }]

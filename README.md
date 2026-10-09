@@ -4,9 +4,9 @@ Aplicación web para gestionar la logística de última milla en Huancayo. El in
 
 ## Estado actual
 
-Los Sprints 1 y 2 están implementados para desarrollo local. El sistema gestiona pedidos, vehículos, conductores y rutas; autentica por JWT y RBAC; conserva coordenadas PostGIS; calcula emisiones; y optimiza lotes de hasta 50 pedidos respetando capacidad, prioridad, ventanas horarias, disponibilidad y una jornada máxima de ocho horas.
+Los Sprints 1 y 2 están implementados para desarrollo local. El sistema gestiona pedidos, vehículos, conductores y rutas; autentica por JWT y RBAC; conserva coordenadas PostGIS; calcula emisiones; optimiza lotes de hasta 50 pedidos; y muestra sus paradas ordenadas sobre un mapa OpenStreetMap.
 
-Permanecen planificados para sprints posteriores el mapa, la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
+Permanecen planificados para sprints posteriores el seguimiento móvil/offline del conductor, la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
 
 ## Arquitectura y tecnologías
 

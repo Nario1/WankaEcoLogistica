@@ -67,7 +67,7 @@ export default function LoginPage() {
               type="password"
               autoComplete="current-password"
               required
-              inputProps={{ minLength: 8 }}
+              slotProps={{ htmlInput: { minLength: 8 } }}
             />
             <Button
               type="submit"

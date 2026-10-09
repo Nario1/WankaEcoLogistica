@@ -6,7 +6,7 @@
 
 **Líder del proyecto:** Equipo del proyecto
 
-**Versión:** V_1_0_1
+**Versión:** V_1_0_2
 
 ## Historias de usuario completadas en este Sprint
 
@@ -18,7 +18,7 @@
 
 ## Demostración del trabajo completado
 
-La demostración reproducible consiste en iniciar sesión como administrador u operador, abrir **Planificación de rutas**, seleccionar **Optimizar pedidos**, indicar el inicio de jornada y elegir los pedidos pendientes. El sistema crea una ruta sólo si encuentra vehículo y conductor elegibles y todas las restricciones son factibles. La tabla presenta vehículo, conductor, horario, distancia y peso. Los casos negativos muestran un error seguro y no dejan asignaciones parciales.
+La demostración reproducible consiste en iniciar sesión como administrador u operador, abrir **Planificación de rutas**, seleccionar **Optimizar pedidos**, indicar el inicio de jornada y elegir los pedidos pendientes. El sistema crea una ruta sólo si encuentra vehículo y conductor elegibles y todas las restricciones son factibles. La tabla presenta vehículo, conductor, horario, distancia y peso; **Ver mapa** carga las coordenadas persistidas, ajusta la vista y conecta las paradas en el orden calculado. Los casos negativos muestran el motivo del conflicto y no dejan asignaciones parciales.
 
 ## Evidencia de calidad
 
@@ -31,7 +31,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 ## Pendientes
 
 - Configurar `TEST_DATABASE_URL` en integración continua para que la prueba PostGIS deje de depender del entorno local.
-- La visualización cartográfica (US-005), reoptimización por incidencias (US-007), indicadores (US-006) y reportes (US-008) conservan su lugar en sprints posteriores.
+- El seguimiento móvil/offline y navegación vial del conductor (alcance completo de US-005), reoptimización por incidencias (US-007), indicadores (US-006) y reportes (US-008) conservan su lugar en sprints posteriores.
 - La evidencia de despliegue en staging requiere infraestructura y credenciales externas al repositorio.
 
 ## Historial de control de cambios
@@ -39,4 +39,5 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
 | V_1_0_1 | 07/10/2026 | Navegación bidireccional incorporada. | Equipo del proyecto |
+| V_1_0_2 | 08/10/2026 | Evidencia del mapa de planificación y mensajes de conflicto mejorados. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Revisión y demostración verificable del Sprint 2. | Equipo del proyecto |

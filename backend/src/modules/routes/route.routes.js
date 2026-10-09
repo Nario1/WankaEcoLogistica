@@ -12,6 +12,12 @@ export function createRouteRouter({ routeService, authenticate }) {
       response.json({ data: await routeService.list() }),
     ),
   );
+  router.get(
+    "/:id/stops",
+    asyncHandler(async (request, response) =>
+      response.json({ data: await routeService.listStops(request.params.id) }),
+    ),
+  );
   router.post(
     "/",
     asyncHandler(async (request, response) => {
