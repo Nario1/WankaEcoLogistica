@@ -20,6 +20,12 @@ import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import RouteMap from "./RouteMap";
 
+function toLocalDateTimeInput(value) {
+  const date = new Date(value);
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+  return local.toISOString().slice(0, 16);
+}
+
 export default function RoutesPage() {
   const { session, logout } = useAuth();
   const resource = useApiResource("/routes");
@@ -102,8 +108,19 @@ export default function RoutesPage() {
       setOptionsError("Seleccione al menos un pedido pendiente.");
       return;
     }
+    const vehicle = vehicles.find((item) => item.id === dialog.vehicleId);
+    const totalWeightKg = orders
+      .filter((order) => selectedOrderIds.includes(order.id))
+      .reduce((total, order) => total + order.weightKg, 0);
+    if (vehicle && totalWeightKg > vehicle.capacityKg * 0.95) {
+      setOptionsError(
+        `El peso seleccionado supera los ${(vehicle.capacityKg * 0.95).toFixed(2)} kg permitidos para ${vehicle.plate}.`,
+      );
+      return;
+    }
     setSubmitting(true);
     setOptionsError("");
+    const startsAt = new FormData(event.currentTarget).get("startsAt");
     try {
       const optimized = await apiRequest("/optimizations", {
         token: session.token,
@@ -111,6 +128,7 @@ export default function RoutesPage() {
         body: JSON.stringify({
           routeId: dialog.id,
           orderIds: selectedOrderIds,
+          startsAt: new Date(startsAt).toISOString(),
         }),
       });
       setOrders((current) =>
@@ -133,6 +151,16 @@ export default function RoutesPage() {
       setSubmitting(false);
     }
   }
+
+  const selectedWeightKg = orders
+    .filter((order) => selectedOrderIds.includes(order.id))
+    .reduce((total, order) => total + order.weightKg, 0);
+  const selectedVehicle = dialog?.vehicleId
+    ? vehicles.find((vehicle) => vehicle.id === dialog.vehicleId)
+    : null;
+  const safeCapacityKg = selectedVehicle
+    ? selectedVehicle.capacityKg * 0.95
+    : null;
 
   return (
     <ResourcePage
@@ -275,9 +303,17 @@ export default function RoutesPage() {
             -75.20516872975998).
           </Alert>
           <Alert severity="info">
-            <strong>{dialog.vehiclePlate}</strong> · {dialog.driverName} ·
-            inicio {new Date(dialog.startsAt).toLocaleString("es-PE")}
+            <strong>{dialog.vehiclePlate}</strong> · {dialog.driverName}
           </Alert>
+          <TextField
+            name="startsAt"
+            label="Hora de salida"
+            type="datetime-local"
+            required
+            defaultValue={toLocalDateTimeInput(dialog.startsAt)}
+            slotProps={{ inputLabel: { shrink: true } }}
+            helperText="Ajústela para que coincida con las ventanas de los pedidos."
+          />
           <FormControl required fullWidth>
             <InputLabel id="orders-label">Pedidos pendientes</InputLabel>
             <Select
@@ -301,6 +337,14 @@ export default function RoutesPage() {
               ))}
             </Select>
           </FormControl>
+          {safeCapacityKg !== null && (
+            <Alert
+              severity={selectedWeightKg > safeCapacityKg ? "error" : "info"}
+            >
+              Peso seleccionado: {selectedWeightKg.toFixed(2)} kg · capacidad
+              segura de {dialog.vehiclePlate}: {safeCapacityKg.toFixed(2)} kg
+            </Alert>
+          )}
           <Alert severity="info">
             Se respetará el 95 % de capacidad operativa, la prioridad, las
             ventanas de entrega y la jornada máxima de 8 horas. Si un pedido no

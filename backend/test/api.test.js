@@ -140,7 +140,11 @@ test("POST /api/optimizations optimiza la ruta manual seleccionada", async () =>
         authorization: `Bearer ${tokenFor("OPERATOR")}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ routeId, orderIds: [orderId] }),
+      body: JSON.stringify({
+        routeId,
+        orderIds: [orderId],
+        startsAt: "2026-10-08T13:00:00Z",
+      }),
     });
     const body = await response.json();
     assert.equal(response.status, 201);
@@ -148,6 +152,7 @@ test("POST /api/optimizations optimiza la ruta manual seleccionada", async () =>
     assert.deepEqual(lastOptimizationCall.body, {
       routeId,
       orderIds: [orderId],
+      startsAt: "2026-10-08T13:00:00Z",
     });
     assert.equal(lastOptimizationCall.actorId, "OPERATOR-1");
   });

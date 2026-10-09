@@ -6,7 +6,7 @@
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
 | Líder del proyecto | Equipo del proyecto |
-| Versión | V_1_0_4 |
+| Versión | V_1_0_5 |
 | Fecha | 08/10/2026 |
 | Periodo | Cierre del Sprint 2 |
 
@@ -30,7 +30,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|
 | Alcance | Verde | Tres ítems planificados implementados y trazados. |
 | Cronograma | Verde | Incremento disponible al cierre del Sprint 2. |
-| Calidad | Verde | 24 de 24 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,16 %; lint, formato y build aprobados. |
+| Calidad | Verde | 24 de 24 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,19 %; lint, formato y build aprobados. |
 | Seguridad | Verde | Endpoint protegido con JWT y roles `ADMIN`/`OPERATOR`; consultas parametrizadas. |
 | Datos | Verde | Creación de ruta y asignación de pedidos atómica mediante transacción. |
 | Riesgo de entorno | Amarillo | La prueba real PostGIS requiere `TEST_DATABASE_URL` y una instancia migrada. |
@@ -40,6 +40,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 - Se limita cada optimización a 50 pedidos y una jornada máxima de ocho horas.
 - Se rechaza el lote completo cuando la ruta no es elegible, falta capacidad, conductor, pedidos pendientes o factibilidad horaria; no se publica una asignación parcial.
 - La ruta manual seleccionada conserva su vehículo y conductor; el peso no supera el 95 % de la capacidad nominal (RN-002).
+- La hora de salida se confirma o corrige al optimizar para hacerla compatible con las ventanas de entrega; el frontend anticipa excesos de peso antes de invocar la API.
 - Todas las rutas parten del local fijo indicado por el negocio y la misma ruta pasa de manual a optimizada.
 - La heurística exige prioridad alta dentro del primer 50 % de su ventana (RN-004), luego considera vencimiento y distancia; conserva distancia, peso y orden de entrega.
 
@@ -47,6 +48,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_5 | 08/10/2026 | Corrección guiada de la hora de salida y validación previa de capacidad en la interfaz. | Equipo del proyecto |
 | V_1_0_4 | 08/10/2026 | Origen fijo, optimización de ruta manual seleccionada y aplicación estricta de RN-002/RN-004. | Equipo del proyecto |
 | V_1_0_1 | 07/10/2026 | Navegación documental y trazabilidad actualizadas según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_2 | 08/10/2026 | Incorporación del mapa de planificación y correcciones de compatibilidad MUI. | Equipo del proyecto |

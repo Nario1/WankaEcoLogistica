@@ -57,7 +57,7 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
       id: id(70),
       vehicleId: id(80),
       driverId: id(90),
-      startsAt: "2026-10-08T13:00:00Z",
+      startsAt: "2026-10-08T23:02:00Z",
       status: "PLANNED",
       optimized: false,
       capacityKg: 50,
@@ -67,7 +67,11 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
   };
   const { service, repository } = makeService(resources);
   const result = await service.optimize(
-    { routeId: id(70), orderIds: [id(1), id(2)] },
+    {
+      routeId: id(70),
+      orderIds: [id(1), id(2)],
+      startsAt: "2026-10-08T13:00:00Z",
+    },
     id(99),
   );
   assert.equal(result.sequence.length, 2);
@@ -78,6 +82,10 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
   );
   assert.ok(repository.saved.distanceKm >= 0);
   assert.equal(repository.saved.routeId, id(70));
+  assert.equal(
+    repository.saved.startsAt.toISOString(),
+    "2026-10-08T13:00:00.000Z",
+  );
   assert.deepEqual(repository.saved.depot, DISPATCH_DEPOT);
 });
 
@@ -98,16 +106,37 @@ test("rechaza duplicados, pedidos no pendientes y capacidad superior al 95 %", a
   };
   const { service } = makeService(base);
   await assert.rejects(
-    service.optimize({ routeId: id(70), orderIds: [id(1), id(1)] }, id(99)),
+    service.optimize(
+      {
+        routeId: id(70),
+        orderIds: [id(1), id(1)],
+        startsAt: "2026-10-08T13:00:00Z",
+      },
+      id(99),
+    ),
     { code: "VALIDATION_ERROR" },
   );
   await assert.rejects(
-    service.optimize({ routeId: id(70), orderIds: [id(1)] }, id(99)),
+    service.optimize(
+      {
+        routeId: id(70),
+        orderIds: [id(1)],
+        startsAt: "2026-10-08T13:00:00Z",
+      },
+      id(99),
+    ),
     { code: "CONFLICT" },
   );
   const missing = makeService({ ...base, orders: [] }).service;
   await assert.rejects(
-    missing.optimize({ routeId: id(70), orderIds: [id(1)] }, id(99)),
+    missing.optimize(
+      {
+        routeId: id(70),
+        orderIds: [id(1)],
+        startsAt: "2026-10-08T13:00:00Z",
+      },
+      id(99),
+    ),
     { code: "CONFLICT" },
   );
   assert.throws(
@@ -133,7 +162,11 @@ test("exige ruta manual planificada, vehículo activo y conductor activo asignad
     vehicleStatus: "ACTIVE",
     driverStatus: "ACTIVE",
   };
-  const request = { routeId: id(70), orderIds: [id(1)] };
+  const request = {
+    routeId: id(70),
+    orderIds: [id(1)],
+    startsAt: "2026-10-08T13:00:00Z",
+  };
   for (const route of [
     null,
     { ...validRoute, optimized: true },
@@ -188,7 +221,11 @@ test("rechaza la optimización si el nuevo horario solapa al conductor", async (
   };
   await assert.rejects(
     makeService(resources).service.optimize(
-      { routeId: id(70), orderIds: [id(1)] },
+      {
+        routeId: id(70),
+        orderIds: [id(1)],
+        startsAt: "2026-10-08T13:00:00Z",
+      },
       id(99),
     ),
     { code: "CONFLICT" },

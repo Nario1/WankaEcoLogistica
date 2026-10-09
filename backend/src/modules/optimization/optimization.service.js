@@ -1,5 +1,9 @@
 import { badRequest, conflict } from "../../shared/errors.js";
-import { assertObject, requireUuid } from "../../shared/validation.js";
+import {
+  assertObject,
+  requireDateTime,
+  requireUuid,
+} from "../../shared/validation.js";
 
 const MAX_ORDERS = 50;
 const AVERAGE_SPEED_KMH = 25;
@@ -64,6 +68,7 @@ function validateInput(input) {
   return {
     orderIds,
     routeId: requireUuid(input.routeId, "routeId"),
+    startsAt: requireDateTime(input.startsAt, "startsAt"),
   };
 }
 
@@ -137,7 +142,7 @@ export class OptimizationService {
   }
 
   async optimize(input, actorId) {
-    const { orderIds, routeId } = validateInput(input);
+    const { orderIds, routeId, startsAt } = validateInput(input);
     const resources = await this.optimizationRepository.getResources(
       orderIds,
       routeId,
@@ -172,7 +177,6 @@ export class OptimizationService {
         `El peso supera la capacidad operativa segura del vehículo (${usableCapacityKg.toFixed(2)} kg, equivalente al 95 % de su capacidad)`,
       );
 
-    const startsAt = new Date(resources.route.startsAt);
     const optimized = buildOptimizedSequence(
       resources.orders,
       startsAt,

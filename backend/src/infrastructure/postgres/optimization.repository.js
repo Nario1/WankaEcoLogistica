@@ -61,11 +61,11 @@ export class PgOptimizationRepository {
     try {
       await client.query("BEGIN");
       const routeUpdate = await client.query(
-        `UPDATE rutas SET fin = $2, distancia_km = $3, peso_total_kg = $4,
+        `UPDATE rutas SET inicio = $2, fin = $3, distancia_km = $4, peso_total_kg = $5,
           optimizada = TRUE, actualizado_en = NOW()
          WHERE ruta_id = $1 AND estado = 'PLANNED' AND optimizada = FALSE
          RETURNING ruta_id AS id`,
-        [routeId, endsAt, distanceKm, totalWeightKg],
+        [routeId, startsAt, endsAt, distanceKm, totalWeightKg],
       );
       if (routeUpdate.rowCount !== 1) {
         throw conflict("La ruta ya no está disponible para optimizar");
