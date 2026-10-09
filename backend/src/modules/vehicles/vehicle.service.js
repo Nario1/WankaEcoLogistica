@@ -15,6 +15,13 @@ export class VehicleService {
     return this.vehicleRepository.list();
   }
 
+  async get(id) {
+    requireUuid(id);
+    const vehicle = await this.vehicleRepository.findById(id);
+    if (!vehicle) throw notFound("Vehículo");
+    return vehicle;
+  }
+
   async create(input, actorId) {
     const vehicleInput = validateVehicle(input);
     if (await this.vehicleRepository.findByPlate(vehicleInput.plate)) {
@@ -45,6 +52,18 @@ export class VehicleService {
     await this.auditRepository.record({
       userId: actorId,
       action: "VEHICLE_UPDATED",
+      entity: "vehicles",
+      entityId: id,
+    });
+    return vehicle;
+  }
+
+  async remove(id, actorId) {
+    await this.get(id);
+    const vehicle = await this.vehicleRepository.remove(id);
+    await this.auditRepository.record({
+      userId: actorId,
+      action: "VEHICLE_DEACTIVATED",
       entity: "vehicles",
       entityId: id,
     });

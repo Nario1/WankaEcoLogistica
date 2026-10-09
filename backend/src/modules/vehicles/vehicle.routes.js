@@ -13,6 +13,13 @@ export function createVehicleRouter({ vehicleService, authenticate }) {
       response.json({ data: await vehicleService.list() }),
     ),
   );
+  router.get(
+    "/:id",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.AUDITOR),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await vehicleService.get(request.params.id) }),
+    ),
+  );
   router.post(
     "/",
     authorize(ROLES.ADMIN),
@@ -34,6 +41,15 @@ export function createVehicleRouter({ vehicleService, authenticate }) {
         ),
       });
     }),
+  );
+  router.delete(
+    "/:id",
+    authorize(ROLES.ADMIN),
+    asyncHandler(async (request, response) =>
+      response.json({
+        data: await vehicleService.remove(request.params.id, request.user.id),
+      }),
+    ),
   );
   return router;
 }

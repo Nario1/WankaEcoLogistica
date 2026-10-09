@@ -12,6 +12,12 @@ export function createDriverRouter({ driverService, authenticate }) {
       response.json({ data: await driverService.list() }),
     ),
   );
+  router.get(
+    "/:id",
+    asyncHandler(async (request, response) =>
+      response.json({ data: await driverService.get(request.params.id) }),
+    ),
+  );
   router.post(
     "/",
     authorize(ROLES.ADMIN),
@@ -20,6 +26,28 @@ export function createDriverRouter({ driverService, authenticate }) {
         data: await driverService.create(request.body, request.user.id),
       });
     }),
+  );
+  router.patch(
+    "/:id",
+    authorize(ROLES.ADMIN),
+    asyncHandler(async (request, response) =>
+      response.json({
+        data: await driverService.update(
+          request.params.id,
+          request.body,
+          request.user.id,
+        ),
+      }),
+    ),
+  );
+  router.delete(
+    "/:id",
+    authorize(ROLES.ADMIN),
+    asyncHandler(async (request, response) =>
+      response.json({
+        data: await driverService.remove(request.params.id, request.user.id),
+      }),
+    ),
   );
   return router;
 }

@@ -62,4 +62,12 @@ export class PgVehicleRepository {
     );
     return this.findById(id);
   }
+
+  async remove(id) {
+    await this.pool.query(
+      "UPDATE vehiculos SET estado = 'OUT_OF_SERVICE', actualizado_en = NOW() WHERE vehiculo_id = $1",
+      [id],
+    );
+    return this.findById(id);
+  }
 }

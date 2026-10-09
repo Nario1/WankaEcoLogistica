@@ -1,49 +1,106 @@
 # WankaEcoLogística Huancayo
 
-Aplicación web para gestionar la logística de última milla en Huancayo. El incremento actual corresponde al Sprint 2 e incorpora optimización de rutas sobre la base operativa segura entregada en el Sprint 1.
+Aplicación web para gestionar la logística de última milla en Huancayo. El sistema administra pedidos, vehículos, conductores y rutas, y optimiza entregas desde el local de WankaEcoLogística ubicado en `-12.07201013486951, -75.20516872975998`.
+
+Este es el único README general del proyecto. Los entregables específicos se encuentran organizados por sprint dentro de [`docs/03 Implementación/`](<docs/03 Implementación/>).
 
 ## Estado actual
 
-Los Sprints 1 y 2 están implementados para desarrollo local. El sistema identifica el producto o carga de cada pedido; gestiona vehículos, conductores y rutas; autentica por JWT y RBAC; conserva coordenadas PostGIS; calcula emisiones; planifica hasta 50 pedidos desde un formulario integrado con recomendación de unidad; y calcula el trazado sobre calles transitables desde el local fijo `-12.07201013486951, -75.20516872975998`.
+Los Sprints 1 y 2 están implementados para desarrollo local:
+
+- CRUD completo de pedidos, vehículos, conductores y rutas.
+- Bajas lógicas para conservar historial y auditoría.
+- Autenticación JWT, control RBAC y bloqueo temporal por intentos fallidos.
+- Coordenadas geográficas almacenadas con PostgreSQL/PostGIS.
+- Selección de la ubicación de los pedidos directamente en el mapa.
+- Identificación del producto o carga, peso, prioridad y ventana horaria.
+- Fechas y horas presentadas con controles AM/PM.
+- Planificación integrada de pedidos, vehículo, conductor y horario.
+- Recomendación del vehículo activo de menor capacidad suficiente.
+- Optimización de entre 1 y 50 pedidos usando como máximo el 95 % de la capacidad nominal.
+- Validación de prioridad, ventanas de entrega, solapamientos y jornada máxima de ocho horas.
+- Trazado por calles reales mediante TomTom Routing o OSRM/OpenStreetMap.
+- Cálculo reproducible de emisiones.
 
 Permanecen planificados para sprints posteriores el seguimiento móvil/offline del conductor, la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
 
-## Arquitectura y tecnologías
+## Historias implementadas
 
-- `frontend/`: React 19, Vite 8 y Material UI 9.
-- `backend/`: Node.js 20+, Express 5, JWT y bcrypt; módulos, servicios y repositorios.
-- Datos: PostgreSQL 15+ con PostGIS y migraciones SQL incrementales.
-- Navegación: OSRM/OpenStreetMap para red vial o TomTom Routing para incorporar tráfico actual e histórico.
-- Calidad: Node test runner con cobertura, ESLint y Prettier.
-
-El contrato HTTP se encuentra en [backend/openapi.yaml](backend/openapi.yaml).
-
-## Funcionalidades entregadas
-
-| Sprint | Ítem | Funcionalidad |
+| Sprint | Ítem | Resultado |
 |---|---|---|
-| 1 | US-001 | Crear, listar y actualizar pedidos validados. |
-| 1 | US-002 | Administrar vehículos y su disponibilidad. |
+| 1 | US-001 | Registrar, consultar, editar y cancelar pedidos validados. |
+| 1 | US-002 | Registrar, consultar, editar y dar de baja vehículos. |
 | 1 | US-003 | Gestionar conductores y asignaciones sin solapamientos. |
 | 1 | EN-002 | Autenticación, RBAC y bloqueo temporal. |
 | 1 | EN-006 | Persistencia PostGIS y cálculo reproducible de emisiones. |
-| 2 | US-004 | Optimizar entre 1 y 50 pedidos, sugerir unidades por capacidad segura y calcular el trazado vial. |
-| 2 | EN-001 | Medir el rendimiento con 50 puntos y límite P95 de 3,5 s. |
-| 2 | EN-007 | Actualizar pruebas, cobertura, migraciones y OpenAPI. |
+| 2 | US-004 | Optimizar hasta 50 pedidos respetando capacidad, prioridad, ventanas y disponibilidad. |
+| 2 | EN-001 | Medir el rendimiento con 50 puntos y objetivo P95 máximo de 3,5 segundos. |
+| 2 | EN-007 | Mantener pruebas, cobertura, migraciones, OpenAPI y documentación sincronizados. |
 
-## Inicio rápido en Windows
+US-005 a US-008 pertenecen a sprints posteriores y no se declaran como terminadas.
 
-Requisitos: Node.js 20+, PostgreSQL 15+ y PostGIS.
+## Arquitectura y tecnologías
+
+- `frontend/`: React 19, Vite 8, Material UI 9, Leaflet y React Leaflet.
+- `backend/`: Node.js 20+, Express 5, JWT y bcrypt, organizado en rutas, servicios y repositorios.
+- `backend/migrations/`: migraciones incrementales de PostgreSQL/PostGIS.
+- `backend/test/`: pruebas de API, servicios, optimización, navegación y PostGIS.
+- `docs/`: documentación de inicio, planificación e implementación.
+
+El contrato HTTP está disponible en [backend/openapi.yaml](backend/openapi.yaml) y corresponde a OpenAPI `3.1.0`, versión documental `0.3.0`.
+
+## Requisitos
+
+- Node.js 20 o superior.
+- npm.
+- PostgreSQL 15 o superior.
+- Extensión PostGIS habilitada.
+- Una clave TomTom opcional para rutas con tráfico.
+
+## Configuración del backend
+
+Desde la raíz del proyecto:
 
 ```powershell
 cd backend
 npm install
 Copy-Item .env.example .env
-# Configure DATABASE_URL, JWT_SECRET y credenciales de seed.
+```
+
+Configure `backend/.env`:
+
+```dotenv
+NODE_ENV=development
+PORT=3000
+DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/wanka_ecologistica
+DATABASE_SSL=false
+JWT_SECRET=reemplace-por-un-secreto-de-al-menos-32-caracteres
+JWT_EXPIRES_IN=15m
+CORS_ORIGIN=http://localhost:5173
+OSRM_BASE_URL=https://router.project-osrm.org
+TOMTOM_API_KEY=
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=reemplace-por-una-contrasena-segura
+```
+
+`ADMIN_PASSWORD` debe tener al menos 12 caracteres. `JWT_SECRET` debe tener al menos 32. No suba `backend/.env` ni claves reales a Git.
+
+Prepare la base y el usuario administrador:
+
+```powershell
 npm run db:migrate
 npm run db:seed
+```
+
+Inicie la API:
+
+```powershell
 npm run dev
 ```
+
+La API estará disponible en `http://localhost:3000` y su verificación de salud en `http://localhost:3000/health`.
+
+## Configuración del frontend
 
 En otra terminal:
 
@@ -54,59 +111,103 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-Abra `http://localhost:5173`. La API responde en `http://localhost:3000` y su salud se consulta en `http://localhost:3000/health`.
-
-### Proveedor de navegación
-
-Configure una de estas opciones en `backend/.env`:
+La variable esperada es:
 
 ```dotenv
-# Trazado vial y sentidos de circulación, sin tráfico en tiempo real:
-OSRM_BASE_URL=https://router.project-osrm.org
-
-# Opcional y recomendado para tráfico actual/histórico:
-TOMTOM_API_KEY=su_clave_tomtom
+VITE_API_URL=http://localhost:3000/api
 ```
 
-Si existe `TOMTOM_API_KEY`, el backend prioriza TomTom Traffic. Sin ella utiliza OSRM. En ambos casos, las coordenadas del local y las paradas se envían al proveedor configurado para calcular la geometría; use una instancia OSRM propia si la política de privacidad no permite compartirlas con terceros.
+Abra `http://localhost:5173` e inicie sesión con el administrador configurado en el backend.
 
-## Calidad
+## Navegación y tráfico
+
+El backend selecciona el proveedor automáticamente:
+
+- Con `TOMTOM_API_KEY`, utiliza TomTom Routing con tráfico actual o histórico, según la hora de salida.
+- Sin `TOMTOM_API_KEY`, utiliza OSRM/OpenStreetMap como respaldo para respetar la red vial y sentidos de circulación, sin afirmar tráfico en tiempo real.
+
+Después de modificar `TOMTOM_API_KEY`, reinicie el backend y optimice una ruta nueva. El mapa indicará el proveedor empleado. Las credenciales y coordenadas de la operación se envían al proveedor configurado; use infraestructura propia si la política de privacidad lo exige.
+
+## Flujo principal del Sprint 2
+
+1. Registrar pedidos con producto, dirección, ubicación, peso, prioridad y ventana.
+2. Registrar vehículos y conductores activos.
+3. Abrir **Planificación de rutas** y seleccionar entre 1 y 50 pedidos pendientes.
+4. Revisar el vehículo recomendado, el conductor y el horario sugerido.
+5. Confirmar la creación y optimización.
+6. Abrir **Ver mapa** para consultar origen, paradas, geometría vial, distancia, duración y tráfico.
+
+Si ninguna unidad cumple el 95 % de capacidad segura, el sistema rechaza el lote completo y solicita reducirlo, reprogramarlo o registrar otra unidad.
+
+## CRUD operativo
+
+| Recurso | Operaciones | Baja lógica |
+|---|---|---|
+| Pedidos | Listar, consultar, crear, editar y eliminar | `CANCELLED` |
+| Vehículos | Listar, consultar, crear, editar y eliminar | `OUT_OF_SERVICE` |
+| Conductores | Listar, consultar, crear, editar y eliminar | `INACTIVE` |
+| Rutas | Listar, consultar, crear, editar, asignar conductor y eliminar | `CANCELLED` |
+
+La eliminación física no se utiliza porque estos recursos participan en relaciones históricas y registros de auditoría.
+
+## Calidad y pruebas
+
+Backend:
 
 ```powershell
-# backend/
+cd backend
 npm test
 npm run lint
 npm run format:check
+```
 
-# frontend/
+Frontend:
+
+```powershell
+cd frontend
 npm run lint
 npm run format:check
 npm run build
 ```
 
-Para ejecutar también la integración PostGIS configure `TEST_DATABASE_URL` con una base aislada y migrada.
+Última verificación local:
 
-## Documentación
+- 30 pruebas detectadas.
+- 29 aprobadas.
+- 0 fallidas.
+- 1 omitida porque `TEST_DATABASE_URL` no estaba configurada.
+- 87,75 % de cobertura de líneas; el mínimo exigido es 80 %.
+- Lint, formato y compilación del frontend aprobados.
+
+La prueba omitida necesita una base PostgreSQL/PostGIS aislada y migrada:
+
+```dotenv
+TEST_DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/wanka_ecologistica_test
+```
+
+No utilice la base de desarrollo o producción como base de pruebas.
+
+## Estructura de documentación
 
 ### Inicio y planificación
 
 - [Requisitos funcionales](<docs/01 Inicio/06. Requisitos funcionales V_1_0_0.md>)
 - [Reglas de negocio](<docs/01 Inicio/09. Reglas de negocio V_1_0_0.md>)
 - [Arquitectura C4](<docs/01 Inicio/12. Modelo C4 V_1_0_0.md>)
-- [Backlog y planificación de sprints](<docs/02 Planificación/01 Transformando a ágil V_1_0_0.md>)
+- [Backlog y planificación](<docs/02 Planificación/01 Transformando a ágil V_1_0_0.md>)
 - [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>)
-- [Calidad de código](CODE_QUALITY.md)
+- [Estándares de calidad](CODE_QUALITY.md)
 
-### Entregables del Sprint 1
+### Sprint 1
 
-- [01 Informe de estado del proyecto](<docs/03 Implementación/Sprint 1/01 Informe de estado del proyecto V_1_0_0.md>)
-- [02 Registro de Impedimentos](<docs/03 Implementación/Sprint 1/02 Registro de Impedimentos V_1_0_0.md>)
-- [03 Revisión del Sprint](<docs/03 Implementación/Sprint 1/03 Revisión del Sprint V_1_0_0.md>)
-- [04 Retrospectiva del Sprint](<docs/03 Implementación/Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Informe de estado](<docs/03 Implementación/Sprint 1/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<docs/03 Implementación/Sprint 1/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión del Sprint](<docs/03 Implementación/Sprint 1/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<docs/03 Implementación/Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>)
 
-### Entregables del Sprint 2
+### Sprint 2
 
-- [01 Informe de estado del proyecto](<docs/03 Implementación/Sprint 2/01 Informe de estado del proyecto V_1_0_0.md>)
-- [02 Registro de Impedimentos](<docs/03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
-- [03 Revisión del Sprint](<docs/03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
-- [04 Retrospectiva del Sprint](<docs/03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Informe de estado](<docs/03 Implementación/Sprint 2/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<docs/03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión del Sprint](<docs/03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<docs/03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)

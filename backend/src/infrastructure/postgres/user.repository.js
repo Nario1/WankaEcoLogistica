@@ -56,4 +56,21 @@ export class PgUserRepository {
     );
     return result.rows.map(mapUser);
   }
+
+  async updateDriver(id, changes) {
+    const current = await this.findById(id);
+    const result = await this.pool.query(
+      `UPDATE usuarios SET email = $2, nombre = $3, estado = $4,
+       password_hash = $5, actualizado_en = NOW()
+       WHERE usuario_id = $1 AND rol = 'DRIVER' RETURNING *`,
+      [
+        id,
+        changes.email ?? current.email,
+        changes.name ?? current.name,
+        changes.status ?? current.status,
+        changes.passwordHash ?? current.passwordHash,
+      ],
+    );
+    return mapUser(firstRow(result));
+  }
 }

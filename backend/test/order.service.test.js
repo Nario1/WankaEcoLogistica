@@ -21,6 +21,7 @@ test("crea y actualiza un pedido válido", async () => {
     auditRepository: new MemoryAuditRepository(),
   });
   const created = await service.create(validOrder, "operator-1");
+  created.status = "PENDING";
   const updated = await service.update(
     created.id,
     { windowStart: "09:00", windowEnd: "11:00" },
@@ -28,6 +29,9 @@ test("crea y actualiza un pedido válido", async () => {
   );
   assert.equal(updated.windowStart, "09:00");
   assert.equal(repository.records.length, 1);
+  assert.equal((await service.get(created.id)).id, created.id);
+  const removed = await service.remove(created.id, "operator-1");
+  assert.equal(removed.status, "CANCELLED");
 });
 
 test("rechaza peso negativo, coordenadas fuera de rango y ventana invertida", async () => {

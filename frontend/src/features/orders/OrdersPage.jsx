@@ -67,6 +67,12 @@ export default function OrdersPage() {
     }
   }
 
+  async function remove(order) {
+    if (!globalThis.confirm(`¿Cancelar el pedido "${order.productName}"?`))
+      return;
+    await resource.mutate("DELETE", `/${order.id}`).catch(() => {});
+  }
+
   return (
     <ResourcePage
       title="Pedidos"
@@ -123,6 +129,11 @@ export default function OrdersPage() {
                   <Button onClick={() => setEditing({ ...order })}>
                     Editar
                   </Button>
+                  {order.status === "PENDING" && (
+                    <Button color="error" onClick={() => remove(order)}>
+                      Eliminar
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

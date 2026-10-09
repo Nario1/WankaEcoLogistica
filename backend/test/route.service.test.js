@@ -114,3 +114,20 @@ test("calcula navegación vial desde el local hasta las paradas", async () => {
   );
   assert.deepEqual(navigation.geometry[1], [-12.063181, -75.205992]);
 });
+
+test("consulta, actualiza y cancela una ruta", async () => {
+  const service = makeService();
+  assert.equal((await service.get(route.id)).id, route.id);
+  const updated = await service.update(
+    route.id,
+    {
+      startsAt: "2026-10-02T09:00:00Z",
+      endsAt: "2026-10-02T15:00:00Z",
+      status: "IN_PROGRESS",
+    },
+    "operator-1",
+  );
+  assert.equal(updated.status, "IN_PROGRESS");
+  const cancelled = await service.remove(route.id, "operator-1");
+  assert.equal(cancelled.status, "CANCELLED");
+});

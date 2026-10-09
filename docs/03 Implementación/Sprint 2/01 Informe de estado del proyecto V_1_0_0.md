@@ -20,7 +20,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|
 | US-004 — Optimizar rutas | Completado | `POST /api/optimizations`, formulario integrado React, migraciones `002_sprint_2.sql`/`003_order_product.sql` y pruebas de servicio. |
 | EN-001 — Rendimiento de ruteo | Completado | Benchmark automatizado con 50 puntos y umbral P95 ≤ 3,5 s. |
-| EN-007 — Calidad y API | Completado localmente | OpenAPI 0.2.0, lint, formato, build y cobertura automatizados mediante scripts npm. |
+| EN-007 — Calidad y API | Completado localmente | OpenAPI 0.3.0, lint, formato, build y cobertura automatizados mediante scripts npm. |
 | Extensión visual del incremento | Completado | Mapa interactivo con paradas ordenadas, ajuste automático de vista y consulta persistida de coordenadas. |
 | Navegación vial | Completado y configurable | Geometría sobre calles mediante OSRM; integración TomTom habilitable para tráfico actual e histórico. |
 | Recomendación de unidad | Completado | Unidades activas filtradas por el 95 % de capacidad, ordenadas por menor capacidad suficiente y validadas nuevamente en el backend. |
@@ -35,7 +35,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 |---|---|---|
 | Alcance | Verde | Tres ítems planificados implementados y trazados. |
 | Cronograma | Verde | Incremento disponible al cierre del Sprint 2. |
-| Calidad | Verde | 28 de 28 pruebas aprobadas, incluida PostGIS; cobertura de líneas: 90,04 %; lint, formato y build aprobados. |
+| Calidad | Verde | 29 pruebas aprobadas, 0 fallidas y 1 omitida por ausencia de `TEST_DATABASE_URL`; cobertura de líneas: 87,75 %; lint, formato y build aprobados. |
 | Seguridad | Verde | Endpoint protegido con JWT y roles `ADMIN`/`OPERATOR`; consultas parametrizadas. |
 | Datos | Verde | Conversión de ruta y asignación de todos los pedidos atómica mediante transacción y controles de concurrencia. |
 | Riesgo de entorno | Amarillo | La prueba real PostGIS requiere `TEST_DATABASE_URL` y una instancia migrada. |
@@ -57,10 +57,15 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 - Todas las rutas parten del local fijo indicado por el negocio y la misma ruta pasa de manual a optimizada.
 - La heurística exige prioridad alta dentro del primer 50 % de su ventana (RN-004), luego considera vencimiento y distancia; conserva distancia, peso y orden de entrega.
 
+## Cierre técnico complementario
+
+Se verificó el CRUD completo de pedidos, vehículos, conductores y rutas mediante operaciones de listado, consulta individual, creación, actualización y baja lógica. El contrato `backend/openapi.yaml` versión `0.3.0` documenta estas operaciones. La baja lógica conserva trazabilidad, relaciones históricas y registros de auditoría sin exponer recursos inactivos como disponibles para nuevas planificaciones.
+
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_11 | 09/10/2026 | CRUD operativo completo, bajas lógicas, pruebas de regresión y OpenAPI 0.3.0. | Equipo del proyecto |
 | V_1_0_10 | 08/10/2026 | Sugerencia automática de fecha y horario según ventanas y jornada máxima. | Equipo del proyecto |
 | V_1_0_9 | 08/10/2026 | Selectores horarios explícitos y accesibles con hora, minutos y AM/PM. | Equipo del proyecto |
 | V_1_0_8 | 08/10/2026 | Identificación de carga, horario AM/PM y formulario integral de planificación. | Equipo del proyecto |

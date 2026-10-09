@@ -14,7 +14,7 @@
 |---|---|---|
 | US-004 | Planificación integral y optimización de hasta 50 pedidos pendientes, incluida una ruta manual existente. | Salida desde local fijo, carga identificada, recomendación de unidad, conductor, horario sugerido, 95 % de capacidad, prioridad alta en primera mitad de ventana, jornada máxima y rechazo total de lotes inviables. |
 | EN-001 | Benchmark automatizado del algoritmo con 50 puntos. | Medición repetida de latencia y aserción de P95 ≤ 3,5 s. |
-| EN-007 | Contrato OpenAPI 0.2.0, migración incremental y controles de calidad. | Pruebas con cobertura mínima, lint, formato y build reproducibles. |
+| EN-007 | Contrato OpenAPI 0.3.0, migración incremental y controles de calidad. | Pruebas con cobertura mínima, lint, formato y build reproducibles. |
 
 ## Demostración del trabajo completado
 
@@ -28,7 +28,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 - Pruebas de API y RBAC para operaciones existentes; el endpoint nuevo usa el mismo middleware probado.
 - Persistencia parametrizada y transaccional.
 - Contrato `backend/openapi.yaml` y migraciones actualizados.
-- Ejecución local final: 28 de 28 pruebas aprobadas, incluida PostGIS; 90,04 % de cobertura de líneas; lint, formato y build aprobados.
+- Ejecución local final: 29 pruebas aprobadas, 0 fallidas y 1 omitida porque `TEST_DATABASE_URL` no está configurada; 87,75 % de cobertura de líneas; lint, formato y build aprobados.
 
 ## Pendientes
 
@@ -36,10 +36,15 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 - El seguimiento móvil/offline y navegación vial del conductor (alcance completo de US-005), reoptimización por incidencias (US-007), indicadores (US-006) y reportes (US-008) conservan su lugar en sprints posteriores.
 - La evidencia de despliegue en staging requiere infraestructura y credenciales externas al repositorio.
 
+## Verificación complementaria del incremento
+
+Además de los escenarios de US-004, la regresión cubre consulta, edición y baja lógica de los recursos operativos heredados del Sprint 1. Pedidos se cancelan, vehículos pasan a fuera de servicio, conductores quedan inactivos y rutas se cancelan; no se realiza borrado físico porque los cuatro recursos participan en trazabilidad y auditoría. OpenAPI `0.3.0` conserva sincronía con estas operaciones.
+
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_11 | 09/10/2026 | Evidencia de CRUD completo, bajas lógicas, regresión y contrato OpenAPI 0.3.0. | Equipo del proyecto |
 | V_1_0_10 | 08/10/2026 | Evidencia de fecha e intervalo sugeridos desde las ventanas seleccionadas. | Equipo del proyecto |
 | V_1_0_9 | 08/10/2026 | Evidencia de selección simple de horarios mediante hora, minutos y AM/PM. | Equipo del proyecto |
 | V_1_0_8 | 08/10/2026 | Evidencia del nombre de carga, presentación AM/PM y planificación integral. | Equipo del proyecto |

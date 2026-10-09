@@ -7,6 +7,9 @@ class VehicleRepository extends MemoryRepository {
   async findByPlate(plate) {
     return this.records.find((vehicle) => vehicle.plate === plate) ?? null;
   }
+  async remove(id) {
+    return this.update(id, { status: "OUT_OF_SERVICE" });
+  }
 }
 
 const vehicle = {
@@ -30,6 +33,9 @@ test("registra vehículo normalizando la placa y permite sacarlo de servicio", a
     "admin-1",
   );
   assert.equal(updated.status, "OUT_OF_SERVICE");
+  assert.equal((await service.get(created.id)).id, created.id);
+  const removed = await service.remove(created.id, "admin-1");
+  assert.equal(removed.status, "OUT_OF_SERVICE");
 });
 
 test("rechaza una placa duplicada", async () => {

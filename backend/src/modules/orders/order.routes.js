@@ -14,6 +14,13 @@ export function createOrderRouter({ orderService, authenticate }) {
       response.json({ data: await orderService.list() }),
     ),
   );
+  router.get(
+    "/:id",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.AUDITOR),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await orderService.get(request.params.id) }),
+    ),
+  );
   router.post(
     "/",
     authorize(ROLES.ADMIN, ROLES.OPERATOR),
@@ -32,6 +39,15 @@ export function createOrderRouter({ orderService, authenticate }) {
           request.body,
           request.user.id,
         ),
+      });
+    }),
+  );
+  router.delete(
+    "/:id",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR),
+    asyncHandler(async (request, response) => {
+      response.json({
+        data: await orderService.remove(request.params.id, request.user.id),
       });
     }),
   );

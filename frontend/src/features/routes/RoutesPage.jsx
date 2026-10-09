@@ -181,6 +181,32 @@ export default function RoutesPage() {
     ).catch(() => {});
   }
 
+  async function updateRoute(event) {
+    event.preventDefault();
+    const values = Object.fromEntries(new FormData(event.currentTarget));
+    await submitResource("PATCH", `/${dialog.id}`, {
+      vehicleId: values.vehicleId,
+      startsAt: new Date(values.startsAt).toISOString(),
+      endsAt: new Date(values.endsAt).toISOString(),
+      status: values.status,
+    }).catch(() => {});
+  }
+
+  async function removeRoute(route) {
+    if (
+      !globalThis.confirm(
+        `¿Cancelar la ruta del vehículo ${route.vehiclePlate}?`,
+      )
+    )
+      return;
+    await resource.mutate("DELETE", `/${route.id}`).catch(() => {});
+    if (mappedRoute?.id === route.id) {
+      setMappedRoute(null);
+      setStops([]);
+      setNavigation(null);
+    }
+  }
+
   async function showRoute(route) {
     setMappedRoute(route);
     setMapLoading(true);
@@ -351,6 +377,19 @@ export default function RoutesPage() {
                 <Button onClick={() => setDialog({ type: "driver", ...route })}>
                   {route.driverId ? "Reasignar" : "Asignar"}
                 </Button>
+                {route.status !== "CANCELLED" &&
+                  route.status !== "COMPLETED" && (
+                    <>
+                      <Button
+                        onClick={() => setDialog({ type: "edit", ...route })}
+                      >
+                        Editar
+                      </Button>
+                      <Button color="error" onClick={() => removeRoute(route)}>
+                        Eliminar
+                      </Button>
+                    </>
+                  )}
               </TableCell>
             </TableRow>
           ))}
@@ -475,6 +514,50 @@ export default function RoutesPage() {
                 {driver.name}
               </MenuItem>
             ))}
+          </TextField>
+        </FormDialog>
+      )}
+      {dialog?.type === "edit" && (
+        <FormDialog
+          open
+          title="Editar ruta"
+          onClose={() => setDialog(null)}
+          onSubmit={updateRoute}
+          submitting={submitting}
+        >
+          <TextField
+            name="vehicleId"
+            label="Vehículo"
+            select
+            required
+            defaultValue={dialog.vehicleId}
+          >
+            {vehicles.map((vehicle) => (
+              <MenuItem key={vehicle.id} value={vehicle.id}>
+                {vehicle.plate} · {vehicle.capacityKg} kg
+              </MenuItem>
+            ))}
+          </TextField>
+          <DateTime12Field
+            name="startsAt"
+            label="Inicio"
+            defaultValue={toLocalDateTimeInput(dialog.startsAt)}
+          />
+          <DateTime12Field
+            name="endsAt"
+            label="Fin (máximo 8 horas)"
+            defaultValue={toLocalDateTimeInput(dialog.endsAt)}
+          />
+          <TextField
+            name="status"
+            label="Estado"
+            select
+            defaultValue={dialog.status}
+          >
+            <MenuItem value="PLANNED">Planificada</MenuItem>
+            <MenuItem value="IN_PROGRESS">En curso</MenuItem>
+            <MenuItem value="COMPLETED">Completada</MenuItem>
+            <MenuItem value="CANCELLED">Cancelada</MenuItem>
           </TextField>
         </FormDialog>
       )}

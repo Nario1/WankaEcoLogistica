@@ -47,6 +47,11 @@ export class MemoryUserRepository {
     this.users.push(created);
     return created;
   }
+  async updateDriver(id, changes) {
+    const driver = await this.findById(id);
+    Object.assign(driver, changes);
+    return driver;
+  }
 }
 
 export class MemoryRepository {
@@ -67,6 +72,11 @@ export class MemoryRepository {
   async update(id, input) {
     const record = await this.findById(id);
     Object.assign(record, input);
+    return record;
+  }
+  async remove(id) {
+    const record = await this.findById(id);
+    Object.assign(record, { status: "CANCELLED" });
     return record;
   }
 }

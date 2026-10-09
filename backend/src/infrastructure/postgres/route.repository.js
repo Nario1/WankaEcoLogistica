@@ -55,6 +55,23 @@ export class PgRouteRepository {
     return this.findById(firstRow(result).ruta_id);
   }
 
+  async update(id, { vehicleId, startsAt, endsAt, status }) {
+    await this.pool.query(
+      `UPDATE rutas SET vehiculo_id = $2, inicio = $3, fin = $4,
+       estado = $5, actualizado_en = NOW() WHERE ruta_id = $1`,
+      [id, vehicleId, startsAt, endsAt, status],
+    );
+    return this.findById(id);
+  }
+
+  async remove(id) {
+    await this.pool.query(
+      "UPDATE rutas SET estado = 'CANCELLED', actualizado_en = NOW() WHERE ruta_id = $1",
+      [id],
+    );
+    return this.findById(id);
+  }
+
   async hasDriverConflict(driverId, startsAt, endsAt, excludedRouteId) {
     const result = await this.pool.query(
       `SELECT EXISTS (

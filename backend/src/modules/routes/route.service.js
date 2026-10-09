@@ -2,6 +2,7 @@ import { badRequest, conflict, notFound } from "../../shared/errors.js";
 import {
   assertObject,
   requireDateTime,
+  requireEnum,
   requireUuid,
 } from "../../shared/validation.js";
 import { DISPATCH_DEPOT } from "../optimization/optimization.service.js";
@@ -25,6 +26,13 @@ export class RouteService {
 
   list() {
     return this.routeRepository.list();
+  }
+
+  async get(id) {
+    requireUuid(id);
+    const route = await this.routeRepository.findById(id);
+    if (!route) throw notFound("Ruta");
+    return route;
   }
 
   async listStops(routeId) {
@@ -70,6 +78,69 @@ export class RouteService {
       entityId: route.id,
     });
     return route;
+  }
+
+  async update(id, input, actorId) {
+    const current = await this.get(id);
+    assertObject(input);
+    const allowed = ["vehicleId", "startsAt", "endsAt", "status"];
+    const unknown = Object.keys(input).filter((key) => !allowed.includes(key));
+    if (unknown.length || !Object.keys(input).length) {
+      throw badRequest("Datos inválidos", {
+        unknown: unknown.length
+          ? `Campos no permitidos: ${unknown.join(", ")}`
+          : "Debe enviar al menos un campo",
+      });
+    }
+    const vehicleId = input.vehicleId
+      ? requireUuid(input.vehicleId, "vehicleId")
+      : current.vehicleId;
+    const startsAt = input.startsAt
+      ? requireDateTime(input.startsAt, "startsAt")
+      : new Date(current.startsAt);
+    const endsAt = input.endsAt
+      ? requireDateTime(input.endsAt, "endsAt")
+      : new Date(current.endsAt);
+    const status = input.status
+      ? requireEnum(input.status, "status", [
+          "PLANNED",
+          "IN_PROGRESS",
+          "COMPLETED",
+          "CANCELLED",
+        ])
+      : current.status;
+    this.assertDuration(startsAt, endsAt);
+    const vehicle = await this.vehicleRepository.findById(vehicleId);
+    if (!vehicle) throw notFound("Vehículo");
+    if (vehicle.status !== "ACTIVE" && vehicleId !== current.vehicleId)
+      throw conflict("El vehículo está fuera de servicio");
+    const route = await this.routeRepository.update(id, {
+      vehicleId,
+      startsAt,
+      endsAt,
+      status,
+    });
+    await this.auditRepository.record({
+      userId: actorId,
+      action: "ROUTE_UPDATED",
+      entity: "routes",
+      entityId: id,
+    });
+    return route;
+  }
+
+  async remove(id, actorId) {
+    const route = await this.get(id);
+    if (route.status === "COMPLETED")
+      throw conflict("Una ruta completada no puede cancelarse");
+    const cancelled = await this.routeRepository.remove(id);
+    await this.auditRepository.record({
+      userId: actorId,
+      action: "ROUTE_CANCELLED",
+      entity: "routes",
+      entityId: id,
+    });
+    return cancelled;
   }
 
   async assignDriver(routeId, driverId, actorId) {

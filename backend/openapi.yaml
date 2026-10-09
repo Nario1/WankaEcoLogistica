@@ -1,18 +1,22 @@
 openapi: 3.1.0
 info:
   title: WankaEcoLogística API
-  version: 0.2.0
-  description: API de los Sprints 1 y 2 para autenticación, pedidos, flota, conductores y optimización de rutas.
+  version: 0.3.0
+  description: API de los Sprints 1 y 2 para autenticación, CRUD operativo y optimización de rutas.
 servers:
   - url: http://localhost:3000
+security:
+  - bearerAuth: []
 paths:
   /health:
     get:
-      summary: Estado de la API
+      security: []
+      summary: Consultar el estado de la API
       responses:
         "200": { description: API disponible }
   /api/auth/login:
     post:
+      security: []
       summary: Iniciar sesión
       requestBody:
         required: true
@@ -30,151 +34,155 @@ paths:
         "423": { description: Cuenta bloqueada }
   /api/orders:
     get:
-      security: [{ bearerAuth: [] }]
       summary: Listar pedidos
       responses:
         "200": { description: Lista de pedidos }
     post:
-      security: [{ bearerAuth: [] }]
-      summary: Registrar pedido
+      summary: Registrar un pedido
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              type: object
-              required:
-                [
-                  productName,
-                  address,
-                  latitude,
-                  longitude,
-                  weightKg,
-                  windowStart,
-                  windowEnd,
-                ]
-              properties:
-                productName: { type: string, minLength: 2, maxLength: 160 }
-                address: { type: string }
-                latitude: { type: number }
-                longitude: { type: number }
-                weightKg: { type: number, exclusiveMinimum: 0 }
-                windowStart: { type: string }
-                windowEnd: { type: string }
+            schema: { $ref: "#/components/schemas/OrderInput" }
       responses:
         "201": { description: Pedido registrado }
         "400": { description: Datos inválidos }
   /api/orders/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ResourceId"
+    get:
+      summary: Consultar un pedido
+      responses:
+        "200": { description: Detalle del pedido }
+        "404": { description: Pedido inexistente }
     patch:
-      security: [{ bearerAuth: [] }]
-      summary: Actualizar pedido
-      parameters:
-        [
-          {
-            in: path,
-            name: id,
-            required: true,
-            schema: { type: string, format: uuid },
-          },
-        ]
+      summary: Actualizar un pedido
       responses:
         "200": { description: Pedido actualizado }
         "404": { description: Pedido inexistente }
+    delete:
+      summary: Cancelar lógicamente un pedido pendiente
+      responses:
+        "200": { description: Pedido cancelado }
+        "409": { description: El pedido ya no está pendiente }
   /api/vehicles:
     get:
-      security: [{ bearerAuth: [] }]
       summary: Listar vehículos
       responses:
         "200": { description: Lista de vehículos }
     post:
-      security: [{ bearerAuth: [] }]
-      summary: Registrar vehículo (ADMIN)
+      summary: Registrar un vehículo (ADMIN)
       responses:
         "201": { description: Vehículo registrado }
         "409": { description: Placa duplicada }
   /api/vehicles/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ResourceId"
+    get:
+      summary: Consultar un vehículo
+      responses:
+        "200": { description: Detalle del vehículo }
+        "404": { description: Vehículo inexistente }
     patch:
-      security: [{ bearerAuth: [] }]
-      summary: Actualizar vehículo o estado (ADMIN)
-      parameters:
-        [
-          {
-            in: path,
-            name: id,
-            required: true,
-            schema: { type: string, format: uuid },
-          },
-        ]
+      summary: Actualizar un vehículo o su estado (ADMIN)
       responses:
         "200": { description: Vehículo actualizado }
+        "409": { description: Placa duplicada }
+    delete:
+      summary: Dar de baja lógicamente un vehículo (ADMIN)
+      responses:
+        "200": { description: Vehículo fuera de servicio }
+        "404": { description: Vehículo inexistente }
   /api/drivers:
     get:
-      security: [{ bearerAuth: [] }]
       summary: Listar conductores
       responses:
         "200": { description: Lista de conductores }
     post:
-      security: [{ bearerAuth: [] }]
-      summary: Registrar conductor (ADMIN)
+      summary: Registrar un conductor (ADMIN)
       responses:
         "201": { description: Conductor registrado }
+        "409": { description: Correo duplicado }
+  /api/drivers/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ResourceId"
+    get:
+      summary: Consultar un conductor
+      responses:
+        "200": { description: Detalle público del conductor }
+        "404": { description: Conductor inexistente }
+    patch:
+      summary: Editar datos, contraseña o estado del conductor (ADMIN)
+      responses:
+        "200": { description: Conductor actualizado }
+        "409": { description: Correo duplicado }
+    delete:
+      summary: Desactivar lógicamente un conductor (ADMIN)
+      responses:
+        "200": { description: Conductor inactivo }
+        "404": { description: Conductor inexistente }
   /api/routes:
     get:
-      security: [{ bearerAuth: [] }]
       summary: Listar rutas operativas
       responses:
         "200": { description: Lista de rutas }
     post:
-      security: [{ bearerAuth: [] }]
-      summary: Crear ruta manual para asignación
+      summary: Crear una ruta manual
       responses:
         "201": { description: Ruta creada }
+        "409": { description: Vehículo u horario no elegible }
+  /api/routes/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ResourceId"
+    get:
+      summary: Consultar una ruta operativa
+      responses:
+        "200": { description: Detalle de la ruta }
+        "404": { description: Ruta inexistente }
+    patch:
+      summary: Editar vehículo, horario o estado de una ruta
+      responses:
+        "200": { description: Ruta actualizada }
+        "409": { description: Vehículo u horario no elegible }
+    delete:
+      summary: Cancelar lógicamente una ruta no completada
+      responses:
+        "200": { description: Ruta cancelada }
+        "409": { description: Una ruta completada no puede cancelarse }
   /api/routes/{id}/driver:
     put:
-      security: [{ bearerAuth: [] }]
-      summary: Asignar o reasignar conductor
+      summary: Asignar o reasignar un conductor
       parameters:
-        [
-          {
-            in: path,
-            name: id,
-            required: true,
-            schema: { type: string, format: uuid },
-          },
-        ]
+        - $ref: "#/components/parameters/ResourceId"
       responses:
         "200": { description: Conductor asignado }
         "409": { description: Conflicto horario o jornada mayor de ocho horas }
   /api/routes/{id}/stops:
     get:
-      security: [{ bearerAuth: [] }]
       summary: Listar las paradas ordenadas de una ruta
       parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: string, format: uuid }
+        - $ref: "#/components/parameters/ResourceId"
       responses:
         "200": { description: Paradas con coordenadas y orden de entrega }
         "404": { description: Ruta inexistente }
   /api/routes/{id}/navigation:
     get:
-      security: [{ bearerAuth: [] }]
-      summary: Calcular el trazado sobre la red vial para una ruta optimizada
+      summary: Calcular el trazado vial de una ruta optimizada
       parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: string, format: uuid }
+        - $ref: "#/components/parameters/ResourceId"
       responses:
         "200":
-          description: Geometría vial, distancia, duración, proveedor y uso de tráfico
+          {
+            description: Geometría vial,
+            distancia,
+            duración,
+            proveedor y uso de tráfico,
+          }
         "409": { description: Ruta sin paradas optimizadas }
         "503": { description: Proveedor de navegación no disponible }
   /api/optimizations:
     post:
-      security: [{ bearerAuth: [] }]
-      summary: Optimizar hasta 50 pedidos pendientes
+      summary: Optimizar entre 1 y 50 pedidos pendientes
       requestBody:
         required: true
         content:
@@ -183,37 +191,54 @@ paths:
               type: object
               required: [routeId, vehicleId, orderIds, startsAt]
               properties:
-                routeId:
-                  type: string
-                  format: uuid
-                  description: Ruta manual planificada que se convertirá en optimizada
-                vehicleId:
-                  type: string
-                  format: uuid
-                  description: Vehículo sugerido o elegido para la ruta
+                routeId: { type: string, format: uuid }
+                vehicleId: { type: string, format: uuid }
                 orderIds:
                   type: array
                   minItems: 1
                   maxItems: 50
                   uniqueItems: true
                   items: { type: string, format: uuid }
-                startsAt:
-                  type: string
-                  format: date-time
-                  description: Hora de salida confirmada o corregida al optimizar
+                startsAt: { type: string, format: date-time }
       responses:
         "201":
-          description: Ruta manual seleccionada optimizada desde el local de despacho y pedidos secuenciados
+          { description: Ruta optimizada desde el local y pedidos secuenciados }
         "400": { description: Solicitud inválida }
-        "409":
-          description: Ruta, capacidad operativa del 95 %, recursos o ventanas inviables
+        "409": { description: Capacidad, recursos o ventanas inviables }
   /api/emissions/calculate:
     post:
-      security: [{ bearerAuth: [] }]
       summary: Calcular emisiones conservando valores fuente
       responses:
         "200": { description: Cálculo reproducible }
 components:
+  parameters:
+    ResourceId:
+      in: path
+      name: id
+      required: true
+      schema: { type: string, format: uuid }
+  schemas:
+    OrderInput:
+      type: object
+      required:
+        [
+          productName,
+          address,
+          latitude,
+          longitude,
+          weightKg,
+          windowStart,
+          windowEnd,
+        ]
+      properties:
+        productName: { type: string, minLength: 2, maxLength: 160 }
+        address: { type: string, minLength: 5, maxLength: 255 }
+        latitude: { type: number, minimum: -90, maximum: 90 }
+        longitude: { type: number, minimum: -180, maximum: 180 }
+        weightKg: { type: number, exclusiveMinimum: 0 }
+        priority: { type: string, enum: [NORMAL, HIGH] }
+        windowStart: { type: string, pattern: "^([01]\\d|2[0-3]):[0-5]\\d$" }
+        windowEnd: { type: string, pattern: "^([01]\\d|2[0-3]):[0-5]\\d$" }
   securitySchemes:
     bearerAuth:
       type: http

@@ -67,4 +67,12 @@ export class PgOrderRepository {
     );
     return this.findById(id);
   }
+
+  async remove(id) {
+    await this.pool.query(
+      "UPDATE pedidos SET estado = 'CANCELLED', actualizado_en = NOW() WHERE pedido_id = $1",
+      [id],
+    );
+    return this.findById(id);
+  }
 }

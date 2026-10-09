@@ -50,6 +50,11 @@ export default function VehiclesPage() {
       setSubmitting(false);
     }
   }
+  async function remove(vehicle) {
+    if (!globalThis.confirm(`¿Dar de baja el vehículo ${vehicle.plate}?`))
+      return;
+    await resource.mutate("DELETE", `/${vehicle.id}`).catch(() => {});
+  }
   return (
     <ResourcePage
       title="Vehículos"
@@ -89,7 +94,14 @@ export default function VehiclesPage() {
               </TableCell>
               <TableCell>
                 {isAdmin && (
-                  <Button onClick={() => setEditing(vehicle)}>Editar</Button>
+                  <>
+                    <Button onClick={() => setEditing(vehicle)}>Editar</Button>
+                    {vehicle.status === "ACTIVE" && (
+                      <Button color="error" onClick={() => remove(vehicle)}>
+                        Eliminar
+                      </Button>
+                    )}
+                  </>
                 )}
               </TableCell>
             </TableRow>

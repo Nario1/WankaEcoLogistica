@@ -13,6 +13,12 @@ export function createRouteRouter({ routeService, authenticate }) {
     ),
   );
   router.get(
+    "/:id",
+    asyncHandler(async (request, response) =>
+      response.json({ data: await routeService.get(request.params.id) }),
+    ),
+  );
+  router.get(
     "/:id/stops",
     asyncHandler(async (request, response) =>
       response.json({ data: await routeService.listStops(request.params.id) }),
@@ -33,6 +39,26 @@ export function createRouteRouter({ routeService, authenticate }) {
         data: await routeService.create(request.body, request.user.id),
       });
     }),
+  );
+  router.patch(
+    "/:id",
+    asyncHandler(async (request, response) =>
+      response.json({
+        data: await routeService.update(
+          request.params.id,
+          request.body,
+          request.user.id,
+        ),
+      }),
+    ),
+  );
+  router.delete(
+    "/:id",
+    asyncHandler(async (request, response) =>
+      response.json({
+        data: await routeService.remove(request.params.id, request.user.id),
+      }),
+    ),
   );
   router.put(
     "/:id/driver",

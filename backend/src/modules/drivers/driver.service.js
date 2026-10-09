@@ -1,9 +1,11 @@
 import bcrypt from "bcryptjs";
-import { conflict } from "../../shared/errors.js";
+import { badRequest, conflict, notFound } from "../../shared/errors.js";
 import {
   assertObject,
   requireEmail,
   requireString,
+  requireUuid,
+  requireEnum,
 } from "../../shared/validation.js";
 
 export class DriverService {
@@ -38,6 +40,70 @@ export class DriverService {
       action: "DRIVER_CREATED",
       entity: "users",
       entityId: driver.id,
+    });
+    return this.toPublicDriver(driver);
+  }
+
+  async get(id) {
+    requireUuid(id);
+    const driver = await this.userRepository.findById(id);
+    if (!driver || driver.role !== "DRIVER") throw notFound("Conductor");
+    return this.toPublicDriver(driver);
+  }
+
+  async update(id, input, actorId) {
+    requireUuid(id);
+    assertObject(input);
+    const allowed = ["name", "email", "password", "status"];
+    const unknown = Object.keys(input).filter((key) => !allowed.includes(key));
+    if (unknown.length || !Object.keys(input).length) {
+      throw badRequest("Datos inválidos", {
+        unknown: unknown.length
+          ? `Campos no permitidos: ${unknown.join(", ")}`
+          : "Debe enviar al menos un campo",
+      });
+    }
+    const current = await this.userRepository.findById(id);
+    if (!current || current.role !== "DRIVER") throw notFound("Conductor");
+    const changes = {};
+    if (input.name !== undefined)
+      changes.name = requireString(input.name, "name", { min: 3, max: 120 });
+    if (input.email !== undefined) {
+      changes.email = requireEmail(input.email);
+      const duplicate = await this.userRepository.findByEmail(changes.email);
+      if (duplicate && duplicate.id !== id)
+        throw conflict("El correo ya se encuentra registrado");
+    }
+    if (input.status !== undefined)
+      changes.status = requireEnum(input.status, "status", [
+        "ACTIVE",
+        "INACTIVE",
+      ]);
+    if (input.password)
+      changes.passwordHash = await bcrypt.hash(
+        requireString(input.password, "password", { min: 12, max: 128 }),
+        12,
+      );
+    const driver = await this.userRepository.updateDriver(id, changes);
+    await this.auditRepository.record({
+      userId: actorId,
+      action: "DRIVER_UPDATED",
+      entity: "users",
+      entityId: id,
+    });
+    return this.toPublicDriver(driver);
+  }
+
+  async remove(id, actorId) {
+    await this.get(id);
+    const driver = await this.userRepository.updateDriver(id, {
+      status: "INACTIVE",
+    });
+    await this.auditRepository.record({
+      userId: actorId,
+      action: "DRIVER_DEACTIVATED",
+      entity: "users",
+      entityId: id,
     });
     return this.toPublicDriver(driver);
   }
