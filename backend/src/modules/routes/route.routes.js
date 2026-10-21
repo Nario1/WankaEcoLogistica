@@ -5,35 +5,56 @@ import { authorize } from "../auth/auth.middleware.js";
 
 export function createRouteRouter({ routeService, authenticate }) {
   const router = Router();
-  router.use(authenticate, authorize(ROLES.ADMIN, ROLES.OPERATOR));
+  router.use(authenticate);
+
+  router.get(
+    "/mine",
+    authorize(ROLES.DRIVER),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await routeService.listMine(request.user.id) }),
+    ),
+  );
+
   router.get(
     "/",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR),
     asyncHandler(async (_request, response) =>
       response.json({ data: await routeService.list() }),
     ),
   );
   router.get(
     "/:id",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.DRIVER),
     asyncHandler(async (request, response) =>
-      response.json({ data: await routeService.get(request.params.id) }),
+      response.json({
+        data: await routeService.get(request.params.id, request.user),
+      }),
     ),
   );
   router.get(
     "/:id/stops",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.DRIVER),
     asyncHandler(async (request, response) =>
-      response.json({ data: await routeService.listStops(request.params.id) }),
+      response.json({
+        data: await routeService.listStops(request.params.id, request.user),
+      }),
     ),
   );
   router.get(
     "/:id/navigation",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.DRIVER),
     asyncHandler(async (request, response) =>
       response.json({
-        data: await routeService.getNavigation(request.params.id),
+        data: await routeService.getNavigation(
+          request.params.id,
+          request.user,
+        ),
       }),
     ),
   );
   router.post(
     "/",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR),
     asyncHandler(async (request, response) => {
       response.status(201).json({
         data: await routeService.create(request.body, request.user.id),
@@ -42,6 +63,7 @@ export function createRouteRouter({ routeService, authenticate }) {
   );
   router.patch(
     "/:id",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR),
     asyncHandler(async (request, response) =>
       response.json({
         data: await routeService.update(
@@ -54,6 +76,7 @@ export function createRouteRouter({ routeService, authenticate }) {
   );
   router.delete(
     "/:id",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR),
     asyncHandler(async (request, response) =>
       response.json({
         data: await routeService.remove(request.params.id, request.user.id),
@@ -62,6 +85,7 @@ export function createRouteRouter({ routeService, authenticate }) {
   );
   router.put(
     "/:id/driver",
+    authorize(ROLES.ADMIN, ROLES.OPERATOR),
     asyncHandler(async (request, response) => {
       response.json({
         data: await routeService.assignDriver(

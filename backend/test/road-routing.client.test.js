@@ -43,7 +43,7 @@ test("transforma la geometría OSRM de longitud/latitud al formato del mapa", as
   }
 });
 
-test("usa tráfico TomTom cuando existe una clave configurada", async () => {
+test("usa tráfico TomTom cuando el adaptador selecciona ese proveedor", async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
     assert.match(String(url), /traffic=true/);

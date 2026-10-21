@@ -20,6 +20,19 @@ export class PgRouteRepository {
     ).rows;
   }
 
+  async listByDriver(driverId) {
+    return (
+      await this.pool.query(
+        `SELECT ${columns} FROM rutas r
+       LEFT JOIN usuarios u ON u.usuario_id = r.conductor_id
+       JOIN vehiculos v ON v.vehiculo_id = r.vehiculo_id
+       WHERE r.conductor_id = $1 AND r.estado <> 'CANCELLED'
+       ORDER BY r.inicio DESC`,
+        [driverId],
+      )
+    ).rows;
+  }
+
   async findById(id) {
     return firstRow(
       await this.pool.query(

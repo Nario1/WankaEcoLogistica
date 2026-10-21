@@ -1,4 +1,4 @@
-import { badRequest, conflict, notFound } from "../../shared/errors.js";
+import { badRequest, conflict, forbidden, notFound } from "../../shared/errors.js";
 import {
   assertObject,
   requireDateTime,
@@ -28,24 +28,32 @@ export class RouteService {
     return this.routeRepository.list();
   }
 
-  async get(id) {
+  listMine(driverId) {
+    requireUuid(driverId);
+    return this.routeRepository.listByDriver(driverId);
+  }
+
+  async get(id, actor = null) {
     requireUuid(id);
     const route = await this.routeRepository.findById(id);
     if (!route) throw notFound("Ruta");
+    this.assertRouteAccess(route, actor);
     return route;
   }
 
-  async listStops(routeId) {
+  async listStops(routeId, actor = null) {
     requireUuid(routeId);
     const route = await this.routeRepository.findById(routeId);
     if (!route) throw notFound("Ruta");
+    this.assertRouteAccess(route, actor);
     return this.routeRepository.listStops(routeId);
   }
 
-  async getNavigation(routeId) {
+  async getNavigation(routeId, actor = null) {
     requireUuid(routeId);
     const route = await this.routeRepository.findById(routeId);
     if (!route) throw notFound("Ruta");
+    this.assertRouteAccess(route, actor);
     const stops = await this.routeRepository.listStops(routeId);
     if (!route.optimized || !stops.length) {
       throw conflict("La ruta todavía no tiene paradas optimizadas");
@@ -54,6 +62,13 @@ export class RouteService {
       [DISPATCH_DEPOT, ...stops],
       route.startsAt,
     );
+  }
+
+  assertRouteAccess(route, actor) {
+    if (!actor || actor.role !== "DRIVER") return;
+    if (route.driverId !== actor.id) {
+      throw forbidden();
+    }
   }
 
   async create(input, actorId) {

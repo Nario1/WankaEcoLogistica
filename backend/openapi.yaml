@@ -121,6 +121,12 @@ paths:
       responses:
         "200": { description: Conductor inactivo }
         "404": { description: Conductor inexistente }
+  /api/routes/mine:
+    get:
+      summary: Listar rutas asignadas al conductor autenticado
+      responses:
+        "200": { description: Rutas del conductor }
+        "403": { description: Solo rol DRIVER }
   /api/routes:
     get:
       summary: Listar rutas operativas

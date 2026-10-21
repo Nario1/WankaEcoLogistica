@@ -16,6 +16,8 @@ Planificación ágil
 Implementación del Sprint 1
        ↓
 Implementación del Sprint 2
+       ↓
+Implementación del Sprint 3
 ```
 
 ## 01 Inicio
@@ -62,6 +64,13 @@ Cada sprint conserva sus cuatro artefactos: informe, impedimentos, revisión y r
 - [Registro de impedimentos](<03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
 - [Revisión](<03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
 - [Retrospectiva](<03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
+
+### Sprint 3 — Seguimiento en campo
+
+- [Informe de estado](<03 Implementación/Sprint 3/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<03 Implementación/Sprint 3/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión](<03 Implementación/Sprint 3/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<03 Implementación/Sprint 3/04 Retrospectiva del Sprint V_1_0_0.md>)
 
 ## Referencias técnicas
 

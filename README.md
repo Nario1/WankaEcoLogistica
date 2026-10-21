@@ -24,7 +24,7 @@ Los Sprints 1 y 2 están implementados para desarrollo local:
 - Trazado por calles reales mediante TomTom Routing o OSRM/OpenStreetMap.
 - Cálculo reproducible de emisiones.
 
-Permanecen planificados para sprints posteriores el seguimiento móvil/offline del conductor, la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
+Permanecen planificados para sprints posteriores la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
 
 ## Historias implementadas
 
@@ -38,8 +38,11 @@ Permanecen planificados para sprints posteriores el seguimiento móvil/offline d
 | 2 | US-004 | Optimizar hasta 50 pedidos respetando capacidad, prioridad, ventanas y disponibilidad. |
 | 2 | EN-001 | Medir el rendimiento con 50 puntos y objetivo P95 máximo de 3,5 segundos. |
 | 2 | EN-007 | Mantener pruebas, cobertura, migraciones, OpenAPI y documentación sincronizados. |
+| 3 | EN-005 | Adaptador de mapas/tráfico (OSRM, TomTom, stub) desacoplado del dominio. |
+| 3 | US-005 | Conductor consulta su ruta asignada en el mapa (**Mi ruta**). |
+| 3 | EN-004 | PWA offline con caché de última ruta y sincronización al reconectar. |
 
-US-005 a US-008 pertenecen a sprints posteriores y no se declaran como terminadas.
+US-006 a US-008 pertenecen a sprints posteriores y no se declaran como terminadas.
 
 ## Arquitectura y tecnologías
 
@@ -63,7 +66,8 @@ WankaEcoLogistica/
 │   ├── 02 Planificación/        # Backlog, Jira, riesgos y presupuesto
 │   └── 03 Implementación/
 │       ├── Sprint 1/            # Base operativa y seguridad
-│       └── Sprint 2/            # Optimización, evidencia y retrospectiva
+│       ├── Sprint 2/            # Optimización, evidencia y retrospectiva
+│       └── Sprint 3/            # Seguimiento en campo, mapa conductor y PWA
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
 │   ├── scripts/                 # Migración y creación del administrador
@@ -302,3 +306,10 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [Registro de impedimentos](<docs/03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
 - [Revisión del Sprint](<docs/03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
 - [Retrospectiva](<docs/03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
+
+### Sprint 3
+
+- [Informe de estado](<docs/03 Implementación/Sprint 3/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<docs/03 Implementación/Sprint 3/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión del Sprint](<docs/03 Implementación/Sprint 3/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<docs/03 Implementación/Sprint 3/04 Retrospectiva del Sprint V_1_0_0.md>)

@@ -21,6 +21,11 @@ class RouteRepository extends MemoryRepository {
   async listStops(routeId) {
     return [{ id: "stop-1", routeId, deliveryOrder: 1 }];
   }
+  async listByDriver(driverId) {
+    return this.records.filter(
+      (item) => item.driverId === driverId && item.status !== "CANCELLED",
+    );
+  }
 }
 
 const route = {
@@ -113,6 +118,22 @@ test("calcula navegación vial desde el local hasta las paradas", async () => {
     [-12.07201013486951, -75.20516872975998],
   );
   assert.deepEqual(navigation.geometry[1], [-12.063181, -75.205992]);
+});
+
+test("el conductor solo consulta la ruta que tiene asignada", async () => {
+  const service = makeService();
+  await service.assignDriver(route.id, driver.id, "operator-1");
+  const mine = await service.listMine(driver.id);
+  assert.equal(mine.length, 1);
+  await assert.rejects(
+    service.get(route.id, {
+      id: "00000000-0000-4000-8000-000000000099",
+      role: "DRIVER",
+    }),
+    { code: "FORBIDDEN" },
+  );
+  const owned = await service.get(route.id, { id: driver.id, role: "DRIVER" });
+  assert.equal(owned.id, route.id);
 });
 
 test("consulta, actualiza y cancela una ruta", async () => {

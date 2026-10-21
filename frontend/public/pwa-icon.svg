@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="WankaEcoLogística">
+  <rect width="128" height="128" rx="24" fill="#087f5b"/>
+  <path d="M28 86 L48 42 L64 70 L80 42 L100 86" fill="none" stroke="#f7faf7" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="96" cy="34" r="10" fill="#c3fae8"/>
+</svg>

@@ -1,0 +1,18 @@
+{
+  "name": "WankaEcoLogística",
+  "short_name": "WankaEco",
+  "description": "Seguimiento de rutas en campo para WankaEcoLogística Huancayo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7faf7",
+  "theme_color": "#087f5b",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
