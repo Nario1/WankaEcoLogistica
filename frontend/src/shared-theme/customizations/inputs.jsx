@@ -441,4 +441,18 @@ export const inputsCustomizations = {
       }),
     },
   },
+  MuiInputLabel: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        "&.Mui-focused": {
+          color: brand[700],
+        },
+        ...theme.applyStyles("dark", {
+          "&.Mui-focused": {
+            color: brand[200],
+          },
+        }),
+      }),
+    },
+  },
 };

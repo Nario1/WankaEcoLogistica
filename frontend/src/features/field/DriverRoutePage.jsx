@@ -88,7 +88,7 @@ export default function DriverRoutePage() {
   }, [applyCache, cacheKey, session.token]);
 
   useEffect(() => {
-    loadRoutes();
+    void loadRoutes();
   }, [loadRoutes]);
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function DriverRoutePage() {
       return;
     }
     let cancelled = false;
-    (async () => {
+    void (async () => {
       setLoading(true);
       setError("");
       try {
@@ -146,7 +146,7 @@ export default function DriverRoutePage() {
       `Sincronizando ${pending.length} cambio(s) pendiente(s) al recuperar red…`,
     );
     clearPendingFieldSync(cacheKey);
-    loadRoutes().finally(() => {
+    void loadRoutes().finally(() => {
       setSyncMessage("Cambios pendientes sincronizados.");
     });
   }, [cacheKey, loadRoutes, online]);

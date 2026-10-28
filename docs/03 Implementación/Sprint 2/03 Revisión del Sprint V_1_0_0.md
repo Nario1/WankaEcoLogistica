@@ -33,7 +33,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 ## Pendientes
 
 - Configurar `TEST_DATABASE_URL` en integración continua para que la prueba PostGIS deje de depender del entorno local.
-- El seguimiento móvil/offline y navegación vial del conductor (alcance completo de US-005), reoptimización por incidencias (US-007), indicadores (US-006) y reportes (US-008) conservan su lugar en sprints posteriores.
+- US-005 y la base offline del conductor se entregaron después, en el Sprint 03. La reoptimización por incidencias (US-007), los indicadores (US-006) y los reportes (US-008) conservan su lugar en sprints posteriores.
 - La evidencia de despliegue en staging requiere infraestructura y credenciales externas al repositorio.
 
 ## Verificación complementaria del incremento
@@ -44,6 +44,7 @@ Además de los escenarios de US-004, la regresión cubre consulta, edición y ba
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_12 | 28/10/2026 | El pendiente de US-005 se trasladó al Sprint 03, donde quedó entregado. | Nario German Reyes Rios |
 | V_1_0_11 | 09/10/2026 | Evidencia de CRUD completo, bajas lógicas, regresión y contrato OpenAPI 0.3.0. | Equipo del proyecto |
 | V_1_0_10 | 08/10/2026 | Evidencia de fecha e intervalo sugeridos desde las ventanas seleccionadas. | Equipo del proyecto |
 | V_1_0_9 | 08/10/2026 | Evidencia de selección simple de horarios mediante hora, minutos y AM/PM. | Equipo del proyecto |

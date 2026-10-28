@@ -1,19 +1,13 @@
 import { expect, test } from "@playwright/test";
-
-const email = process.env.PLAYWRIGHT_EMAIL ?? "admin@wanka.local";
-const password = process.env.PLAYWRIGHT_PASSWORD ?? "WankaAdmin2026";
+import { loginAsAdmin, openMenu } from "./helpers/auth.js";
 
 test("un administrador registra un pedido eligiendo el punto en el mapa", async ({
   page,
 }) => {
   const productName = `Carga prueba ${Date.now()}`;
 
-  await page.goto("/");
-  await page.getByLabel("Correo electrónico").fill(email);
-  await page.getByLabel("Contraseña").fill(password);
-  await page.getByRole("button", { name: "Ingresar" }).click();
-
-  await page.getByRole("button", { name: "Pedidos" }).click();
+  await loginAsAdmin(page);
+  await openMenu(page, "Pedidos");
   await page.getByRole("heading", { name: "Pedidos" }).waitFor();
   await page.getByRole("button", { name: "Nuevo pedido" }).click();
 

@@ -1,10 +1,10 @@
 # Registro de impedimentos
 
-[← Anterior: Informe](<01 Informe de estado del proyecto V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Revisión →](<03 Revisión del Sprint V_1_0_0.md>)
+[← Anterior: Informe](<06 Informe de estado del proyecto V_1_0_0.md>) · [README principal](../../../README.md) · [Volver a la revisión →](<01 Revisión del Sprint V_1_0_0.md>)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
-**Líder del proyecto:** Equipo del proyecto
+**Líder del proyecto:** Nario German Reyes Rios
 
 **Versión:** V_1_0_2
 

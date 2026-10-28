@@ -54,13 +54,14 @@ const mainListItems = [
 export default function MenuContent({ selected, onSelect, role }) {
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: "space-between" }}>
-      <List dense>
+      <List dense component="nav" aria-label="Navegación principal">
         {mainListItems
           .filter((item) => item.roles.includes(role))
           .map((item) => (
             <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 selected={selected === item.id}
+                aria-current={selected === item.id ? "page" : undefined}
                 onClick={() => onSelect(item.id)}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>

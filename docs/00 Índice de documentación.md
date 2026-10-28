@@ -17,7 +17,7 @@ Implementación del Sprint 1
        ↓
 Implementación del Sprint 2
        ↓
-Implementación del Sprint 3
+Implementación del Sprint 03
 ```
 
 ## 01 Inicio
@@ -65,12 +65,15 @@ Cada sprint conserva sus cuatro artefactos: informe, impedimentos, revisión y r
 - [Revisión](<03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
 - [Retrospectiva](<03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
 
-### Sprint 3 — Seguimiento en campo
+### Sprint 03 — Seguimiento en campo y consigna de calidad
 
-- [Informe de estado](<03 Implementación/Sprint 3/01 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<03 Implementación/Sprint 3/02 Registro de Impedimentos V_1_0_0.md>)
-- [Revisión](<03 Implementación/Sprint 3/03 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva](<03 Implementación/Sprint 3/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Revisión del sprint](<03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva del sprint](<03 Implementación/Sprint 03/02 Retrospectiva del Sprint V_1_0_0.md>)
+- [Calidad de código](<03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>)
+- [OWASP Top 10 2025](<03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
+- [Accesibilidad WCAG](<03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
+- [Informe de estado](<03 Implementación/Sprint 03/06 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<03 Implementación/Sprint 03/07 Registro de Impedimentos V_1_0_0.md>)
 
 ## Referencias técnicas
 

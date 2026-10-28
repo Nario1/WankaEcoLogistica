@@ -49,6 +49,7 @@ export default function ColorModeIconDropdown(props) {
         onClick={handleClick}
         disableRipple
         size="small"
+        aria-label="Cambiar tema"
         aria-controls={open ? "color-scheme-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
@@ -58,7 +59,7 @@ export default function ColorModeIconDropdown(props) {
       </IconButton>
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
+        id="color-scheme-menu"
         open={open}
         onClose={handleClose}
         onClick={handleClose}
@@ -75,13 +76,13 @@ export default function ColorModeIconDropdown(props) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem selected={mode === "system"} onClick={handleMode("system")}>
-          System
+          Sistema
         </MenuItem>
         <MenuItem selected={mode === "light"} onClick={handleMode("light")}>
-          Light
+          Claro
         </MenuItem>
         <MenuItem selected={mode === "dark"} onClick={handleMode("dark")}>
-          Dark
+          Oscuro
         </MenuItem>
       </Menu>
     </React.Fragment>

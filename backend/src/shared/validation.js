@@ -54,7 +54,19 @@ export function requireEnum(value, field, allowed) {
 
 export function requireEmail(value) {
   const email = requireString(value, "email", { max: 255 }).toLowerCase();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const parts = email.split("@");
+  const domain = parts[1] ?? "";
+  const dot = domain.lastIndexOf(".");
+  const hasWhitespace = [" ", "\t", "\n", "\r"].some((character) =>
+    email.includes(character),
+  );
+  const valid =
+    parts.length === 2 &&
+    parts[0].length > 0 &&
+    !hasWhitespace &&
+    dot > 0 &&
+    dot < domain.length - 1;
+  if (!valid) {
     throw badRequest("Datos inválidos", {
       email: "Formato de correo inválido",
     });

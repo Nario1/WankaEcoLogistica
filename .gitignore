@@ -4,3 +4,9 @@ dist/
 .env.*
 !.env.example
 *.log
+.scannerwork/
+.sonar/
+coverage/
+lighthouse-*.json
+backend/coverage/
+frontend/coverage/

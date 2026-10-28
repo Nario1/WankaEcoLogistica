@@ -82,7 +82,7 @@ export default function AppNavbar({ selected, onSelect, user, onLogout }) {
             </Typography>
           </Stack>
           <ColorModeIconDropdown />
-          <MenuButton aria-label="menu" onClick={toggleDrawer(true)}>
+          <MenuButton aria-label="Abrir menú" onClick={toggleDrawer(true)}>
             <MenuRoundedIcon />
           </MenuButton>
           <SideMenuMobile

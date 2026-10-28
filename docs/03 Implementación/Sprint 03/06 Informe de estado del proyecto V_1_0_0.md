@@ -1,11 +1,11 @@
 # Informe de estado del proyecto
 
-[← Sprint 2](<../Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
+[← Anterior: Retrospectiva](<02 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<07 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|
 | Proyecto | WankaEcoLogística Huancayo |
-| Líder del proyecto | Equipo del proyecto |
+| Líder del proyecto | Nario German Reyes Rios |
 | Versión | V_1_0_2 |
 | Fecha | 21/10/2026 |
 | Periodo | Cierre técnico del Sprint 3 (20/10/2026 – 03/11/2026) |

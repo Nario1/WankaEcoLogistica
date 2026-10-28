@@ -67,7 +67,7 @@ WankaEcoLogistica/
 │   └── 03 Implementación/
 │       ├── Sprint 1/            # Base operativa y seguridad
 │       ├── Sprint 2/            # Optimización, evidencia y retrospectiva
-│       └── Sprint 3/            # Seguimiento en campo, mapa conductor y PWA
+│       └── Sprint 03/           # Consigna oficial: revisión, retrospectiva y calidad
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
 │   ├── scripts/                 # Migración y creación del administrador
@@ -307,9 +307,12 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [Revisión del Sprint](<docs/03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
 - [Retrospectiva](<docs/03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
 
-### Sprint 3
+### Sprint 03
 
-- [Informe de estado](<docs/03 Implementación/Sprint 3/01 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<docs/03 Implementación/Sprint 3/02 Registro de Impedimentos V_1_0_0.md>)
-- [Revisión del Sprint](<docs/03 Implementación/Sprint 3/03 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva](<docs/03 Implementación/Sprint 3/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Revisión del sprint](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva del sprint](<docs/03 Implementación/Sprint 03/02 Retrospectiva del Sprint V_1_0_0.md>)
+- [Calidad de código](<docs/03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>)
+- [OWASP Top 10 2025](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
+- [Accesibilidad WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
+- [Informe de estado](<docs/03 Implementación/Sprint 03/06 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<docs/03 Implementación/Sprint 03/07 Registro de Impedimentos V_1_0_0.md>)

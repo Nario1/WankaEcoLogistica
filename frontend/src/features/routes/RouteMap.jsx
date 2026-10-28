@@ -54,6 +54,8 @@ export default function RouteMap({ route, stops, navigation, loading }) {
         )}
       </Stack>
       <Box
+        role="region"
+        aria-label="Mapa de la ruta"
         sx={{
           height: { xs: 360, md: 480 },
           borderRadius: 2,
