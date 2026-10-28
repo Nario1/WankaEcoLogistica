@@ -1,18 +1,33 @@
 /* WankaEcoLogística — service worker EN-004 */
 const SHELL_CACHE = "wanka-shell-v1";
-const SHELL_ASSETS = ["/", "/index.html", "/manifest.webmanifest", "/pwa-icon.svg"];
+const SHELL_ASSETS = [
+  "/",
+  "/index.html",
+  "/manifest.webmanifest",
+  "/pwa-icon.svg",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(SHELL_CACHE).then((cache) => cache.addAll(SHELL_ASSETS)).then(() => self.skipWaiting()),
+    caches
+      .open(SHELL_CACHE)
+      .then((cache) => cache.addAll(SHELL_ASSETS))
+      .then(() => self.skipWaiting()),
   );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== SHELL_CACHE).map((key) => caches.delete(key))),
-    ).then(() => self.clients.claim()),
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key !== SHELL_CACHE)
+            .map((key) => caches.delete(key)),
+        ),
+      )
+      .then(() => self.clients.claim()),
   );
 });
 

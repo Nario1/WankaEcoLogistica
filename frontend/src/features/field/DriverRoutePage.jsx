@@ -88,20 +88,28 @@ export default function DriverRoutePage() {
   }, [applyCache, cacheKey, session.token]);
 
   useEffect(() => {
-    void loadRoutes();
+    let cancelled = false;
+    void (async () => {
+      await Promise.resolve();
+      if (!cancelled) await loadRoutes();
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [loadRoutes]);
 
   useEffect(() => {
-    if (!selectedId) {
-      setStops([]);
-      setNavigation(null);
-      return;
-    }
-    if (!online) {
-      applyCache();
-      return;
-    }
+    if (!selectedId) return undefined;
     let cancelled = false;
+    if (!online) {
+      void (async () => {
+        await Promise.resolve();
+        if (!cancelled) applyCache();
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }
     void (async () => {
       setLoading(true);
       setError("");
@@ -139,16 +147,24 @@ export default function DriverRoutePage() {
   }, [applyCache, cacheKey, online, routes, selectedId, session.token]);
 
   useEffect(() => {
-    if (!online) return;
+    if (!online) return undefined;
     const pending = listPendingFieldSync(cacheKey);
-    if (!pending.length) return;
-    setSyncMessage(
-      `Sincronizando ${pending.length} cambio(s) pendiente(s) al recuperar red…`,
-    );
-    clearPendingFieldSync(cacheKey);
-    void loadRoutes().finally(() => {
-      setSyncMessage("Cambios pendientes sincronizados.");
-    });
+    if (!pending.length) return undefined;
+    const pendingCount = pending.length;
+    let cancelled = false;
+    void (async () => {
+      await Promise.resolve();
+      if (cancelled) return;
+      setSyncMessage(
+        `Sincronizando ${pendingCount} cambio(s) pendiente(s) al recuperar red…`,
+      );
+      clearPendingFieldSync(cacheKey);
+      await loadRoutes();
+      if (!cancelled) setSyncMessage("Cambios pendientes sincronizados.");
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [cacheKey, loadRoutes, online]);
 
   return (
@@ -175,10 +191,7 @@ export default function DriverRoutePage() {
           </Alert>
         )}
         {syncMessage && (
-          <Alert
-            severity="success"
-            onClose={() => setSyncMessage("")}
-          >
+          <Alert severity="success" onClose={() => setSyncMessage("")}>
             {syncMessage}
           </Alert>
         )}
@@ -217,8 +230,8 @@ export default function DriverRoutePage() {
         )}
         <RouteMap
           route={selected}
-          stops={stops}
-          navigation={navigation}
+          stops={selectedId ? stops : []}
+          navigation={selectedId ? navigation : null}
           loading={loading}
         />
       </Stack>

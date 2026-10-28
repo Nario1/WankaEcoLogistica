@@ -45,10 +45,7 @@ export function createRouteRouter({ routeService, authenticate }) {
     authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.DRIVER),
     asyncHandler(async (request, response) =>
       response.json({
-        data: await routeService.getNavigation(
-          request.params.id,
-          request.user,
-        ),
+        data: await routeService.getNavigation(request.params.id, request.user),
       }),
     ),
   );

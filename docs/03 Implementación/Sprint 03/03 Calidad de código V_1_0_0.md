@@ -11,6 +11,8 @@
 
 Análisis ejecutado con SonarQube Community Build `26.10.0.133078`, levantado con Docker mediante `docker-compose.sonarqube.yml` en `http://localhost:9001`. El puerto 9000 estaba ocupado por otra instancia local, por eso esta usa el 9001. El escáner fue `@sonar/scan` desde el repositorio, con el informe LCOV del backend en `backend/coverage/lcov.info`.
 
+Este es el análisis que se expone: el que detectó los bugs y el code smell. El Quality Gate ya estaba en PASSED con esos hallazgos abiertos.
+
 - **Estado del Quality Gate:** PASSED
 - **Porcentaje de Cobertura de Pruebas (Coverage):** 65,4 %
 - **Duplicación de Código:** 2,2 %
@@ -26,19 +28,30 @@ La cobertura de SonarQube considera frontend y backend juntos. El backend, medid
 | **Code Smells** | 1 | Alta (MAJOR) |
 | **Security Hotspots** | 0 | — |
 
-Los tres bugs son la regla `javascript:S9383` en `frontend/src/features/field/DriverRoutePage.jsx`, líneas 91, 105 y 149: promesas de carga y sincronización invocadas sin `await`, `.catch` o `void`. El code smell es `javascript:S8786` en `backend/src/shared/validation.js`: la expresión regular del correo podía retroceder de forma superlineal. La deuda técnica estimada por SonarQube (`sqale_index`) fue de 20 minutos.
+Los tres bugs son el mismo problema, en la pantalla **Mi ruta** del conductor: la vista donde, después de iniciar sesión, ve la ruta que le asignaron, las paradas y el mapa.
+
+| Hallazgo | En palabras simples | Dónde ocurre | Archivo, al costado |
+|---|---|---|---|
+| Bug 1 | Al abrir **Mi ruta**, el sistema pide las rutas del conductor y no dejaba claro qué hacer si esa consulta falla. | Pantalla Mi ruta, al entrar | `frontend/src/features/field/DriverRoutePage.jsx`, línea 91 |
+| Bug 2 | Al elegir una ruta, pide las paradas y el trazado del mapa con el mismo descuido. | Pantalla Mi ruta, al seleccionar la ruta | El mismo archivo, línea 105 |
+| Bug 3 | Cuando el celular recupera la señal, intenta enviar lo que quedó pendiente sin atender el fallo de esa operación. | Pantalla Mi ruta, al volver la conexión | El mismo archivo, línea 149 |
+| Code smell | Al iniciar sesión o registrar a una persona, la revisión del correo podía tardar demasiado si alguien escribía un texto muy largo o mal armado. | Formulario de correo | `backend/src/shared/validation.js` |
+
+SonarQube llama a los tres bugs «promesa flotante»: la pantalla dispara la consulta al servidor y sigue adelante, sin declarar que, si falla, el conductor ya ve el aviso en la misma pantalla. El code smell no es un fallo visible para el usuario; es una forma frágil de revisar el formato del correo.
+
+La deuda técnica estimada por SonarQube fue de 20 minutos.
 
 ## 3. Plan de Remediación y Deuda Técnica
 
 - **Deuda Técnica Estimada:** 20 minutos en el análisis del 2026-10-28.
 - **Principales hallazgos y acciones correctivas:**
-  1. Promesas flotantes en `DriverRoutePage.jsx`. Se marcaron con el operador `void` la carga inicial, la consulta de paradas y la sincronización al recuperar red, para que el rechazo quede explícitamente ignorado donde la interfaz ya muestra el error.
-  2. Expresión regular de `requireEmail` en `validation.js`. Se reemplazó por una validación de una sola arroba, parte local, dominio y punto, sin cuantificadores anidados.
+  1. En **Mi ruta**, las tres consultas (rutas al entrar, paradas y mapa al elegir una ruta, y sincronización al volver la señal) quedaron declaradas de forma explícita. Si el servidor no responde, el conductor sigue viendo el mensaje de error en la pantalla. El archivo de esa vista es `frontend/src/features/field/DriverRoutePage.jsx`.
+  2. La revisión del correo ya no usa el patrón que podía demorarse. Ahora comprueba algo simple: una sola arroba, texto antes y después, y un punto en el dominio. Eso vive en la validación del servidor, `backend/src/shared/validation.js`.
 
-El Quality Gate ya estaba en PASSED antes de estas correcciones. El tablero muestra el análisis previo hasta que se publique uno nuevo.
+Las correcciones quedaron en el repositorio. La tabla de cantidad detectada conserva los 3 bugs y el code smell, que es lo que se explica en la exposición.
 
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
-| V_1_0_0 | 28/10/2026 | Evaluación con el análisis SonarQube en Docker y corrección de los hallazgos. | Nario German Reyes Rios |
+| V_1_0_0 | 28/10/2026 | Evaluación con el análisis SonarQube en Docker. Los hallazgos se redactaron en lenguaje de la pantalla Mi ruta y del correo, para la exposición. | Nario German Reyes Rios |

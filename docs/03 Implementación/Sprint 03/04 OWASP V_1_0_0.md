@@ -27,10 +27,10 @@ El mismo análisis del documento de calidad dejó 0 vulnerabilidades y 0 securit
 ## 2. Detalles de Security Hotspots y Vulnerabilidades Críticas
 
 - **Hotspot #1:** No aplica. SonarQube reportó 0 security hotspots en el proyecto `wanka-ecologistica`.
-- **Hotspot #2:** No aplica. Tampoco hubo vulnerabilidades. El único hallazgo cercano a abuso de entrada fue el code smell de la expresión regular del correo, ya sustituida en `backend/src/shared/validation.js`, y SonarQube lo clasificó como mantenibilidad, no como vulnerabilidad.
+- **Hotspot #2:** No aplica. Tampoco hubo vulnerabilidades. Lo más cercano fue la revisión del correo al iniciar sesión: un texto muy largo podía hacer trabajar de más al servidor. SonarQube lo clasificó como un problema de mantenimiento, no como una vulnerabilidad. El detalle está en [Calidad de código](<03 Calidad de código V_1_0_0.md>).
 
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
-| V_1_0_0 | 28/10/2026 | Matriz OWASP Top 10 2025 con el análisis SonarQube del Sprint 03. | Nario German Reyes Rios |
+| V_1_0_0 | 28/10/2026 | Matriz OWASP Top 10 2025 con el análisis SonarQube del Sprint 3. | Nario German Reyes Rios |

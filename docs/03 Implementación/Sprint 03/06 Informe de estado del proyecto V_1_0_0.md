@@ -1,6 +1,6 @@
 # Informe de estado del proyecto
 
-[← Anterior: Retrospectiva](<02 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<07 Registro de Impedimentos V_1_0_0.md>)
+[← Anterior: WCAG](<05 WCAG V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<07 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|
@@ -52,6 +52,7 @@ Se limpió el backlog de Jira antes de implementar, se cerraron los tres ítems 
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_3 | 28/10/2026 | El enlace de regreso apunta a la evaluación WCAG, para cerrar la cadena del sprint. | Nario German Reyes Rios |
 | V_1_0_2 | 21/10/2026 | Ajuste de coherencia y política de no publicar secretos. | Equipo del proyecto |
 | V_1_0_1 | 21/10/2026 | Informe de cierre técnico con alcance, indicadores y decisiones. | Equipo del proyecto |
 | V_1_0_0 | 21/10/2026 | Informe de arranque del Sprint 3. | Equipo del proyecto |

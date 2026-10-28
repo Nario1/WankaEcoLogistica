@@ -34,7 +34,7 @@ Redactar el impedimento el mismo día y revisar el texto antes de publicarlo. La
 
 ### Herramientas
 
-Dejar fijos en la guía local el puerto `5174`, la ruta de navegadores de Playwright y `TEST_DATABASE_URL`. Si falla la instalación de un plugin, como ocurrió con `vite-plugin-pwa`, aplicar de inmediato el plan alternativo ya usado: service worker propio. El análisis de calidad de esta consigna se ejecutará con SonarQube en Docker y quedará versionado en el repositorio.
+Dejar fijos en la guía local el puerto `5174`, la ruta de navegadores de Playwright y `TEST_DATABASE_URL`. Si falla la instalación de un plugin, como ocurrió con `vite-plugin-pwa`, aplicar de inmediato el plan alternativo ya usado: service worker propio. El análisis de calidad de esta consigna se ejecutó con SonarQube en Docker y quedó en los documentos de calidad y de OWASP.
 
 ### Acciones a realizar
 
@@ -50,6 +50,7 @@ Dejar fijos en la guía local el puerto `5174`, la ruta de navegadores de Playwr
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_4 | 28/10/2026 | La acción de SonarQube quedó registrada como ejecutada, porque el análisis ya está en los documentos de calidad y OWASP. | Nario German Reyes Rios |
 | V_1_0_3 | 27/10/2026 | Retrospectiva alineada a la plantilla oficial y a la consigna del Sprint 3. | Nario German Reyes Rios |
 | V_1_0_2 | 21/10/2026 | Retrospectiva de cierre sin secretos. | Equipo del proyecto |
 | V_1_0_0 | 21/10/2026 | Plantilla de retrospectiva al inicio del sprint. | Equipo del proyecto |

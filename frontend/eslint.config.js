@@ -18,7 +18,9 @@ export default [
         fetch: "readonly",
         FormData: "readonly",
         Headers: "readonly",
+        navigator: "readonly",
         sessionStorage: "readonly",
+        window: "readonly",
       },
     },
     plugins: {
@@ -36,6 +38,19 @@ export default [
         { allowConstantExport: true, allowExportNames: ["useAuth"] },
       ],
       "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    },
+  },
+  {
+    files: ["public/sw.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "script",
+      globals: {
+        caches: "readonly",
+        fetch: "readonly",
+        self: "readonly",
+        URL: "readonly",
+      },
     },
   },
 ];

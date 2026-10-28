@@ -14,10 +14,7 @@ const points = [
 test("resuelve el proveedor stub, osrm o tomtom según configuración", () => {
   assert.equal(resolveRoutingProviderName({ routingProvider: "stub" }), "stub");
   assert.equal(resolveRoutingProviderName({ routingProvider: "OSRM" }), "osrm");
-  assert.equal(
-    resolveRoutingProviderName({ tomtomApiKey: "clave" }),
-    "tomtom",
-  );
+  assert.equal(resolveRoutingProviderName({ tomtomApiKey: "clave" }), "tomtom");
   assert.equal(resolveRoutingProviderName({}), "osrm");
 });
 
