@@ -26,6 +26,11 @@ export const feedbackCustomizations = {
           borderRadius: "10px",
           border: "1px solid",
           borderColor: (theme.vars || theme).palette.divider,
+          backgroundColor: "#ffffff",
+          backgroundImage: "none",
+          ...theme.applyStyles("dark", {
+            backgroundColor: "hsl(220, 30%, 7%)",
+          }),
         },
       }),
     },

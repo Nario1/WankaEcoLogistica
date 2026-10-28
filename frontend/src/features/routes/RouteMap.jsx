@@ -14,13 +14,9 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { formatTime } from "../../utils/format";
+import { DISPATCH_DEPOT } from "../shared/depot";
 
 const HUANCAYO_CENTER = [-12.0651, -75.2049];
-const DISPATCH_DEPOT = {
-  name: "Local de despacho",
-  latitude: -12.07201013486951,
-  longitude: -75.20516872975998,
-};
 
 function FitRoute({ positions }) {
   const map = useMap();
@@ -43,13 +39,14 @@ export default function RouteMap({ route, stops, navigation, loading }) {
   const positions = roadPositions.length ? roadPositions : markerPositions;
   return (
     <Box sx={{ mt: 3 }}>
-      <Stack direction={{ xs: "column", sm: "row" }} gap={1} sx={{ mb: 1 }}>
+      <Stack spacing={0.5} sx={{ mb: 1.5 }}>
         <Typography variant="h6">Mapa de la ruta optimizada</Typography>
         {route && (
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {route.vehiclePlate} ·{" "}
             {navigation?.distanceKm ?? route.distanceKm ?? 0} km ·{" "}
-            {navigation?.durationMinutes ?? "—"} min · {stops.length} paradas
+            {navigation?.durationMinutes ?? "—"} min ·{" "}
+            {stops.length === 1 ? "1 parada" : `${stops.length} paradas`}
           </Typography>
         )}
       </Stack>

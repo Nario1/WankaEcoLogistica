@@ -104,6 +104,7 @@ export default function DriversPage() {
           <TextField
             name="name"
             label="Nombre completo"
+            placeholder="María Quispe Huamán"
             defaultValue={editing.name}
             required
             slotProps={{ htmlInput: { minLength: 3, maxLength: 120 } }}
@@ -111,6 +112,7 @@ export default function DriversPage() {
           <TextField
             name="email"
             label="Correo electrónico"
+            placeholder="maria.quispe@wanka.local"
             type="email"
             defaultValue={editing.email}
             required
@@ -119,6 +121,11 @@ export default function DriversPage() {
             name="password"
             label={
               editing.id ? "Nueva contraseña (opcional)" : "Contraseña temporal"
+            }
+            placeholder={
+              editing.id
+                ? "Déjela vacía para no cambiarla"
+                : "Mínimo 12 caracteres"
             }
             type="password"
             required={!editing.id}
@@ -135,6 +142,7 @@ export default function DriversPage() {
               label="Estado"
               select
               defaultValue={editing.status}
+              helperText="Inactivo no puede recibir rutas nuevas."
             >
               <MenuItem value="ACTIVE">Disponible</MenuItem>
               <MenuItem value="INACTIVE">Inactivo</MenuItem>

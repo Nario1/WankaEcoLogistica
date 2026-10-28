@@ -1,26 +1,126 @@
 import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import { apiRequest, formatApiError } from "../../api/client";
 import { useAuth } from "../../auth/AuthContext";
 import FormDialog from "../shared/FormDialog";
 import ResourcePage from "../shared/ResourcePage";
+import RowMenu from "../shared/RowMenu";
 import { useApiResource } from "../shared/useApiResource";
 import RouteMap from "./RouteMap";
 import { formatDateTime, formatTime } from "../../utils/format";
 import DateTime12Field from "../shared/DateTime12Field";
+
+function DateTimeCell({ value }) {
+  const [date, time = ""] = formatDateTime(value)
+    .replace(/:\d{2}(?=\s?[AP]M)/, "")
+    .split(", ");
+  return (
+    <TableCell>
+      <Box sx={{ whiteSpace: "nowrap", lineHeight: 1.3 }}>{date}</Box>
+      <Box
+        sx={{ whiteSpace: "nowrap", lineHeight: 1.3, color: "text.secondary" }}
+      >
+        {time}
+      </Box>
+    </TableCell>
+  );
+}
+
+function OrderPicker({
+  labelId,
+  label,
+  orders,
+  selectedIds,
+  onChange,
+  showPriority = false,
+}) {
+  const [open, setOpen] = useState(false);
+  const count = selectedIds.length;
+
+  return (
+    <FormControl required fullWidth>
+      <InputLabel id={labelId}>{label}</InputLabel>
+      <Select
+        labelId={labelId}
+        label={label}
+        multiple
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        value={selectedIds}
+        onChange={(event) => onChange(event.target.value)}
+        renderValue={() =>
+          count
+            ? `${count} pedido${count === 1 ? "" : "s"} seleccionado${count === 1 ? "" : "s"}`
+            : ""
+        }
+        MenuProps={{
+          slotProps: {
+            paper: { sx: { maxHeight: 420 } },
+          },
+        }}
+      >
+        {orders.map((order) => (
+          <MenuItem key={order.id} value={order.id}>
+            <Checkbox checked={selectedIds.includes(order.id)} />
+            <ListItemText
+              primary={`${showPriority && order.priority === "HIGH" ? "Alta · " : ""}${order.productName}`}
+              secondary={`${order.address} · ${order.weightKg} kg · ${formatTime(order.windowStart)}-${formatTime(order.windowEnd)}`}
+            />
+          </MenuItem>
+        ))}
+        <ListSubheader
+          component="div"
+          disableSticky
+          sx={{
+            position: "sticky",
+            bottom: 0,
+            top: "auto",
+            zIndex: 1,
+            bgcolor: "background.paper",
+            borderTop: 1,
+            borderColor: "divider",
+            lineHeight: "normal",
+            py: 1,
+          }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setOpen(false);
+            }}
+          >
+            Continuar
+          </Button>
+        </ListSubheader>
+      </Select>
+      <FormHelperText>
+        Marque los pedidos y pulse Continuar para cerrar la lista.
+      </FormHelperText>
+    </FormControl>
+  );
+}
 
 function toLocalDateTimeInput(value) {
   const date = new Date(value);
@@ -333,66 +433,131 @@ export default function RoutesPage() {
           No hay pedidos pendientes disponibles para optimizar.
         </Alert>
       )}
-      <Table size="small">
+      <Table size="small" sx={{ width: "100%", tableLayout: "fixed" }}>
         <TableHead>
           <TableRow>
-            <TableCell>Vehículo</TableCell>
-            <TableCell>Inicio</TableCell>
-            <TableCell>Fin</TableCell>
-            <TableCell>Conductor</TableCell>
-            <TableCell>Resultado</TableCell>
-            <TableCell />
+            <TableCell sx={{ width: "12%" }}>Vehículo</TableCell>
+            <TableCell sx={{ width: "12%" }}>Inicio</TableCell>
+            <TableCell sx={{ width: "12%" }}>Fin</TableCell>
+            <TableCell sx={{ width: "16%" }}>Conductor</TableCell>
+            <TableCell sx={{ width: "14%" }}>Resultado</TableCell>
+            <TableCell align="right" sx={{ width: "34%" }}>
+              Acciones
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {resource.items.map((route) => (
+          {resource.items.map((route) => {
+            const driverName = route.driverName ?? "Sin asignar";
+            return (
             <TableRow key={route.id} selected={mappedRoute?.id === route.id}>
-              <TableCell>{route.vehiclePlate}</TableCell>
-              <TableCell>{formatDateTime(route.startsAt)}</TableCell>
-              <TableCell>{formatDateTime(route.endsAt)}</TableCell>
-              <TableCell>{route.driverName ?? "Sin asignar"}</TableCell>
+              <TableCell sx={{ whiteSpace: "nowrap" }}>
+                {route.vehiclePlate}
+              </TableCell>
+              <DateTimeCell value={route.startsAt} />
+              <DateTimeCell value={route.endsAt} />
               <TableCell>
+                <Box title={driverName} sx={{ lineHeight: 1.3 }}>
+                  {driverName}
+                </Box>
+              </TableCell>
+              <TableCell sx={{ whiteSpace: "nowrap" }}>
                 {route.optimized
                   ? `${route.distanceKm ?? 0} km / ${route.totalWeightKg ?? 0} kg`
                   : "Manual"}
               </TableCell>
-              <TableCell>
-                {route.optimized && (
-                  <Button onClick={() => showRoute(route)}>Ver mapa</Button>
-                )}
-                {!route.optimized && route.status === "PLANNED" && (
-                  <Button
-                    variant="contained"
-                    disabled={!orders.length || !route.driverId}
-                    onClick={() => {
-                      setSelectedOrderIds([]);
-                      setSelectedVehicleId(route.vehicleId);
-                      setOptionsError("");
-                      setDialog({ type: "optimization", ...route });
+              <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                <Stack
+                  direction="row"
+                  spacing={0.5}
+                  sx={{
+                    width: "100%",
+                    flexWrap: "nowrap",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ flex: "1 1 0", minWidth: 0, display: "flex" }}>
+                    {route.optimized && (
+                      <Button
+                        fullWidth
+                        size="small"
+                        sx={{ px: 1 }}
+                        onClick={() => showRoute(route)}
+                      >
+                        Ver mapa
+                      </Button>
+                    )}
+                    {!route.optimized && route.status === "PLANNED" && (
+                      <Tooltip
+                        title={
+                          route.driverId
+                            ? "Calcular la ruta con los pedidos pendientes"
+                            : "Asigne un conductor para poder optimizar"
+                        }
+                      >
+                        <Box component="span" sx={{ display: "block", width: "100%" }}>
+                          <Button
+                            fullWidth
+                            size="small"
+                            variant="outlined"
+                            sx={{ px: 1 }}
+                            disabled={!orders.length || !route.driverId}
+                            onClick={() => {
+                              setSelectedOrderIds([]);
+                              setSelectedVehicleId(route.vehicleId);
+                              setOptionsError("");
+                              setDialog({ type: "optimization", ...route });
+                            }}
+                          >
+                            Optimizar
+                          </Button>
+                        </Box>
+                      </Tooltip>
+                    )}
+                  </Box>
+                  <Box sx={{ flex: "1 1 0", minWidth: 0, display: "flex" }}>
+                    <Button
+                      fullWidth
+                      size="small"
+                      sx={{ px: 1 }}
+                      onClick={() => setDialog({ type: "driver", ...route })}
+                    >
+                      {route.driverId ? "Reasignar" : "Asignar"}
+                    </Button>
+                  </Box>
+                  <Box
+                    sx={{
+                      width: 36,
+                      flex: "0 0 36px",
+                      display: "flex",
+                      justifyContent: "center",
                     }}
                   >
-                    Optimizar
-                  </Button>
-                )}
-                <Button onClick={() => setDialog({ type: "driver", ...route })}>
-                  {route.driverId ? "Reasignar" : "Asignar"}
-                </Button>
-                {route.status !== "CANCELLED" &&
-                  route.status !== "COMPLETED" && (
-                    <>
-                      <Button
-                        onClick={() => setDialog({ type: "edit", ...route })}
-                      >
-                        Editar
-                      </Button>
-                      <Button color="error" onClick={() => removeRoute(route)}>
-                        Eliminar
-                      </Button>
-                    </>
-                  )}
+                    <RowMenu
+                      items={
+                        route.status === "CANCELLED" ||
+                        route.status === "COMPLETED"
+                          ? []
+                          : [
+                              {
+                                label: "Editar",
+                                onClick: () =>
+                                  setDialog({ type: "edit", ...route }),
+                              },
+                              {
+                                label: "Eliminar",
+                                danger: true,
+                                onClick: () => removeRoute(route),
+                              },
+                            ]
+                      }
+                    />
+                  </Box>
+                </Stack>
               </TableCell>
             </TableRow>
-          ))}
+            );
+          })}
         </TableBody>
       </Table>
       <RouteMap
@@ -414,29 +579,13 @@ export default function RoutesPage() {
             Complete el horario, conductor y pedidos. El sistema recomendará
             automáticamente el vehículo y generará la ruta optimizada.
           </Alert>
-          <FormControl required fullWidth>
-            <InputLabel id="new-route-orders-label">Pedidos</InputLabel>
-            <Select
-              labelId="new-route-orders-label"
-              label="Pedidos"
-              multiple
-              value={selectedOrderIds}
-              onChange={(event) => selectOrders(event.target.value)}
-              renderValue={(values) =>
-                `${values.length} pedido${values.length === 1 ? "" : "s"}`
-              }
-            >
-              {orders.map((order) => (
-                <MenuItem key={order.id} value={order.id}>
-                  <Checkbox checked={selectedOrderIds.includes(order.id)} />
-                  <ListItemText
-                    primary={order.productName}
-                    secondary={`${order.address} · ${order.weightKg} kg · ${formatTime(order.windowStart)}-${formatTime(order.windowEnd)}`}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <OrderPicker
+            labelId="new-route-orders-label"
+            label="Pedidos"
+            orders={orders}
+            selectedIds={selectedOrderIds}
+            onChange={selectOrders}
+          />
           {!!selectedOrderIds.length && !!eligibleVehicles.length && (
             <TextField
               select
@@ -444,6 +593,7 @@ export default function RoutesPage() {
               value={selectedVehicleId}
               onChange={(event) => setSelectedVehicleId(event.target.value)}
               required
+              helperText="La primera opción es la unidad más pequeña que alcanza para la carga."
             >
               {eligibleVehicles.map((vehicle, index) => (
                 <MenuItem key={vehicle.id} value={vehicle.id}>
@@ -465,6 +615,7 @@ export default function RoutesPage() {
             select
             required
             defaultValue=""
+            helperText="Persona que realizará las entregas de esta ruta."
           >
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
@@ -508,6 +659,7 @@ export default function RoutesPage() {
             select
             required
             defaultValue={dialog.driverId ?? ""}
+            helperText="Elija quién se hará cargo de esta ruta."
           >
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
@@ -553,6 +705,7 @@ export default function RoutesPage() {
             label="Estado"
             select
             defaultValue={dialog.status}
+            helperText="En curso y completada reflejan el avance en campo."
           >
             <MenuItem value="PLANNED">Planificada</MenuItem>
             <MenuItem value="IN_PROGRESS">En curso</MenuItem>
@@ -587,29 +740,14 @@ export default function RoutesPage() {
                 : toLocalDateTimeInput(dialog.startsAt)
             }
           />
-          <FormControl required fullWidth>
-            <InputLabel id="orders-label">Pedidos pendientes</InputLabel>
-            <Select
-              labelId="orders-label"
-              label="Pedidos pendientes"
-              multiple
-              value={selectedOrderIds}
-              onChange={(event) => selectOrders(event.target.value)}
-              renderValue={(values) =>
-                `${values.length} pedido${values.length === 1 ? "" : "s"} seleccionado${values.length === 1 ? "" : "s"}`
-              }
-            >
-              {orders.map((order) => (
-                <MenuItem key={order.id} value={order.id}>
-                  <Checkbox checked={selectedOrderIds.includes(order.id)} />
-                  <ListItemText
-                    primary={`${order.priority === "HIGH" ? "Alta · " : ""}${order.productName}`}
-                    secondary={`${order.address} · ${order.weightKg} kg · ${formatTime(order.windowStart)}-${formatTime(order.windowEnd)}`}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <OrderPicker
+            labelId="orders-label"
+            label="Pedidos pendientes"
+            orders={orders}
+            selectedIds={selectedOrderIds}
+            onChange={selectOrders}
+            showPriority
+          />
           {selectedOrderIds.length > 0 && eligibleVehicles.length > 0 && (
             <TextField
               select

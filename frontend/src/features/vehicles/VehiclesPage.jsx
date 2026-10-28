@@ -119,6 +119,7 @@ export default function VehiclesPage() {
           <TextField
             name="plate"
             label="Placa"
+            placeholder="T123456"
             defaultValue={editing.plate}
             required
             helperText="De 5 a 10 caracteres: letras, números y guiones."
@@ -133,25 +134,31 @@ export default function VehiclesPage() {
           <TextField
             name="capacityKg"
             label="Capacidad (kg)"
+            placeholder="1000"
             type="number"
             defaultValue={editing.capacityKg}
             required
+            helperText="Carga máxima que puede llevar el vehículo."
             slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
           />
           <TextField
             name="consumptionPerKm"
             label="Consumo por km"
+            placeholder="0.12"
             type="number"
             defaultValue={editing.consumptionPerKm}
             required
+            helperText="Litros que gasta por cada kilómetro recorrido."
             slotProps={{ htmlInput: { min: 0, step: 0.01 } }}
           />
           <TextField
             name="emissionFactor"
             label="Factor de emisión"
+            placeholder="2.68"
             type="number"
             defaultValue={editing.emissionFactor}
             required
+            helperText="Kilogramos de CO₂ por cada litro de combustible."
             slotProps={{ htmlInput: { min: 0, step: 0.0001 } }}
           />
           <TextField
@@ -159,6 +166,7 @@ export default function VehiclesPage() {
             label="Estado"
             select
             defaultValue={editing.status}
+            helperText="Fuera de servicio no entra en la planificación."
           >
             <MenuItem value="ACTIVE">Disponible</MenuItem>
             <MenuItem value="OUT_OF_SERVICE">Fuera de servicio</MenuItem>

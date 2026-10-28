@@ -68,6 +68,14 @@ export const inputsCustomizations = {
               "&:active": {
                 backgroundColor: gray[800],
               },
+              "&.Mui-disabled": {
+                color: gray[800],
+                backgroundColor: gray[100],
+                backgroundImage: "none",
+                boxShadow: "none",
+                borderColor: gray[300],
+                opacity: 1,
+              },
               ...theme.applyStyles("dark", {
                 color: "black",
                 backgroundColor: gray[50],
@@ -369,8 +377,8 @@ export const inputsCustomizations = {
       },
       input: {
         "&::placeholder": {
-          opacity: 0.7,
-          color: gray[500],
+          opacity: 1,
+          color: gray[600],
         },
       },
     },
@@ -420,6 +428,9 @@ export const inputsCustomizations = {
       }),
       notchedOutline: {
         border: "none",
+        "& legend": {
+          display: "none",
+        },
       },
     },
   },
@@ -436,22 +447,41 @@ export const inputsCustomizations = {
   MuiFormLabel: {
     styleOverrides: {
       root: ({ theme }) => ({
-        typography: theme.typography.caption,
-        marginBottom: 8,
+        position: "static",
+        transform: "none",
+        marginBottom: 6,
+        maxWidth: "100%",
+        color: (theme.vars || theme).palette.text.primary,
+        fontSize: theme.typography.body2.fontSize,
+        fontWeight: 600,
+        lineHeight: 1.35,
+        "&.Mui-focused": {
+          color: (theme.vars || theme).palette.text.primary,
+        },
       }),
     },
   },
   MuiInputLabel: {
     styleOverrides: {
       root: ({ theme }) => ({
-        "&.Mui-focused": {
-          color: brand[700],
+        position: "static",
+        transform: "none",
+        color: (theme.vars || theme).palette.text.primary,
+        "&&": {
+          position: "static",
+          transform: "none",
         },
-        ...theme.applyStyles("dark", {
-          "&.Mui-focused": {
-            color: brand[200],
-          },
-        }),
+        "&.MuiInputLabel-shrink": {
+          position: "static",
+          transform: "none",
+          fontSize: theme.typography.body2.fontSize,
+        },
+        "&.Mui-focused": {
+          color: (theme.vars || theme).palette.text.primary,
+        },
+        "&.Mui-error": {
+          color: (theme.vars || theme).palette.error.main,
+        },
       }),
     },
   },

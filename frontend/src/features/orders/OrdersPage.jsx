@@ -39,8 +39,12 @@ export default function OrdersPage() {
   const updateLocation = (latitude, longitude) =>
     setEditing((current) => ({
       ...current,
-      latitude: latitude.toFixed(6),
-      longitude: longitude.toFixed(6),
+      latitude:
+        latitude == null || latitude === "" ? "" : Number(latitude).toFixed(6),
+      longitude:
+        longitude == null || longitude === ""
+          ? ""
+          : Number(longitude).toFixed(6),
     }));
 
   async function submit(event) {
@@ -156,19 +160,21 @@ export default function OrdersPage() {
           <TextField
             name="productName"
             label="Producto o carga transportada"
+            placeholder="4 cajas de productos de limpieza"
             value={editing.productName}
             onChange={updateField("productName")}
             required
-            helperText="Ejemplo: 4 cajas de productos de limpieza"
+            helperText="Describa qué se va a entregar."
             slotProps={{ htmlInput: { minLength: 2, maxLength: 160 } }}
           />
           <TextField
             name="address"
             label="Dirección o referencia"
+            placeholder="Av. Ferrocarril 123, Huancayo"
             value={editing.address}
             onChange={updateField("address")}
             required
-            helperText="Ejemplo: Av. Ferrocarril 123, Huancayo"
+            helperText="Calle, número y distrito donde se deja el pedido."
             slotProps={{ htmlInput: { minLength: 5, maxLength: 255 } }}
           />
           <LocationPicker
@@ -180,21 +186,25 @@ export default function OrdersPage() {
             <TextField
               name="latitude"
               label="Latitud"
+              placeholder="-12.065100"
               type="number"
               value={editing.latitude}
               onChange={updateField("latitude")}
               required
               fullWidth
+              helperText="Se completa al marcar el destino en el mapa."
               slotProps={{ htmlInput: { min: -90, max: 90, step: "any" } }}
             />
             <TextField
               name="longitude"
               label="Longitud"
+              placeholder="-75.204900"
               type="number"
               value={editing.longitude}
               onChange={updateField("longitude")}
               required
               fullWidth
+              helperText="Coordenada oeste de Huancayo, alrededor de -75.20."
               slotProps={{ htmlInput: { min: -180, max: 180, step: "any" } }}
             />
           </Stack>
@@ -202,11 +212,13 @@ export default function OrdersPage() {
             <TextField
               name="weightKg"
               label="Peso (kg)"
+              placeholder="15"
               type="number"
               value={editing.weightKg}
               onChange={updateField("weightKg")}
               required
               fullWidth
+              helperText="Peso total de la carga, en kilogramos."
               slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
             />
             <TextField
@@ -216,6 +228,7 @@ export default function OrdersPage() {
               value={editing.priority}
               onChange={updateField("priority")}
               fullWidth
+              helperText="Alta se atiende antes que una entrega normal."
             >
               <MenuItem value="NORMAL">Normal</MenuItem>
               <MenuItem value="HIGH">Alta</MenuItem>
