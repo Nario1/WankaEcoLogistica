@@ -10,8 +10,10 @@ import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import { useAuth } from "../../auth/AuthContext";
 import FormDialog from "../shared/FormDialog";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
+import { numberInput, plateInput } from "../shared/fieldRules";
 
 const emptyVehicle = {
   plate: "",
@@ -25,6 +27,8 @@ export default function VehiclesPage() {
   const { session } = useAuth();
   const resource = useApiResource("/vehicles");
   const [editing, setEditing] = useState(null);
+  const [pendingRemoval, setPendingRemoval] = useState(null);
+  const [removing, setRemoving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const isAdmin = session.user.role === "ADMIN";
   async function submit(event) {
@@ -50,10 +54,17 @@ export default function VehiclesPage() {
       setSubmitting(false);
     }
   }
-  async function remove(vehicle) {
-    if (!globalThis.confirm(`¿Dar de baja el vehículo ${vehicle.plate}?`))
-      return;
-    await resource.mutate("DELETE", `/${vehicle.id}`).catch(() => {});
+  async function confirmRemoval() {
+    if (!pendingRemoval) return;
+    setRemoving(true);
+    try {
+      await resource.mutate("DELETE", `/${pendingRemoval.id}`);
+      setPendingRemoval(null);
+    } catch {
+      /* El hook presenta el error seguro de la API. */
+    } finally {
+      setRemoving(false);
+    }
   }
   return (
     <ResourcePage
@@ -97,7 +108,7 @@ export default function VehiclesPage() {
                   <>
                     <Button onClick={() => setEditing(vehicle)}>Editar</Button>
                     {vehicle.status === "ACTIVE" && (
-                      <Button color="error" onClick={() => remove(vehicle)}>
+                      <Button color="error" onClick={() => setPendingRemoval(vehicle)}>
                         Eliminar
                       </Button>
                     )}
@@ -122,14 +133,7 @@ export default function VehiclesPage() {
             placeholder="T123456"
             defaultValue={editing.plate}
             required
-            helperText="De 5 a 10 caracteres: letras, números y guiones."
-            slotProps={{
-              htmlInput: {
-                minLength: 5,
-                maxLength: 10,
-                pattern: "[A-Za-z0-9-]+",
-              },
-            }}
+            slotProps={{ htmlInput: plateInput }}
           />
           <TextField
             name="capacityKg"
@@ -138,8 +142,13 @@ export default function VehiclesPage() {
             type="number"
             defaultValue={editing.capacityKg}
             required
-            helperText="Carga máxima que puede llevar el vehículo."
-            slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
+            slotProps={{
+              htmlInput: numberInput({
+                min: 0.01,
+                max: 100000,
+                title: "La capacidad va de 0.01 a 100000 kg",
+              }),
+            }}
           />
           <TextField
             name="consumptionPerKm"
@@ -148,8 +157,13 @@ export default function VehiclesPage() {
             type="number"
             defaultValue={editing.consumptionPerKm}
             required
-            helperText="Litros que gasta por cada kilómetro recorrido."
-            slotProps={{ htmlInput: { min: 0, step: 0.01 } }}
+            slotProps={{
+              htmlInput: numberInput({
+                min: 0,
+                max: 5,
+                title: "El consumo va de 0 a 5 litros por km",
+              }),
+            }}
           />
           <TextField
             name="emissionFactor"
@@ -158,21 +172,38 @@ export default function VehiclesPage() {
             type="number"
             defaultValue={editing.emissionFactor}
             required
-            helperText="Kilogramos de CO₂ por cada litro de combustible."
-            slotProps={{ htmlInput: { min: 0, step: 0.0001 } }}
+            slotProps={{
+              htmlInput: numberInput({
+                min: 0,
+                max: 20,
+                title: "El factor de emisión va de 0 a 20",
+              }),
+            }}
           />
           <TextField
             name="status"
             label="Estado"
             select
             defaultValue={editing.status}
-            helperText="Fuera de servicio no entra en la planificación."
           >
             <MenuItem value="ACTIVE">Disponible</MenuItem>
             <MenuItem value="OUT_OF_SERVICE">Fuera de servicio</MenuItem>
           </TextField>
         </FormDialog>
       )}
+      <ConfirmDialog
+        open={Boolean(pendingRemoval)}
+        title="Eliminar vehículo"
+        message={
+          pendingRemoval
+            ? `Se dará de baja el vehículo ${pendingRemoval.plate}.`
+            : ""
+        }
+        confirmLabel="Eliminar"
+        confirming={removing}
+        onClose={() => setPendingRemoval(null)}
+        onConfirm={confirmRemoval}
+      />
     </ResourcePage>
   );
 }

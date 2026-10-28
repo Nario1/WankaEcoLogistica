@@ -19,7 +19,6 @@ export default function DateTime12Field({ name, label, defaultValue = "" }) {
         value={date}
         onChange={(event) => setDate(event.target.value)}
         slotProps={{ inputLabel: { shrink: true } }}
-        helperText="Elija el día en el calendario."
       />
       <Time12Field label={label} value={time} onChange={setTime} />
     </Stack>

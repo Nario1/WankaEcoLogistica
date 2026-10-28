@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -18,9 +17,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { apiRequest, formatApiError } from "../../api/client";
 import { useAuth } from "../../auth/AuthContext";
 import FormDialog from "../shared/FormDialog";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import ResourcePage from "../shared/ResourcePage";
 import RowMenu from "../shared/RowMenu";
 import { useApiResource } from "../shared/useApiResource";
@@ -115,9 +116,6 @@ function OrderPicker({
           </Button>
         </ListSubheader>
       </Select>
-      <FormHelperText>
-        Marque los pedidos y pulse Continuar para cerrar la lista.
-      </FormHelperText>
     </FormControl>
   );
 }
@@ -185,6 +183,8 @@ export default function RoutesPage() {
   const [stops, setStops] = useState([]);
   const [navigation, setNavigation] = useState(null);
   const [mapLoading, setMapLoading] = useState(false);
+  const [pendingRemoval, setPendingRemoval] = useState(null);
+  const [removing, setRemoving] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -292,18 +292,21 @@ export default function RoutesPage() {
     }).catch(() => {});
   }
 
-  async function removeRoute(route) {
-    if (
-      !globalThis.confirm(
-        `¿Cancelar la ruta del vehículo ${route.vehiclePlate}?`,
-      )
-    )
-      return;
-    await resource.mutate("DELETE", `/${route.id}`).catch(() => {});
-    if (mappedRoute?.id === route.id) {
-      setMappedRoute(null);
-      setStops([]);
-      setNavigation(null);
+  async function confirmRemoval() {
+    if (!pendingRemoval) return;
+    setRemoving(true);
+    try {
+      await resource.mutate("DELETE", `/${pendingRemoval.id}`);
+      if (mappedRoute?.id === pendingRemoval.id) {
+        setMappedRoute(null);
+        setStops([]);
+        setNavigation(null);
+      }
+      setPendingRemoval(null);
+    } catch {
+      /* El hook presenta el error seguro de la API. */
+    } finally {
+      setRemoving(false);
     }
   }
 
@@ -382,6 +385,10 @@ export default function RoutesPage() {
       await showRoute(mapped);
     } catch (error) {
       setOptionsError(formatApiError(error));
+      setDialog(null);
+      await showRoute(mapped);
+    } catch (error) {
+      setOptionsError(formatApiError(error));
     } finally {
       setSubmitting(false);
     }
@@ -390,13 +397,6 @@ export default function RoutesPage() {
   const selectedWeightKg = orders
     .filter((order) => selectedOrderIds.includes(order.id))
     .reduce((total, order) => total + order.weightKg, 0);
-  const eligibleVehicles = vehicles
-    .filter((vehicle) => vehicle.capacityKg * 0.95 >= selectedWeightKg)
-    .sort((left, right) => left.capacityKg - right.capacityKg);
-  const selectedVehicle = selectedVehicleId
-    ? vehicles.find((vehicle) => vehicle.id === selectedVehicleId)
-    : null;
-  const safeCapacityKg = selectedVehicle
     ? selectedVehicle.capacityKg * 0.95
     : null;
 
@@ -544,7 +544,7 @@ export default function RoutesPage() {
                                 onClick: () =>
                                   setDialog({ type: "edit", ...route }),
                               },
-                              {
+                                onClick: () => setPendingRemoval(route),
                                 label: "Eliminar",
                                 danger: true,
                                 onClick: () => removeRoute(route),
@@ -590,7 +590,6 @@ export default function RoutesPage() {
             <TextField
               select
               label="Vehículo recomendado"
-              value={selectedVehicleId}
               onChange={(event) => setSelectedVehicleId(event.target.value)}
               required
               helperText="La primera opción es la unidad más pequeña que alcanza para la carga."
@@ -612,10 +611,6 @@ export default function RoutesPage() {
           <TextField
             name="driverId"
             label="Conductor"
-            select
-            required
-            defaultValue=""
-            helperText="Persona que realizará las entregas de esta ruta."
           >
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
@@ -659,7 +654,6 @@ export default function RoutesPage() {
             select
             required
             defaultValue={dialog.driverId ?? ""}
-            helperText="Elija quién se hará cargo de esta ruta."
           >
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
@@ -705,6 +699,8 @@ export default function RoutesPage() {
             label="Estado"
             select
             defaultValue={dialog.status}
+            select
+            defaultValue={dialog.status}
             helperText="En curso y completada reflejan el avance en campo."
           >
             <MenuItem value="PLANNED">Planificada</MenuItem>
@@ -715,18 +711,15 @@ export default function RoutesPage() {
         </FormDialog>
       )}
       {dialog?.type === "optimization" && (
-        <FormDialog
-          open
-          title="Optimizar ruta"
+          submitLabel="Optimizar"
           onClose={() => setDialog(null)}
           onSubmit={optimizeRoute}
           submitting={submitting}
         >
           {optionsError && <Alert severity="error">{optionsError}</Alert>}
-          <Alert severity="success">
-            La ruta saldrá del local de despacho (-12.07201013486951,
-            -75.20516872975998).
-          </Alert>
+          <Typography variant="body2" color="text.secondary">
+            Ordena las paradas y calcula el tiempo de viaje desde el local.
+          </Typography>
           <Alert severity="info">
             <strong>{dialog.vehiclePlate}</strong> · {dialog.driverName}
           </Alert>
@@ -751,40 +744,35 @@ export default function RoutesPage() {
           {selectedOrderIds.length > 0 && eligibleVehicles.length > 0 && (
             <TextField
               select
-              label="Vehículo sugerido"
               value={selectedVehicleId}
               onChange={(event) => setSelectedVehicleId(event.target.value)}
               helperText="Se recomienda la unidad activa de menor capacidad suficiente para aprovechar mejor la flota."
             >
-              {eligibleVehicles.map((vehicle, index) => (
-                <MenuItem key={vehicle.id} value={vehicle.id}>
-                  {index === 0 ? "Recomendado · " : ""}
+                  {vehicle.plate}
                   {vehicle.plate} · {vehicle.capacityKg.toFixed(2)} kg nominales
                   · {(vehicle.capacityKg * 0.95 - selectedWeightKg).toFixed(2)}{" "}
                   kg libres
                 </MenuItem>
               ))}
             </TextField>
-          )}
-          {selectedOrderIds.length > 0 && !eligibleVehicles.length && (
-            <Alert severity="error">
-              No hay unidades activas que cumplan la capacidad requerida de{" "}
-              {selectedWeightKg.toFixed(2)} kg. Registre una unidad adecuada,
-              reduzca el lote o reprograme los pedidos.
+              Ningún vehículo activo cubre {selectedWeightKg.toFixed(0)} kg.
             </Alert>
           )}
-          {safeCapacityKg !== null && (
-            <Alert
-              severity={selectedWeightKg > safeCapacityKg ? "error" : "info"}
-            >
-              Peso seleccionado: {selectedWeightKg.toFixed(2)} kg · capacidad
-              segura de {dialog.vehiclePlate}: {safeCapacityKg.toFixed(2)} kg
-            </Alert>
-          )}
-          <Alert severity="info">
-            Se respetará el 95 % de capacidad operativa, la prioridad, las
             ventanas de entrega y la jornada máxima de 8 horas. Si un pedido no
             es factible, no se asignará ninguno.
+      <ConfirmDialog
+        open={Boolean(pendingRemoval)}
+        title="Eliminar ruta"
+        message={
+          pendingRemoval
+            ? `Se cancelará la ruta del vehículo ${pendingRemoval.vehiclePlate}.`
+            : ""
+        }
+        confirmLabel="Eliminar"
+        confirming={removing}
+        onClose={() => setPendingRemoval(null)}
+        onConfirm={confirmRemoval}
+      />
           </Alert>
         </FormDialog>
       )}

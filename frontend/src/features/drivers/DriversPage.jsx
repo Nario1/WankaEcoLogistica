@@ -10,8 +10,14 @@ import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import { useAuth } from "../../auth/AuthContext";
 import FormDialog from "../shared/FormDialog";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
+import {
+  emailInput,
+  passwordInput,
+  personNameInput,
+} from "../shared/fieldRules";
 
 const emptyDriver = { name: "", email: "", password: "", status: "ACTIVE" };
 
@@ -19,6 +25,8 @@ export default function DriversPage() {
   const { session } = useAuth();
   const resource = useApiResource("/drivers");
   const [editing, setEditing] = useState(null);
+  const [pendingRemoval, setPendingRemoval] = useState(null);
+  const [removing, setRemoving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const isAdmin = session.user.role === "ADMIN";
 
@@ -41,9 +49,17 @@ export default function DriversPage() {
     }
   }
 
-  async function remove(driver) {
-    if (!globalThis.confirm(`¿Desactivar al conductor ${driver.name}?`)) return;
-    await resource.mutate("DELETE", `/${driver.id}`).catch(() => {});
+  async function confirmRemoval() {
+    if (!pendingRemoval) return;
+    setRemoving(true);
+    try {
+      await resource.mutate("DELETE", `/${pendingRemoval.id}`);
+      setPendingRemoval(null);
+    } catch {
+      /* El hook presenta el error seguro de la API. */
+    } finally {
+      setRemoving(false);
+    }
   }
 
   return (
@@ -82,7 +98,7 @@ export default function DriversPage() {
                       Editar
                     </Button>
                     {driver.status === "ACTIVE" && (
-                      <Button color="error" onClick={() => remove(driver)}>
+                      <Button color="error" onClick={() => setPendingRemoval(driver)}>
                         Eliminar
                       </Button>
                     )}
@@ -107,7 +123,7 @@ export default function DriversPage() {
             placeholder="María Quispe Huamán"
             defaultValue={editing.name}
             required
-            slotProps={{ htmlInput: { minLength: 3, maxLength: 120 } }}
+            slotProps={{ htmlInput: personNameInput }}
           />
           <TextField
             name="email"
@@ -116,6 +132,7 @@ export default function DriversPage() {
             type="email"
             defaultValue={editing.email}
             required
+            slotProps={{ htmlInput: emailInput }}
           />
           <TextField
             name="password"
@@ -125,16 +142,11 @@ export default function DriversPage() {
             placeholder={
               editing.id
                 ? "Déjela vacía para no cambiarla"
-                : "Mínimo 12 caracteres"
+                : "Mínimo 12 caracteres, con letras y números"
             }
             type="password"
             required={!editing.id}
-            helperText={
-              editing.id
-                ? "Déjela vacía para conservar la actual."
-                : "Mínimo 12 caracteres; entréguela por un canal seguro."
-            }
-            slotProps={{ htmlInput: { minLength: 12, maxLength: 128 } }}
+            slotProps={{ htmlInput: passwordInput }}
           />
           {editing.id && (
             <TextField
@@ -142,7 +154,6 @@ export default function DriversPage() {
               label="Estado"
               select
               defaultValue={editing.status}
-              helperText="Inactivo no puede recibir rutas nuevas."
             >
               <MenuItem value="ACTIVE">Disponible</MenuItem>
               <MenuItem value="INACTIVE">Inactivo</MenuItem>
@@ -150,6 +161,19 @@ export default function DriversPage() {
           )}
         </FormDialog>
       )}
+      <ConfirmDialog
+        open={Boolean(pendingRemoval)}
+        title="Eliminar conductor"
+        message={
+          pendingRemoval
+            ? `Se desactivará al conductor ${pendingRemoval.name}.`
+            : ""
+        }
+        confirmLabel="Eliminar"
+        confirming={removing}
+        onClose={() => setPendingRemoval(null)}
+        onConfirm={confirmRemoval}
+      />
     </ResourcePage>
   );
 }

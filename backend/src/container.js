@@ -45,6 +45,7 @@ export function createContainer(config) {
       }),
       optimizationService: new OptimizationService({
         optimizationRepository,
+        roadRoutingClient,
         ...common,
       }),
     },

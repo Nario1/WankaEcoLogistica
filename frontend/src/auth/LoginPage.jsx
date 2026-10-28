@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import AppTheme from "../shared-theme/AppTheme";
 import { formatApiError } from "../api/client";
 import { useAuth } from "./AuthContext";
+import { emailInput, loginPasswordInput } from "../features/shared/fieldRules";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -61,6 +62,7 @@ export default function LoginPage() {
               autoComplete="username"
               required
               autoFocus
+              slotProps={{ htmlInput: emailInput }}
             />
             <TextField
               name="password"
@@ -69,9 +71,6 @@ export default function LoginPage() {
               type="password"
               autoComplete="current-password"
               required
-              slotProps={{ htmlInput: { minLength: 8 } }}
-            />
-            <Button
               type="submit"
               variant="contained"
               size="large"

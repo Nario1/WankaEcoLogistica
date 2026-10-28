@@ -30,3 +30,22 @@ test("consulta, edita y desactiva un conductor", async () => {
   const removed = await service.remove(driver.id, "admin-1");
   assert.equal(removed.status, "INACTIVE");
 });
+
+test("rechaza un nombre de conductor con números", async () => {
+  const service = new DriverService({
+    userRepository: new MemoryUserRepository(),
+    auditRepository: new MemoryAuditRepository(),
+  });
+  await assert.rejects(
+    () =>
+      service.create(
+        {
+          name: "Conductor 1",
+          email: "nuevo.conductor@wanka.local",
+          password: "WankaDriver2026",
+        },
+        "admin-1",
+      ),
+    (error) => error.details?.name === "Use solo letras, espacios y guiones",
+  );
+});

@@ -44,8 +44,8 @@ export default function RouteMap({ route, stops, navigation, loading }) {
         {route && (
           <Typography variant="body2" color="text.secondary">
             {route.vehiclePlate} ·{" "}
-            {navigation?.distanceKm ?? route.distanceKm ?? 0} km ·{" "}
-            {navigation?.durationMinutes ?? "—"} min ·{" "}
+            {navigation?.distanceKm ?? route.distanceKm ?? 0} km · tiempo
+            estimado {navigation?.durationMinutes ?? "—"} min ·{" "}
             {stops.length === 1 ? "1 parada" : `${stops.length} paradas`}
           </Typography>
         )}
@@ -126,10 +126,13 @@ export default function RouteMap({ route, stops, navigation, loading }) {
       </Box>
       {route && navigation && (
         <Alert severity={navigation.trafficConsidered ? "success" : "info"}>
-          Trazado vial calculado por {navigation.provider}; respeta la red de
-          calles y sentidos de circulación.
+          Tiempo estimado de viaje: {navigation.durationMinutes} min
+          {navigation.distanceKm != null ? ` · ${navigation.distanceKm} km` : ""}
+          . Trazado de {navigation.provider}.
           {navigation.trafficConsidered
-            ? ` Tráfico incluido; demora estimada: ${navigation.trafficDelayMinutes} min.`
+            ? navigation.trafficDelayMinutes > 0
+              ? ` Tráfico incluido; demora adicional: ${navigation.trafficDelayMinutes} min.`
+              : " Tráfico incluido, sin demora adicional."
             : " El tráfico en tiempo real requiere configurar TOMTOM_API_KEY en el backend."}
         </Alert>
       )}

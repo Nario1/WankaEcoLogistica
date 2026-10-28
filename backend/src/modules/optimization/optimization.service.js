@@ -48,6 +48,69 @@ function distanceKm(from, to) {
   return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+function localLeg(from, to) {
+  const legDistance = distanceKm(from, to);
+  return {
+    distanceKm: legDistance,
+    durationMinutes: (legDistance / AVERAGE_SPEED_KMH) * 60,
+  };
+}
+
+function evaluateCandidate(order, leg, elapsedMinutes, startMinutes) {
+  const arrival = startMinutes + elapsedMinutes + leg.durationMinutes;
+  const waiting = Math.max(0, minutes(order.windowStart) - arrival);
+  const serviceStart = arrival + waiting;
+  const windowStart = minutes(order.windowStart);
+  const windowEnd = minutes(order.windowEnd);
+  const deadline =
+    order.priority === "HIGH"
+      ? windowStart + (windowEnd - windowStart) / 2
+      : windowEnd;
+  return {
+    order,
+    legDistance: leg.distanceKm,
+    durationMinutes: leg.durationMinutes,
+    arrival,
+    waiting,
+    serviceStart,
+    deadline,
+  };
+}
+
+function compareCandidates(left, right) {
+  const priority =
+    Number(right.order.priority === "HIGH") -
+    Number(left.order.priority === "HIGH");
+  return (
+    priority ||
+    left.order.windowEnd.localeCompare(right.order.windowEnd) ||
+    left.legDistance - right.legDistance
+  );
+}
+
+function takeNextStop(candidates, elapsedMinutes, totalDistanceKm, sequence) {
+  if (!candidates.length) {
+    throw conflict(
+      "Las ventanas horarias no permiten atender todos los pedidos seleccionados",
+    );
+  }
+  const selected = candidates[0];
+  const nextElapsed =
+    elapsedMinutes +
+    selected.durationMinutes +
+    selected.waiting +
+    SERVICE_MINUTES;
+  if (nextElapsed > MAX_ROUTE_HOURS * 60) {
+    throw conflict("La ruta optimizada supera las 8 horas permitidas");
+  }
+  sequence.push({ ...selected.order, deliveryOrder: sequence.length + 1 });
+  return {
+    elapsedMinutes: nextElapsed,
+    totalDistanceKm: totalDistanceKm + selected.legDistance,
+    current: selected.order,
+  };
+}
+
 function validateInput(input) {
   assertObject(input);
   if (
@@ -108,10 +171,82 @@ export function buildOptimizedSequence(orders, startsAt, depot) {
           priority ||
           left.order.windowEnd.localeCompare(right.order.windowEnd) ||
           left.legDistance - right.legDistance
-        );
-      });
+export async function buildOptimizedSequenceWithRouting(
+  orders,
+  startsAt,
+  depot,
+  estimateLeg,
+) {
+  const pending = [...orders];
+  const sequence = [];
+  let current = depot;
+  let elapsedMinutes = 0;
+  let totalDistanceKm = 0;
+  const startMinutes = operationMinutes(startsAt);
 
-    if (!candidates.length) {
+  while (pending.length) {
+    const departAt = new Date(startsAt.getTime() + elapsedMinutes * 60_000);
+    const evaluated = await Promise.all(
+      pending.map(async (order) =>
+        evaluateCandidate(
+          order,
+          await estimateLeg(current, order, departAt),
+          elapsedMinutes,
+          startMinutes,
+        ),
+      ),
+    );
+    const candidates = evaluated
+      .filter(({ serviceStart, deadline }) => serviceStart <= deadline)
+      .sort(compareCandidates);
+    ({ elapsedMinutes, totalDistanceKm, current } = takeNextStop(
+      candidates,
+      elapsedMinutes,
+      totalDistanceKm,
+      sequence,
+    ));
+    pending.splice(pending.indexOf(current), 1);
+  }
+  return {
+    sequence,
+    distanceKm: Number(totalDistanceKm.toFixed(2)),
+    elapsedMinutes,
+  };
+}
+
+async function estimateRoadLeg(roadRoutingClient, from, to, departAt) {
+  try {
+    const route = await roadRoutingClient.calculate(
+      [
+        { latitude: from.latitude, longitude: from.longitude },
+        { latitude: to.latitude, longitude: to.longitude },
+      ],
+      departAt,
+    );
+    if (
+      !Number.isFinite(route?.distanceKm) ||
+      !Number.isFinite(route?.durationMinutes)
+    ) {
+      return localLeg(from, to);
+    }
+    return {
+      distanceKm: route.distanceKm,
+      durationMinutes: route.durationMinutes,
+    };
+  } catch {
+    return localLeg(from, to);
+  }
+}
+
+export class OptimizationService {
+  constructor({
+    optimizationRepository,
+    auditRepository,
+    roadRoutingClient = null,
+  }) {
+    this.optimizationRepository = optimizationRepository;
+    this.auditRepository = auditRepository;
+    this.roadRoutingClient = roadRoutingClient;
       throw conflict(
         "Las ventanas horarias no permiten atender todos los pedidos seleccionados",
       );
@@ -152,11 +287,15 @@ export class OptimizationService {
     if (resources.orders.length !== orderIds.length) {
       throw conflict(
         "Todos los pedidos deben existir y encontrarse pendientes",
-      );
-    }
-    const totalWeightKg = resources.orders.reduce(
-      (sum, order) => sum + order.weightKg,
-      0,
+    const optimized = this.roadRoutingClient
+      ? await buildOptimizedSequenceWithRouting(
+          resources.orders,
+          startsAt,
+          DISPATCH_DEPOT,
+          (from, to, departAt) =>
+            estimateRoadLeg(this.roadRoutingClient, from, to, departAt),
+        )
+      : buildOptimizedSequence(resources.orders, startsAt, DISPATCH_DEPOT);
     );
     if (!resources.route) {
       throw conflict("La ruta manual seleccionada no existe");

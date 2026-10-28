@@ -92,6 +92,30 @@ export function requireDateTime(value, field) {
   return date;
 }
 
+export function requirePersonName(value, field = "name") {
+  const name = requireString(value, field, { min: 3, max: 120 });
+  if (
+    !/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:[ '\-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/.test(name)
+  ) {
+    throw badRequest("Datos inválidos", {
+      [field]: "Use solo letras, espacios y guiones",
+    });
+  }
+  return name;
+}
+
+export function requirePassword(value, { min = 12 } = {}) {
+  const password = requireString(value, "password", { min, max: 128 });
+  const hasLetter = /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(password);
+  const hasDigit = /\d/.test(password);
+  if (!hasLetter || !hasDigit) {
+    throw badRequest("Datos inválidos", {
+      password: "Debe incluir letras y números",
+    });
+  }
+  return password;
+}
+
 export function requireUuid(value, field = "id") {
   const id = requireString(value, field, { min: 36, max: 36 });
   if (

@@ -207,7 +207,6 @@ export default function DriverRoutePage() {
             select
             label="Ruta asignada"
             value={selectedId}
-            helperText="Elija la ruta que va a recorrer."
             onChange={(event) => {
               const nextId = event.target.value;
               setSelectedId(nextId);

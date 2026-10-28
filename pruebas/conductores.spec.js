@@ -3,7 +3,7 @@ import { loginAsAdmin, openMenu } from "./helpers/auth.js";
 
 test("el administrador registra un conductor", async ({ page }) => {
   const stamp = Date.now();
-  const name = `Conductor E2E ${stamp}`;
+  const name = `Conductor ${String(stamp).replace(/\d/g, (digit) => "abcdefghij"[digit])}`;
   const email = `e2e.driver.${stamp}@wanka.local`;
 
   await loginAsAdmin(page);

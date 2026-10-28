@@ -13,6 +13,7 @@ export default function FormDialog({
   onSubmit,
   children,
   submitting,
+  submitLabel = "Guardar",
   maxWidth = "sm",
 }) {
   return (

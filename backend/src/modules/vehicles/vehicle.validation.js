@@ -30,11 +30,11 @@ export function validateVehicle(input) {
     consumptionPerKm: requireNumber(
       input.consumptionPerKm,
       "consumptionPerKm",
-      { min: 0, max: 1_000 },
+      { min: 0, max: 5 },
     ),
     emissionFactor: requireNumber(input.emissionFactor, "emissionFactor", {
       min: 0,
-      max: 10_000,
+      max: 20,
     }),
     status: requireEnum(input.status ?? "ACTIVE", "status", VEHICLE_STATUSES),
   };

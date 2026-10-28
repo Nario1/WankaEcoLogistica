@@ -3,7 +3,8 @@ import { badRequest, conflict, notFound } from "../../shared/errors.js";
 import {
   assertObject,
   requireEmail,
-  requireString,
+  requirePassword,
+  requirePersonName,
   requireUuid,
   requireEnum,
 } from "../../shared/validation.js";
@@ -63,11 +64,7 @@ export class DriverService {
           : "Debe enviar al menos un campo",
       });
     }
-    const current = await this.userRepository.findById(id);
-    if (!current || current.role !== "DRIVER") throw notFound("Conductor");
-    const changes = {};
-    if (input.name !== undefined)
-      changes.name = requireString(input.name, "name", { min: 3, max: 120 });
+    if (input.name !== undefined) changes.name = requirePersonName(input.name);
     if (input.email !== undefined) {
       changes.email = requireEmail(input.email);
       const duplicate = await this.userRepository.findByEmail(changes.email);
@@ -79,6 +76,9 @@ export class DriverService {
         "ACTIVE",
         "INACTIVE",
       ]);
+    if (input.password)
+      changes.passwordHash = await bcrypt.hash(
+        requirePassword(input.password),
     if (input.password)
       changes.passwordHash = await bcrypt.hash(
         requireString(input.password, "password", { min: 12, max: 128 }),

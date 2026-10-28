@@ -12,11 +12,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import FormDialog from "../shared/FormDialog";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import LocationPicker from "./LocationPicker";
 import { formatTime } from "../../utils/format";
 import Time12Field from "../shared/Time12Field";
+import {
+  addressInput,
+  numberInput,
+  productInput,
+} from "../shared/fieldRules";
 
 const emptyOrder = {
   productName: "",
@@ -32,6 +38,8 @@ const emptyOrder = {
 export default function OrdersPage() {
   const resource = useApiResource("/orders");
   const [editing, setEditing] = useState(null);
+  const [pendingRemoval, setPendingRemoval] = useState(null);
+  const [removing, setRemoving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const close = () => setEditing(null);
   const updateField = (field) => (event) =>
@@ -71,10 +79,17 @@ export default function OrdersPage() {
     }
   }
 
-  async function remove(order) {
-    if (!globalThis.confirm(`¿Cancelar el pedido "${order.productName}"?`))
-      return;
-    await resource.mutate("DELETE", `/${order.id}`).catch(() => {});
+  async function confirmRemoval() {
+    if (!pendingRemoval) return;
+    setRemoving(true);
+    try {
+      await resource.mutate("DELETE", `/${pendingRemoval.id}`);
+      setPendingRemoval(null);
+    } catch {
+      /* El hook presenta el error seguro de la API. */
+    } finally {
+      setRemoving(false);
+    }
   }
 
   return (
@@ -134,7 +149,7 @@ export default function OrdersPage() {
                     Editar
                   </Button>
                   {order.status === "PENDING" && (
-                    <Button color="error" onClick={() => remove(order)}>
+                    <Button color="error" onClick={() => setPendingRemoval(order)}>
                       Eliminar
                     </Button>
                   )}
@@ -164,8 +179,7 @@ export default function OrdersPage() {
             value={editing.productName}
             onChange={updateField("productName")}
             required
-            helperText="Describa qué se va a entregar."
-            slotProps={{ htmlInput: { minLength: 2, maxLength: 160 } }}
+            slotProps={{ htmlInput: productInput }}
           />
           <TextField
             name="address"
@@ -174,7 +188,6 @@ export default function OrdersPage() {
             value={editing.address}
             onChange={updateField("address")}
             required
-            helperText="Calle, número y distrito donde se deja el pedido."
             slotProps={{ htmlInput: { minLength: 5, maxLength: 255 } }}
           />
           <LocationPicker
@@ -192,10 +205,11 @@ export default function OrdersPage() {
               onChange={updateField("latitude")}
               required
               fullWidth
-              helperText="Se completa al marcar el destino en el mapa."
-              slotProps={{ htmlInput: { min: -90, max: 90, step: "any" } }}
-            />
-            <TextField
+              slotProps={{
+                htmlInput: numberInput({
+                  min: -90,
+                  max: 90,
+                  maxDecimals: 6,
               name="longitude"
               label="Longitud"
               placeholder="-75.204900"
@@ -210,16 +224,14 @@ export default function OrdersPage() {
           </Stack>
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
-              name="weightKg"
-              label="Peso (kg)"
-              placeholder="15"
-              type="number"
-              value={editing.weightKg}
-              onChange={updateField("weightKg")}
-              required
-              fullWidth
-              helperText="Peso total de la carga, en kilogramos."
-              slotProps={{ htmlInput: { min: 0.01, step: 0.01 } }}
+              slotProps={{
+                htmlInput: numberInput({
+                  min: -180,
+                  max: 180,
+                  maxDecimals: 6,
+                  title: "La longitud va de -180 a 180",
+                  allowNegative: true,
+                }),
             />
             <TextField
               name="priority"
@@ -233,8 +245,13 @@ export default function OrdersPage() {
               <MenuItem value="NORMAL">Normal</MenuItem>
               <MenuItem value="HIGH">Alta</MenuItem>
             </TextField>
-          </Stack>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              slotProps={{
+                htmlInput: numberInput({
+                  min: 0.01,
+                  max: 100000,
+                  title: "El peso va de 0.01 a 100000 kg",
+                }),
+              }}
             <input
               type="hidden"
               name="windowStart"
@@ -243,7 +260,6 @@ export default function OrdersPage() {
             <Time12Field
               label="Inicio"
               value={editing.windowStart}
-              onChange={(value) =>
                 setEditing((current) => ({ ...current, windowStart: value }))
               }
             />

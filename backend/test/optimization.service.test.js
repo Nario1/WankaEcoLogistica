@@ -5,6 +5,7 @@ import {
   DISPATCH_DEPOT,
   OptimizationService,
   buildOptimizedSequence,
+  buildOptimizedSequenceWithRouting,
 } from "../src/modules/optimization/optimization.service.js";
 import { MemoryAuditRepository } from "./helpers/fakes.js";
 
@@ -281,6 +282,96 @@ test("rechaza una unidad con conflicto de horario", async () => {
     ),
     { code: "CONFLICT" },
   );
+});
+
+test("usa el tiempo vial para aceptar la parada y guardar esa distancia", async () => {
+  const resources = {
+    orders: [order(1)],
+    vehicle: { id: id(81), capacityKg: 100, status: "ACTIVE" },
+    route: {
+      id: id(70),
+      vehicleId: id(80),
+      driverId: id(90),
+      startsAt: "2026-10-08T13:00:00Z",
+      status: "PLANNED",
+      optimized: false,
+      driverStatus: "ACTIVE",
+    },
+  };
+  const { service, repository } = makeService(resources);
+  service.roadRoutingClient = {
+    async calculate(points, departAt) {
+      assert.equal(points[0].latitude, DISPATCH_DEPOT.latitude);
+      assert.equal(points[1].latitude, resources.orders[0].latitude);
+      assert.equal(departAt.toISOString(), "2026-10-08T13:00:00.000Z");
+      return { distanceKm: 8.33, durationMinutes: 31 };
+    },
+  };
+  const result = await service.optimize(
+    {
+      routeId: id(70),
+      vehicleId: id(81),
+      orderIds: [id(1)],
+      startsAt: "2026-10-08T13:00:00Z",
+    },
+    id(99),
+  );
+  assert.equal(result.sequence.length, 1);
+  assert.equal(repository.saved.distanceKm, 8.33);
+  assert.equal(
+    repository.saved.endsAt.toISOString(),
+    "2026-10-08T13:36:00.000Z",
+  );
+});
+
+test("rechaza la parada cuando el tiempo vial no entra en la ventana", async () => {
+  await assert.rejects(
+    buildOptimizedSequenceWithRouting(
+      [order(1, { windowStart: "08:00", windowEnd: "08:20" })],
+      new Date("2026-10-08T13:00:00Z"),
+      DISPATCH_DEPOT,
+      async () => ({ distanceKm: 4, durationMinutes: 40 }),
+    ),
+    { code: "CONFLICT" },
+  );
+});
+
+test("si el adaptador falla, la optimización sigue con la estimación local", async () => {
+  const resources = {
+    orders: [order(1)],
+    vehicle: { id: id(81), capacityKg: 100, status: "ACTIVE" },
+    route: {
+      id: id(70),
+      vehicleId: id(80),
+      driverId: id(90),
+      startsAt: "2026-10-08T13:00:00Z",
+      status: "PLANNED",
+      optimized: false,
+      driverStatus: "ACTIVE",
+    },
+  };
+  const { service, repository } = makeService(resources);
+  service.roadRoutingClient = {
+    async calculate() {
+      throw new Error("proveedor no disponible");
+    },
+  };
+  const local = buildOptimizedSequence(
+    resources.orders,
+    new Date("2026-10-08T13:00:00Z"),
+    DISPATCH_DEPOT,
+  );
+  const result = await service.optimize(
+    {
+      routeId: id(70),
+      vehicleId: id(81),
+      orderIds: [id(1)],
+      startsAt: "2026-10-08T13:00:00Z",
+    },
+    id(99),
+  );
+  assert.equal(result.sequence[0].id, id(1));
+  assert.equal(repository.saved.distanceKm, local.distanceKm);
 });
 
 test("procesa 50 puntos por debajo del objetivo P95 de 3.5 segundos", () => {

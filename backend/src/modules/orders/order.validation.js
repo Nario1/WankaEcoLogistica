@@ -8,14 +8,37 @@ import {
 } from "../../shared/validation.js";
 import { badRequest } from "../../shared/errors.js";
 
+const LETTER = "A-Za-zÁÉÍÓÚÜÑáéíóúüñ";
+const PRODUCT_NAME = new RegExp(
+  `^[${LETTER}0-9][${LETTER}0-9 .,'\\-]{1,159}$`,
+);
+const ADDRESS = new RegExp(
+  `^[${LETTER}0-9][${LETTER}0-9 .,#°'/\\-]{4,254}$`,
+);
+
+function requireShapedText(value, field, { min, max, pattern, message }) {
+  const text = requireString(value, field, { min, max });
+  if (!pattern.test(text)) {
+    throw badRequest("Datos inválidos", { [field]: message });
+  }
+  return text;
+}
+
 export function validateOrder(input) {
   assertObject(input);
   const order = {
-    productName: requireString(input.productName, "productName", {
+    productName: requireShapedText(input.productName, "productName", {
       min: 2,
       max: 160,
+      pattern: PRODUCT_NAME,
+      message: "Use letras y números. Ejemplo: 4 cajas de limpieza",
     }),
-    address: requireString(input.address, "address", { min: 5, max: 255 }),
+    address: requireShapedText(input.address, "address", {
+      min: 5,
+      max: 255,
+      pattern: ADDRESS,
+      message: "Use letras y números de la dirección",
+    }),
     latitude: requireNumber(input.latitude, "latitude", { min: -90, max: 90 }),
     longitude: requireNumber(input.longitude, "longitude", {
       min: -180,

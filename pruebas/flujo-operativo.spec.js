@@ -7,7 +7,7 @@ test("flujo completo: vehículo, pedido, ruta optimizada y mapa del conductor", 
   const stamp = Date.now();
   const plate = `R${stamp.toString().slice(-7)}`;
   const productName = `Carga E2E ${stamp}`;
-  const driverName = `Conductor E2E ${stamp}`;
+  const driverName = `Conductor ${String(stamp).replace(/\d/g, (digit) => "abcdefghij"[digit])}`;
   const driverEmail = `e2e.flow.${stamp}@wanka.local`;
   const driverPassword = "WankaDriverE2E26";
 
