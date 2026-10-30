@@ -42,17 +42,18 @@ Proveer PostgreSQL/PostGIS aislado en CI y publicar los resultados de cobertura 
 
 ### Acciones a realizar
 
-| Acción | Responsable | Prioridad | Fecha objetivo | Indicador de cierre |
-|---|---|---|---|---|
-| Configurar `TEST_DATABASE_URL` en CI | Equipo técnico | Alta | Inicio del Sprint 3 | Prueba PostGIS ejecutada sin omisiones. |
-| Revisar periódicamente depósito y tiempo de servicio con Operaciones | Líder y stakeholder operativo | Media | Refinamiento del Sprint 3 | Parámetros ratificados o actualizados y versionados. |
-| Incorporar prueba de concurrencia de optimización | Equipo técnico | Media | Sprint 3 | Dos solicitudes no pueden reservar el mismo pedido. |
-| Adjuntar evidencia de staging al cierre | Responsable de calidad | Alta | Próxima revisión | URL y ejecución del pipeline registradas. |
+| Acción | Responsable | Prioridad | Fecha objetivo | Indicador de cierre | Seguimiento documentado al 30/10/2026 |
+|---|---|---|---|---|---|
+| Configurar `TEST_DATABASE_URL` en CI | Equipo técnico | Alta | Inicio del Sprint 3 | Prueba PostGIS ejecutada sin omisiones. | **Configuración implementada:** `.github/workflows/quality.yml` define PostGIS y `TEST_DATABASE_URL`. Falta adjuntar un resultado de ejecución de CI para acreditar el indicador de cierre. |
+| Revisar periódicamente depósito y tiempo de servicio con Operaciones | Líder y stakeholder operativo | Media | Refinamiento del Sprint 3 | Parámetros ratificados o actualizados y versionados. | **Pendiente de evidencia:** los documentos de Sprint 3 no incluyen acta o registro de ratificación por Operaciones. |
+| Incorporar prueba de concurrencia de optimización | Equipo técnico | Media | Sprint 3 | Dos solicitudes no pueden reservar el mismo pedido. | **Pendiente de verificación:** no se identificó un resultado de prueba de concurrencia vinculado a esta acción. Registrar test y ejecución cuando exista. |
+| Adjuntar evidencia de staging al cierre | Responsable de calidad | Alta | Próxima revisión | URL y ejecución del pipeline registradas. | **Pendiente:** no se documenta URL ni resultado de despliegue en staging. |
 
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_11 | 30/10/2026 | Se documenta el seguimiento de las acciones heredadas por el Sprint 3 y la evidencia disponible. | Nario German Reyes Rios |
 | V_1_0_10 | 08/10/2026 | Aprendizajes y acciones sincronizados con la planificación integral y navegación vial. | Equipo del proyecto |
 | V_1_0_1 | 07/10/2026 | Mejora de procesos y navegación según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_0 | 07/10/2026 | Retrospectiva y plan de acción del Sprint 2. | Equipo del proyecto |

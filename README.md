@@ -8,7 +8,7 @@ Para recorrer toda la documentación en orden, consulte el [índice central de d
 
 ## Estado actual
 
-Los Sprints 1 y 2 están implementados para desarrollo local:
+Los incrementos documentados de los Sprints 1, 2 y 3 están disponibles para desarrollo local:
 
 - CRUD completo de pedidos, vehículos, conductores y rutas.
 - Bajas lógicas para conservar historial y auditoría.
@@ -26,6 +26,8 @@ Los Sprints 1 y 2 están implementados para desarrollo local:
 
 Permanecen planificados para sprints posteriores la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
 
+El Sprint 3 agrega el adaptador cartográfico, la consulta **Mi ruta** para el conductor autenticado y una PWA que conserva la última ruta cargada. El funcionamiento sin conexión cubre la consulta cacheada; no implica que las operaciones de administración o planificación estén disponibles offline. El alcance, la demostración, las métricas de calidad, seguridad y accesibilidad, los impedimentos y sus límites de evidencia se detallan en el [paquete documental del Sprint 3](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>).
+
 ## Historias implementadas
 
 | Sprint | Ítem | Resultado |
@@ -42,7 +44,7 @@ Permanecen planificados para sprints posteriores la reoptimización por incidenc
 | 3 | US-005 | Conductor consulta su ruta asignada en el mapa (**Mi ruta**). |
 | 3 | EN-004 | PWA offline con caché de última ruta y sincronización al reconectar. |
 
-US-006 a US-008 pertenecen a sprints posteriores y no se declaran como terminadas.
+US-006 a US-008 pertenecen a sprints posteriores y no se declaran como terminadas. El backlog y la priorización de riesgos se explican en [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>) y [Registro de riesgos](<docs/02 Planificación/03 Registro de riesgos V_1_0_0.md>).
 
 ## Arquitectura y tecnologías
 
@@ -67,7 +69,7 @@ WankaEcoLogistica/
 │   └── 03 Implementación/
 │       ├── Sprint 1/            # Base operativa y seguridad
 │       ├── Sprint 2/            # Optimización, evidencia y retrospectiva
-│       └── Sprint 03/           # Consigna oficial: revisión, retrospectiva y calidad
+│       └── Sprint 03/           # Revisión, retrospectiva, calidad, seguridad y accesibilidad
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
 │   ├── scripts/                 # Migración y creación del administrador
@@ -130,7 +132,7 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-Abra `http://localhost:5173`. La API responde en `http://localhost:3000` y su estado se consulta en `http://localhost:3000/health`.
+Abra `http://localhost:5174`. Vite está configurado con `strictPort`; si el puerto está ocupado, libérelo antes de iniciar el frontend. La API responde en `http://localhost:3000` y su estado se consulta en `http://localhost:3000/health`.
 
 ## Configuración del backend
 
@@ -151,7 +153,7 @@ DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/wanka_ecologistica
 DATABASE_SSL=false
 JWT_SECRET=reemplace-por-un-secreto-de-al-menos-32-caracteres
 JWT_EXPIRES_IN=15m
-CORS_ORIGIN=http://localhost:5173
+CORS_ORIGIN=http://localhost:5174
 OSRM_BASE_URL=https://router.project-osrm.org
 TOMTOM_API_KEY=
 ADMIN_EMAIL=admin@example.com
@@ -192,7 +194,7 @@ La variable esperada es:
 VITE_API_URL=http://localhost:3000/api
 ```
 
-Abra `http://localhost:5173` e inicie sesión con el administrador configurado en el backend.
+Abra `http://localhost:5174` e inicie sesión con el administrador configurado en el backend.
 
 ## Navegación y tráfico
 
@@ -245,16 +247,16 @@ npm run format:check
 npm run build
 ```
 
-Última verificación local:
+### Resultados registrados para el Sprint 3
 
-- 30 pruebas detectadas.
-- 29 aprobadas.
-- 0 fallidas.
-- 1 omitida porque `TEST_DATABASE_URL` no estaba configurada.
-- 87,75 % de cobertura de líneas; el mínimo exigido es 80 %.
-- Lint, formato y compilación del frontend aprobados.
+| Ejecución documentada | Resultado | Alcance y condición |
+|---|---|---|
+| Cierre técnico del Sprint 3 | El equipo registró backend 34/34 con PostGIS y Playwright 3/3 | Resultado histórico consignado en [01 Revisión](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>); no se adjunta salida de consola ni artefacto de CI, y no se volvió a ejecutar en esta actualización. Las pruebas PostGIS requieren una base aislada con PostGIS y `TEST_DATABASE_URL`. |
+| SonarQube, 2026-10-28 | Quality Gate **PASSED**; cobertura 65,4 %; duplicación 2,2 %; 3 bugs, 0 vulnerabilidades, 1 code smell y 0 hotspots | Métricas del snapshot analizado; el Gate aprobado coexistía con incidencias abiertas. La captura está en [SonarQube](<docs/03 Implementación/Sprint 03/SonarqubeWankaecologistica.png>) y el análisis en [Calidad de código](<docs/03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>). |
 
-La prueba omitida necesita una base PostgreSQL/PostGIS aislada y migrada:
+Estas cifras pertenecen a ejecuciones y alcances diferentes; no deben sumarse ni presentarse como una verificación actual del árbol de trabajo. Reejecute los comandos de esta sección después de modificar el código y registre fecha, commit, configuración de base y resultados nuevos. El análisis de seguridad y la evaluación WCAG describen también sus límites de alcance en los documentos [OWASP](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>) y [WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>).
+
+En una ejecución local, la prueba de integración PostGIS se omite si `TEST_DATABASE_URL` no está configurada. El workflow de CI prepara una instancia PostGIS; para ejecutar la integración local, use una base aislada, nunca la de desarrollo o producción:
 
 ```dotenv
 TEST_DATABASE_URL=postgresql://postgres:TU_PASSWORD@localhost:5432/wanka_ecologistica_test
@@ -314,5 +316,3 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [Calidad de código](<docs/03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>)
 - [OWASP Top 10 2025](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
 - [Accesibilidad WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
-- [Informe de estado](<docs/03 Implementación/Sprint 03/06 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<docs/03 Implementación/Sprint 03/07 Registro de Impedimentos V_1_0_0.md>)
