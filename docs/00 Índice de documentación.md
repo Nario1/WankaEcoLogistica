@@ -13,9 +13,9 @@ Definición y arquitectura
        ↓
 Planificación ágil
        ↓
-Implementación del Sprint 1
+Implementación del Sprint 01
        ↓
-Implementación del Sprint 2
+Implementación del Sprint 02
        ↓
 Implementación del Sprint 03
 ```
@@ -51,19 +51,19 @@ Documentos que convierten los requisitos en backlog, sprints, riesgos, Jira y pr
 
 Cada sprint conserva sus cuatro artefactos: informe, impedimentos, revisión y retrospectiva.
 
-### Sprint 1 — Base operativa
+### Sprint 01 — Base operativa
 
-- [Informe de estado](<03 Implementación/Sprint 1/01 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<03 Implementación/Sprint 1/02 Registro de Impedimentos V_1_0_0.md>)
-- [Revisión](<03 Implementación/Sprint 1/03 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva](<03 Implementación/Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Informe de estado](<03 Implementación/Sprint 01/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<03 Implementación/Sprint 01/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión](<03 Implementación/Sprint 01/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<03 Implementación/Sprint 01/04 Retrospectiva del Sprint V_1_0_0.md>)
 
-### Sprint 2 — Optimización de rutas
+### Sprint 02 — Optimización de rutas
 
-- [Informe de estado](<03 Implementación/Sprint 2/01 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
-- [Revisión](<03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva](<03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Informe de estado](<03 Implementación/Sprint 02/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<03 Implementación/Sprint 02/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión](<03 Implementación/Sprint 02/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<03 Implementación/Sprint 02/04 Retrospectiva del Sprint V_1_0_0.md>)
 
 ### Sprint 03 — Seguimiento en campo, calidad y evaluación
 

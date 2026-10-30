@@ -1,6 +1,6 @@
 # Informe de estado del proyecto
 
-[← Sprint 1](<../Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
+[← Sprint 01](<../Sprint 01/04 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Impedimentos →](<02 Registro de Impedimentos V_1_0_0.md>)
 
 | Campo | Información |
 |---|---|
@@ -8,11 +8,11 @@
 | Líder del proyecto | Equipo del proyecto |
 | Versión | V_1_0_10 |
 | Fecha | 08/10/2026 |
-| Periodo | Cierre del Sprint 2 |
+| Periodo | Cierre del Sprint 02 |
 
 ## Resumen ejecutivo
 
-El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo principal integra selección de pedidos identificados, recomendación de vehículo, conductor y horario sugerido; también permite optimizar rutas manuales existentes. Todas parten del local `-12.07201013486951, -75.20516872975998`, aplican prioridad, ventanas y cercanía, y muestran el recorrido sobre la red vial.
+El Sprint 02 entrega la optimización operativa de rutas para hasta 50 pedidos (US-004), la medición reproducible del rendimiento del motor (EN-001) y la actualización del contrato API, pruebas y documentación de calidad (EN-007). El flujo principal integra selección de pedidos identificados, recomendación de vehículo, conductor y horario sugerido; también permite optimizar rutas manuales existentes. Todas parten del local `-12.07201013486951, -75.20516872975998`, aplican prioridad, ventanas y cercanía, y muestran el recorrido sobre la red vial.
 
 ## Estado del alcance
 
@@ -34,7 +34,7 @@ El Sprint 2 entrega la optimización operativa de rutas para hasta 50 pedidos (U
 | Variable | Estado | Resultado |
 |---|---|---|
 | Alcance | Verde | Tres ítems planificados implementados y trazados. |
-| Cronograma | Verde | Incremento disponible al cierre del Sprint 2. |
+| Cronograma | Verde | Incremento disponible al cierre del Sprint 02. |
 | Calidad | Verde | 29 pruebas aprobadas, 0 fallidas y 1 omitida por ausencia de `TEST_DATABASE_URL`; cobertura de líneas: 87,75 %; lint, formato y build aprobados. |
 | Seguridad | Verde | Endpoint protegido con JWT y roles `ADMIN`/`OPERATOR`; consultas parametrizadas. |
 | Datos | Verde | Conversión de ruta y asignación de todos los pedidos atómica mediante transacción y controles de concurrencia. |
@@ -76,4 +76,4 @@ Se verificó el CRUD completo de pedidos, vehículos, conductores y rutas median
 | V_1_0_1 | 07/10/2026 | Navegación documental y trazabilidad actualizadas según retroalimentación docente. | Equipo del proyecto |
 | V_1_0_2 | 08/10/2026 | Incorporación del mapa de planificación y correcciones de compatibilidad MUI. | Equipo del proyecto |
 | V_1_0_3 | 08/10/2026 | Mejora de usabilidad y selección cartográfica de pedidos. | Equipo del proyecto |
-| V_1_0_0 | 07/10/2026 | Informe de cierre y estado verificable del Sprint 2. | Equipo del proyecto |
+| V_1_0_0 | 07/10/2026 | Informe de cierre y estado verificable del Sprint 02. | Equipo del proyecto |

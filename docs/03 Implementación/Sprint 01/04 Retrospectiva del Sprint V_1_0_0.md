@@ -1,6 +1,6 @@
-# Retrospectiva del Sprint 1
+# Retrospectiva del Sprint 01
 
-[← Anterior: Revisión](<03 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Sprint 2 →](<../Sprint 2/01 Informe de estado del proyecto V_1_0_0.md>)
+[← Anterior: Revisión](<03 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Sprint 02 →](<../Sprint 02/01 Informe de estado del proyecto V_1_0_0.md>)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
@@ -43,13 +43,13 @@ Automatizar PostgreSQL/PostGIS aislado en integración continua y conservar sus 
 
 | Acción | Responsable | Prioridad | Fecha objetivo | Indicador de cierre |
 |---|---|---|---|---|
-| Preparar datos y guion antes de cada revisión | Líder del proyecto | Alta | Inicio del Sprint 2 | Guion aprobado antes de la demostración. |
-| Verificar navegación Markdown en la Definition of Done | Responsable de calidad | Alta | Sprint 2 | Enlaces relativos validados sin rutas rotas. |
-| Automatizar la prueba PostGIS | Equipo técnico | Media | Sprint 2 | Prueba ejecutada sin omisiones. |
+| Preparar datos y guion antes de cada revisión | Líder del proyecto | Alta | Inicio del Sprint 02 | Guion aprobado antes de la demostración. |
+| Verificar navegación Markdown en la Definition of Done | Responsable de calidad | Alta | Sprint 02 | Enlaces relativos validados sin rutas rotas. |
+| Automatizar la prueba PostGIS | Equipo técnico | Media | Sprint 02 | Prueba ejecutada sin omisiones. |
 
 ## Historial de control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
 | V_1_0_1 | 07/10/2026 | Plan de mejora actualizado con control de navegación Markdown. | Equipo del proyecto |
-| V_1_0_0 | 02/10/2026 | Retrospectiva y plan de acción del Sprint 1. | Equipo del proyecto |
+| V_1_0_0 | 02/10/2026 | Retrospectiva y plan de acción del Sprint 01. | Equipo del proyecto |

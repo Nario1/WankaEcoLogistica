@@ -11,7 +11,7 @@
 
 ## 1. Criterio de transformación y alcance
 
-Este artefacto convierte el catálogo de Fase 01 en un Product Backlog inicial. La trazabilidad sigue `RF → Épica → Historia de Usuario`; los RNF se convierten en enablers y, cuando procede, en criterios de calidad transversales. Al cierre del Sprint 1 se implementaron US-001, US-002, US-003, EN-002 y EN-006; la evidencia y el estado se registran en `docs/03 Implementación/Sprint 1/`.
+Este artefacto convierte el catálogo de Fase 01 en un Product Backlog inicial. La trazabilidad sigue `RF → Épica → Historia de Usuario`; los RNF se convierten en enablers y, cuando procede, en criterios de calidad transversales. Al cierre del Sprint 01 se implementaron US-001, US-002, US-003, EN-002 y EN-006; la evidencia y el estado se registran en `docs/03 Implementación/Sprint 01/`.
 
 | Fuente | Transformación |
 |---|---|
@@ -244,7 +244,7 @@ Un ítem sólo estará en **Done** cuando: sus criterios de aceptación y prueba
 
 No se alteraron los requisitos de Fase 01 porque los hallazgos no constituyen una aprobación de cambio de alcance. Cualquier modificación posterior debe versionar el documento fuente correspondiente.
 
-## 8. Ejecución del Sprint 2
+## 8. Ejecución del Sprint 02
 
 **Duración:** 2 semanas.
 
@@ -258,11 +258,11 @@ No se alteraron los requisitos de Fase 01 porque los hallazgos no constituyen un
 | EN-001 | Done | Benchmark automatizado de 50 puntos con umbral P95 ≤ 3,5 s. |
 | EN-007 | Done local | OpenAPI 0.2.0, migración incremental, lint, formato, build y cobertura. |
 
-La prueba PostGIS requiere `TEST_DATABASE_URL`; si el entorno no la proporciona se registra como omitida y no como aprobada. La evidencia detallada está en la [revisión del Sprint 2](<../03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>).
+La prueba PostGIS requiere `TEST_DATABASE_URL`; si el entorno no la proporciona se registra como omitida y no como aprobada. La evidencia detallada está en la [revisión del Sprint 02](<../03 Implementación/Sprint 02/03 Revisión del Sprint V_1_0_0.md>).
 
 ## Historial de Control de Cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
-| V_1_1_0 | 07/10/2026 | Actualización del estado real con US-004, EN-001 y EN-007 completados en el Sprint 2. | Equipo |
+| V_1_1_0 | 07/10/2026 | Actualización del estado real con US-004, EN-001 y EN-007 completados en el Sprint 02. | Equipo |
 | V_1_0_0 | 11/09/2026 | Creación del documento de transformación ágil | Equipo |

@@ -8,7 +8,7 @@ Para recorrer toda la documentación en orden, consulte el [índice central de d
 
 ## Estado actual
 
-Los incrementos documentados de los Sprints 1, 2 y 3 están disponibles para desarrollo local:
+Los incrementos documentados de los Sprints 01, 2 y 3 están disponibles para desarrollo local:
 
 - CRUD completo de pedidos, vehículos, conductores y rutas.
 - Bajas lógicas para conservar historial y auditoría.
@@ -26,7 +26,7 @@ Los incrementos documentados de los Sprints 1, 2 y 3 están disponibles para des
 
 Permanecen planificados para sprints posteriores la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
 
-El Sprint 3 agrega el adaptador cartográfico, la consulta **Mi ruta** para el conductor autenticado y una PWA que conserva la última ruta cargada. El funcionamiento sin conexión cubre la consulta cacheada; no implica que las operaciones de administración o planificación estén disponibles offline. El alcance, la demostración, las métricas de calidad, seguridad y accesibilidad, los impedimentos y sus límites de evidencia se detallan en el [paquete documental del Sprint 3](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>).
+El Sprint 03 agrega el adaptador cartográfico, la consulta **Mi ruta** para el conductor autenticado y una PWA que conserva la última ruta cargada. El funcionamiento sin conexión cubre la consulta cacheada; no implica que las operaciones de administración o planificación estén disponibles offline. El alcance, la demostración, las métricas de calidad, seguridad y accesibilidad, los impedimentos y sus límites de evidencia se detallan en el [paquete documental del Sprint 03](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>).
 
 ## Historias implementadas
 
@@ -67,8 +67,8 @@ WankaEcoLogistica/
 │   ├── 01 Inicio/               # Alcance, requisitos, usuarios y arquitectura
 │   ├── 02 Planificación/        # Backlog, Jira, riesgos y presupuesto
 │   └── 03 Implementación/
-│       ├── Sprint 1/            # Base operativa y seguridad
-│       ├── Sprint 2/            # Optimización, evidencia y retrospectiva
+│       ├── Sprint 01/            # Base operativa y seguridad
+│       ├── Sprint 02/            # Optimización, evidencia y retrospectiva
 │       └── Sprint 03/           # Revisión, retrospectiva, calidad, seguridad y accesibilidad
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
@@ -205,7 +205,7 @@ El backend selecciona el proveedor automáticamente:
 
 Después de modificar `TOMTOM_API_KEY`, reinicie el backend y optimice una ruta nueva. El mapa indicará el proveedor empleado. Las credenciales y coordenadas de la operación se envían al proveedor configurado; use infraestructura propia si la política de privacidad lo exige.
 
-## Flujo principal del Sprint 2
+## Flujo principal del Sprint 02
 
 1. Registrar pedidos con producto, dirección, ubicación, peso, prioridad y ventana.
 2. Registrar vehículos y conductores activos.
@@ -247,11 +247,11 @@ npm run format:check
 npm run build
 ```
 
-### Resultados registrados para el Sprint 3
+### Resultados registrados para el Sprint 03
 
 | Ejecución documentada | Resultado | Alcance y condición |
 |---|---|---|
-| Cierre técnico del Sprint 3 | El equipo registró backend 34/34 con PostGIS y Playwright 3/3 | Resultado histórico consignado en [01 Revisión](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>); no se adjunta salida de consola ni artefacto de CI, y no se volvió a ejecutar en esta actualización. Las pruebas PostGIS requieren una base aislada con PostGIS y `TEST_DATABASE_URL`. |
+| Cierre técnico del Sprint 03 | El equipo registró backend 34/34 con PostGIS y Playwright 3/3 | Resultado histórico consignado en [01 Revisión](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>); no se adjunta salida de consola ni artefacto de CI, y no se volvió a ejecutar en esta actualización. Las pruebas PostGIS requieren una base aislada con PostGIS y `TEST_DATABASE_URL`. |
 | SonarQube, 2026-10-28 | Quality Gate **PASSED**; cobertura 65,4 %; duplicación 2,2 %; 3 bugs, 0 vulnerabilidades, 1 code smell y 0 hotspots | Métricas del snapshot analizado; el Gate aprobado coexistía con incidencias abiertas. La captura está en [SonarQube](<docs/03 Implementación/Sprint 03/SonarqubeWankaecologistica.png>) y el análisis en [Calidad de código](<docs/03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>). |
 
 Estas cifras pertenecen a ejecuciones y alcances diferentes; no deben sumarse ni presentarse como una verificación actual del árbol de trabajo. Reejecute los comandos de esta sección después de modificar el código y registre fecha, commit, configuración de base y resultados nuevos. El análisis de seguridad y la evaluación WCAG describen también sus límites de alcance en los documentos [OWASP](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>) y [WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>).
@@ -295,19 +295,19 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 
 - [Estándares de calidad](CODE_QUALITY.md)
 
-### Sprint 1
+### Sprint 01
 
-- [Informe de estado](<docs/03 Implementación/Sprint 1/01 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<docs/03 Implementación/Sprint 1/02 Registro de Impedimentos V_1_0_0.md>)
-- [Revisión del Sprint](<docs/03 Implementación/Sprint 1/03 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva](<docs/03 Implementación/Sprint 1/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Informe de estado](<docs/03 Implementación/Sprint 01/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<docs/03 Implementación/Sprint 01/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión del Sprint](<docs/03 Implementación/Sprint 01/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<docs/03 Implementación/Sprint 01/04 Retrospectiva del Sprint V_1_0_0.md>)
 
-### Sprint 2
+### Sprint 02
 
-- [Informe de estado](<docs/03 Implementación/Sprint 2/01 Informe de estado del proyecto V_1_0_0.md>)
-- [Registro de impedimentos](<docs/03 Implementación/Sprint 2/02 Registro de Impedimentos V_1_0_0.md>)
-- [Revisión del Sprint](<docs/03 Implementación/Sprint 2/03 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva](<docs/03 Implementación/Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>)
+- [Informe de estado](<docs/03 Implementación/Sprint 02/01 Informe de estado del proyecto V_1_0_0.md>)
+- [Registro de impedimentos](<docs/03 Implementación/Sprint 02/02 Registro de Impedimentos V_1_0_0.md>)
+- [Revisión del Sprint](<docs/03 Implementación/Sprint 02/03 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva](<docs/03 Implementación/Sprint 02/04 Retrospectiva del Sprint V_1_0_0.md>)
 
 ### Sprint 03
 

@@ -1,4 +1,4 @@
-# Revisión del Sprint 1
+# Revisión del Sprint 01
 
 [← Anterior: Impedimentos](<02 Registro de Impedimentos V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<04 Retrospectiva del Sprint V_1_0_0.md>)
 
@@ -31,7 +31,7 @@ Se presentó el flujo de inicio de sesión, creación de vehículo activo, regis
 
 ## Pendientes
 
-- Optimización automática de rutas y benchmark de 50 puntos: Sprint 2.
+- Optimización automática de rutas y benchmark de 50 puntos: Sprint 02.
 - Mapa, reoptimización, indicadores y reportes: backlog posterior.
 - Despliegue en staging: condicionado a infraestructura y secretos del entorno.
 
@@ -40,4 +40,4 @@ Se presentó el flujo de inicio de sesión, creación de vehículo activo, regis
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
 | V_1_0_1 | 07/10/2026 | Incorporación de navegación completa y trazabilidad de la revisión. | Equipo del proyecto |
-| V_1_0_0 | 02/10/2026 | Revisión y evidencia del Sprint 1. | Equipo del proyecto |
+| V_1_0_0 | 02/10/2026 | Revisión y evidencia del Sprint 01. | Equipo del proyecto |

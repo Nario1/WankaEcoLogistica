@@ -8,11 +8,11 @@
 | Líder del proyecto | Equipo del proyecto |
 | Versión | V_1_0_1 |
 | Fecha | 02/10/2026 |
-| Periodo | Cierre del Sprint 1 |
+| Periodo | Cierre del Sprint 01 |
 
 ## Resumen ejecutivo
 
-El Sprint 1 entregó una base operativa segura para gestionar pedidos, vehículos, conductores y rutas manuales. El incremento incorporó autenticación, autorización por roles, auditoría, validación geoespacial y cálculo reproducible de emisiones.
+El Sprint 01 entregó una base operativa segura para gestionar pedidos, vehículos, conductores y rutas manuales. El incremento incorporó autenticación, autorización por roles, auditoría, validación geoespacial y cálculo reproducible de emisiones.
 
 ## Estado del alcance
 
@@ -53,4 +53,4 @@ El Sprint 1 entregó una base operativa segura para gestionar pedidos, vehículo
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
 | V_1_0_1 | 07/10/2026 | Mejora de navegación, trazabilidad y enfoque preventivo según retroalimentación docente. | Equipo del proyecto |
-| V_1_0_0 | 02/10/2026 | Informe final del Sprint 1. | Equipo del proyecto |
+| V_1_0_0 | 02/10/2026 | Informe final del Sprint 01. | Equipo del proyecto |

@@ -7,7 +7,7 @@
 | Proyecto | WankaEcoLogística Huancayo |
 | Versión | V_1_0_0 |
 | Fecha | 11/09/2026 |
-| Estado | Backlog de planificación; ejecución del Sprint 1 documentada en `docs/03 Implementación/Sprint 1/` |
+| Estado | Backlog de planificación; ejecución del Sprint 01 documentada en `docs/03 Implementación/Sprint 01/` |
 
 Este documento especifica la configuración que debe registrarse en Jira Software para el backlog de la Fase 02. No existe evidencia visual de una instancia Jira en el repositorio; por tanto, los espacios siguientes son marcadores y no capturas fabricadas.
 
@@ -25,8 +25,8 @@ Las imágenes siguientes proceden de la instancia Jira del proyecto. Se incluyen
 
 | Épica | Relación / dependencia | Ventana propuesta | Release |
 |---|---|---|---|
-| EP-01 Gestión de operación | Habilita planificación | Sprints 1–2 | v1.0.0-MVP |
-| EP-02 Planificación de rutas | Depende de EP-01 y datos geográficos | Sprints 2–4 | v1.0.0-MVP |
+| EP-01 Gestión de operación | Habilita planificación | Sprints 01–2 | v1.0.0-MVP |
+| EP-02 Planificación de rutas | Depende de EP-01 y datos geográficos | Sprints 02–4 | v1.0.0-MVP |
 | EP-03 Seguimiento en campo | Consume rutas de EP-02 | Sprints 3–4 | v1.0.0-MVP |
 | EP-04 Sostenibilidad y reportes | Consume resultados de EP-02 | Sprints 4–5 | v1.0.0-MVP |
 
@@ -58,7 +58,7 @@ Las líneas de tiempo son una propuesta de planificación, sujeta a la capacidad
 
 ## 3. Sprint Planning
 
-### Evidencia 3: Sprint 1
+### Evidencia 3: Sprint 01
 
 ![Planificación de sprints en Jira](image-1.png)
 
@@ -100,7 +100,7 @@ Como evidencia complementaria del espacio Jira, sin sustituir la evidencia espec
 
 Cada captura se recorto exclusivamente en el panel de Jira que demuestra el punto indicado: sin escritorio, barra de tareas, pestañas irrelevantes ni áreas externas al producto.
 
-## 7. Sprint 2
+## 7. Sprint 02
 
 **Sprint Goal:** optimizar hasta 50 pedidos sin incumplir capacidad, prioridad, ventanas ni disponibilidad, con rendimiento medido y contrato API actualizado.
 
@@ -116,5 +116,5 @@ La actualización refleja el estado comprobable del repositorio; no afirma cambi
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
-| V_1_1_0 | 07/10/2026 | Registro documental del alcance y cierre del Sprint 2. | Equipo |
+| V_1_1_0 | 07/10/2026 | Registro documental del alcance y cierre del Sprint 02. | Equipo |
 | V_1_0_0 | 11/09/2026 | Creación de la guía de artefactos Jira | Equipo |

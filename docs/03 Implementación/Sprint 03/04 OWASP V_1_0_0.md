@@ -1,4 +1,4 @@
-﻿# Reporte de Seguridad — OWASP Top 10 2025
+# Reporte de Seguridad — OWASP Top 10 2025
 
 [← Anterior: Calidad](<03 Calidad de código V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: WCAG →](<05 WCAG V_1_0_0.md>)
 
@@ -57,4 +57,4 @@ El equipo informa que no se ejecutó análisis SCA de dependencias y que no se a
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
 | V_1_0_1 | 30/10/2026 | Se distingue resultado general de SonarQube de evaluación por categoría; se detallan evidencias, brechas y plan de verificación. | Nario German Reyes Rios |
-| V_1_0_0 | 28/10/2026 | Matriz inicial OWASP Top 10 2025 basada en el análisis SonarQube del Sprint 3. | Nario German Reyes Rios |
+| V_1_0_0 | 28/10/2026 | Matriz inicial OWASP Top 10 2025 basada en el análisis SonarQube del Sprint 03. | Nario German Reyes Rios |

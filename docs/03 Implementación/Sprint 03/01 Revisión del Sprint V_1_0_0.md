@@ -1,6 +1,6 @@
-﻿# Revisión del sprint
+# Revisión del sprint
 
-[← Sprint 2](<../Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<02 Retrospectiva del Sprint V_1_0_0.md>)
+[← Sprint 02](<../Sprint 02/04 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<02 Retrospectiva del Sprint V_1_0_0.md>)
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
@@ -65,7 +65,7 @@ La evidencia automatizada que el equipo vincula a este recorrido se encuentra en
 
 | Pendiente | Estado al cierre documentado | Seguimiento |
 |---|---|---|
-| US-006, US-007 y US-008 | Fuera del alcance del Sprint 3 | Mantener en backlog de sprints posteriores. |
+| US-006, US-007 y US-008 | Fuera del alcance del Sprint 03 | Mantener en backlog de sprints posteriores. |
 | Validar **Mi ruta** offline con Operaciones en un dispositivo móvil real | Pendiente | Registrar dispositivo, navegador, pasos, resultado y observaciones antes de la sustentación. |
 | Sustentación documental ante el docente | Pendiente en el registro de la demostración | Presentar los documentos 01–05 y registrar retroalimentación. |
 | Evidencia de asistentes y observaciones de stakeholders | No consignada | Añadir acta o resumen cuando exista; no inferir participantes. |

@@ -1,4 +1,4 @@
-﻿# Retrospectiva del sprint
+# Retrospectiva del sprint
 
 [← Anterior: Revisión](<01 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Calidad →](<03 Calidad de código V_1_0_0.md>)
 
@@ -25,7 +25,7 @@
 - Se ordenó el trabajo como adaptador (EN-005), vista del conductor (US-005) y soporte offline (EN-004), manteniendo la dependencia entre entregables.
 - Se limpió el sprint de Jira y el equipo informa EN-005, US-005 y EN-004 en estado **Listo**; la revisión usa los IDs de backlog que también figuran en Artefactos Jira.
 - El acceso a rutas ajenas se controla en el servicio backend además de restringir la navegación de la interfaz.
-- Hay pruebas automatizadas para adaptador, API y flujos Playwright; [la revisión del Sprint 3](<01 Revisión del Sprint V_1_0_0.md>) conserva los resultados históricos informados y aclara que no se adjuntó la salida del runner.
+- Hay pruebas automatizadas para adaptador, API y flujos Playwright; [la revisión del Sprint 03](<01 Revisión del Sprint V_1_0_0.md>) conserva los resultados históricos informados y aclara que no se adjuntó la salida del runner.
 - Los archivos de entorno y credenciales se mantienen fuera del repositorio.
 
 ## ¿Qué podemos hacer mejor?
@@ -56,16 +56,16 @@ Realizar una validación de **Mi ruta** con Operaciones en un teléfono. La revi
 
 | Acción | Responsable | Prioridad | Por qué recibe esta prioridad | Fecha objetivo | Estado y criterio de cierre |
 |---|---|---:|---|---|---|
-| Ejecutar SonarQube y publicar los resultados de calidad/OWASP con métricas trazables | Nario German Reyes Rios | Alta | Entregable obligatorio; sin gate, métricas y hallazgos no se pueden evaluar calidad ni justificar remediaciones. | Cierre documental del Sprint 3 | **Ejecutada para el snapshot del 28/10/2026.** La captura del Gate está adjunta en [Calidad](<03 Calidad de código V_1_0_0.md>) y el análisis en [OWASP](<04 OWASP V_1_0_0.md>). Falta reanalizar el estado corregido. |
-| Evaluar accesibilidad con Lighthouse y registrar remediaciones | Equipo frontend | Alta | Entregable obligatorio; problemas de teclado o contraste pueden impedir el uso de funciones principales. | Cierre documental del Sprint 3 | **Ejecutada parcialmente.** Lighthouse se reporta en login; falta ampliar la muestra y dejar evidencia reproducible en otras vistas/estados. Ver [WCAG](<05 WCAG V_1_0_0.md>). |
-| Enlazar los cinco entregables oficiales del Sprint 3 desde README y volver al README desde cada documento | Equipo del proyecto | Alta | La consigna exige enlaces bidireccionales; una entrega sin navegación completa no cumple el criterio aunque existan los archivos. | Cierre documental del Sprint 3 | **Ejecutada en esta actualización.** Los cinco documentos oficiales figuran en el índice y contienen enlace al README; se retiraron las referencias a los documentos opcionales 06 y 07. |
+| Ejecutar SonarQube y publicar los resultados de calidad/OWASP con métricas trazables | Nario German Reyes Rios | Alta | Entregable obligatorio; sin gate, métricas y hallazgos no se pueden evaluar calidad ni justificar remediaciones. | Cierre documental del Sprint 03 | **Ejecutada para el snapshot del 28/10/2026.** La captura del Gate está adjunta en [Calidad](<03 Calidad de código V_1_0_0.md>) y el análisis en [OWASP](<04 OWASP V_1_0_0.md>). Falta reanalizar el estado corregido. |
+| Evaluar accesibilidad con Lighthouse y registrar remediaciones | Equipo frontend | Alta | Entregable obligatorio; problemas de teclado o contraste pueden impedir el uso de funciones principales. | Cierre documental del Sprint 03 | **Ejecutada parcialmente.** Lighthouse se reporta en login; falta ampliar la muestra y dejar evidencia reproducible en otras vistas/estados. Ver [WCAG](<05 WCAG V_1_0_0.md>). |
+| Enlazar los cinco entregables oficiales del Sprint 03 desde README y volver al README desde cada documento | Equipo del proyecto | Alta | La consigna exige enlaces bidireccionales; una entrega sin navegación completa no cumple el criterio aunque existan los archivos. | Cierre documental del Sprint 03 | **Ejecutada en esta actualización.** Los cinco documentos oficiales figuran en el índice y contienen enlace al README; se retiraron las referencias a los documentos opcionales 06 y 07. |
 | Añadir un seed de conductor sin secretos | Equipo técnico | Media | Facilita repetir la demo y E2E, pero el equipo pudo crear una cuenta local manualmente como solución temporal. | Inicio del siguiente sprint | **Pendiente.** Cierre: otro integrante crea la cuenta con variables de entorno y el repositorio no contiene credenciales. |
 | Validar **Mi ruta** offline en móvil con Operaciones | Henry Rolando Lozano Porta | Media | La demo en escritorio cubre el flujo básico, pero no confirma caché, red móvil y legibilidad en dispositivo de campo. No bloqueó la demo técnica. | Antes de la sustentación | **Pendiente.** Cierre: registrar dispositivo, navegador, pasos, resultado al perder/recuperar red y observaciones de Operaciones. |
 | Registrar asistentes y acuerdos de la demostración formal | Líder del proyecto | Media | Aporta trazabilidad de aceptación; su ausencia no cambia la función técnica, pero deja sin registro quién validó y qué observó. | Durante la sustentación | **Pendiente.** Cierre: acta breve con fecha, roles participantes, comentarios y acuerdos; sin datos personales innecesarios. |
 
 ## Seguimiento de acciones
 
-Las acciones de SonarQube, evaluación WCAG y enlaces se registran como realizadas en esta versión porque ya existen los informes y enlaces correspondientes. “Realizada” no significa que la evaluación cubra todos los componentes ni que el análisis de calidad se haya repetido tras la remediación. Los pendientes de seed, validación móvil y registro de stakeholders permanecen abiertos hasta que se adjunte su evidencia. No se asignaron acciones de prioridad baja: las tareas abiertas afectan reproducibilidad, validación de campo o trazabilidad y se mantienen como prioridad media. Las acciones heredadas del Sprint 2 se actualizaron en su [retrospectiva](<../Sprint 2/04 Retrospectiva del Sprint V_1_0_0.md>).
+Las acciones de SonarQube, evaluación WCAG y enlaces se registran como realizadas en esta versión porque ya existen los informes y enlaces correspondientes. “Realizada” no significa que la evaluación cubra todos los componentes ni que el análisis de calidad se haya repetido tras la remediación. Los pendientes de seed, validación móvil y registro de stakeholders permanecen abiertos hasta que se adjunte su evidencia. No se asignaron acciones de prioridad baja: las tareas abiertas afectan reproducibilidad, validación de campo o trazabilidad y se mantienen como prioridad media. Las acciones heredadas del Sprint 02 se actualizaron en su [retrospectiva](<../Sprint 02/04 Retrospectiva del Sprint V_1_0_0.md>).
 
 ## Control de cambios
 
@@ -74,6 +74,6 @@ Las acciones de SonarQube, evaluación WCAG y enlaces se registran como realizad
 | V_1_0_6 | 30/10/2026 | Se justifica la prioridad de cada acción y se separan evidencias adjuntas de validaciones pendientes. | Nario German Reyes Rios |
 | V_1_0_5 | 30/10/2026 | Se detallan aprendizajes, acciones con estado y criterios verificables; se separa ejecución histórica de evidencia pendiente. | Nario German Reyes Rios |
 | V_1_0_4 | 28/10/2026 | La acción de SonarQube quedó registrada como ejecutada con el informe publicado. | Nario German Reyes Rios |
-| V_1_0_3 | 27/10/2026 | Retrospectiva alineada a la plantilla oficial y a la consigna del Sprint 3. | Nario German Reyes Rios |
+| V_1_0_3 | 27/10/2026 | Retrospectiva alineada a la plantilla oficial y a la consigna del Sprint 03. | Nario German Reyes Rios |
 | V_1_0_2 | 21/10/2026 | Retrospectiva de cierre sin secretos. | Equipo del proyecto |
 | V_1_0_0 | 21/10/2026 | Retrospectiva inicial del sprint. | Equipo del proyecto |

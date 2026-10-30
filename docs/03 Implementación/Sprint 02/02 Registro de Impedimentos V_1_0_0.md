@@ -22,4 +22,4 @@ No quedaron impedimentos que bloqueen el incremento. Las mejoras residuales tien
 |---|---|---|---|
 | V_1_0_10 | 08/10/2026 | Resultado final de pruebas y estado de impedimentos sincronizados con el incremento. | Equipo del proyecto |
 | V_1_0_1 | 07/10/2026 | Impedimentos reformulados con enfoque preventivo y trazabilidad completa. | Equipo del proyecto |
-| V_1_0_0 | 07/10/2026 | Registro inicial y cierre de impedimentos del Sprint 2. | Equipo del proyecto |
+| V_1_0_0 | 07/10/2026 | Registro inicial y cierre de impedimentos del Sprint 02. | Equipo del proyecto |

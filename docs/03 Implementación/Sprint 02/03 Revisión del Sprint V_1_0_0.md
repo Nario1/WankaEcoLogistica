@@ -1,4 +1,4 @@
-# Revisión del Sprint 2
+# Revisión del Sprint 02
 
 [← Anterior: Impedimentos](<02 Registro de Impedimentos V_1_0_0.md>) · [README principal](../../../README.md) · [Siguiente: Retrospectiva →](<04 Retrospectiva del Sprint V_1_0_0.md>)
 
@@ -38,7 +38,7 @@ La demostración reproducible consiste en iniciar sesión como administrador u o
 
 ## Verificación complementaria del incremento
 
-Además de los escenarios de US-004, la regresión cubre consulta, edición y baja lógica de los recursos operativos heredados del Sprint 1. Pedidos se cancelan, vehículos pasan a fuera de servicio, conductores quedan inactivos y rutas se cancelan; no se realiza borrado físico porque los cuatro recursos participan en trazabilidad y auditoría. OpenAPI `0.3.0` conserva sincronía con estas operaciones.
+Además de los escenarios de US-004, la regresión cubre consulta, edición y baja lógica de los recursos operativos heredados del Sprint 01. Pedidos se cancelan, vehículos pasan a fuera de servicio, conductores quedan inactivos y rutas se cancelan; no se realiza borrado físico porque los cuatro recursos participan en trazabilidad y auditoría. OpenAPI `0.3.0` conserva sincronía con estas operaciones.
 
 ## Historial de control de cambios
 
@@ -56,4 +56,4 @@ Además de los escenarios de US-004, la regresión cubre consulta, edición y ba
 | V_1_0_1 | 07/10/2026 | Navegación bidireccional incorporada. | Equipo del proyecto |
 | V_1_0_2 | 08/10/2026 | Evidencia del mapa de planificación y mensajes de conflicto mejorados. | Equipo del proyecto |
 | V_1_0_3 | 08/10/2026 | Evidencia de selección cartográfica y mejoras de experiencia de usuario. | Equipo del proyecto |
-| V_1_0_0 | 07/10/2026 | Revisión y demostración verificable del Sprint 2. | Equipo del proyecto |
+| V_1_0_0 | 07/10/2026 | Revisión y demostración verificable del Sprint 02. | Equipo del proyecto |
