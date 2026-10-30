@@ -1,8 +1,14 @@
+
 import { useState } from "react";
+
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
@@ -11,13 +17,14 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
+
 import FormDialog from "../shared/FormDialog";
-import ConfirmDialog from "../shared/ConfirmDialog";
 import ResourcePage from "../shared/ResourcePage";
 import { useApiResource } from "../shared/useApiResource";
 import LocationPicker from "./LocationPicker";
 import { formatTime } from "../../utils/format";
 import Time12Field from "../shared/Time12Field";
+
 import {
   addressInput,
   numberInput,
@@ -37,43 +44,61 @@ const emptyOrder = {
 
 export default function OrdersPage() {
   const resource = useApiResource("/orders");
+
   const [editing, setEditing] = useState(null);
   const [pendingRemoval, setPendingRemoval] = useState(null);
   const [removing, setRemoving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
   const close = () => setEditing(null);
-  const updateField = (field) => (event) =>
-    setEditing((current) => ({ ...current, [field]: event.target.value }));
-  const updateLocation = (latitude, longitude) =>
+
+  const updateField = (field) => (event) => {
+    setEditing((current) => ({
+      ...current,
+      [field]: event.target.value,
+    }));
+  };
+
+  const updateLocation = (latitude, longitude) => {
     setEditing((current) => ({
       ...current,
       latitude:
-        latitude == null || latitude === "" ? "" : Number(latitude).toFixed(6),
+        latitude == null || latitude === ""
+          ? ""
+          : Number(latitude).toFixed(6),
       longitude:
         longitude == null || longitude === ""
           ? ""
           : Number(longitude).toFixed(6),
     }));
+  };
 
   async function submit(event) {
     event.preventDefault();
-    const values = Object.fromEntries(new FormData(event.currentTarget));
+
+    const values = Object.fromEntries(
+      new FormData(event.currentTarget)
+    );
+
     const body = {
       ...values,
       latitude: Number(editing.latitude),
       longitude: Number(editing.longitude),
       weightKg: Number(values.weightKg),
     };
+
     setSubmitting(true);
+
     try {
       await resource.mutate(
         editing.id ? "PATCH" : "POST",
         editing.id ? `/${editing.id}` : "",
-        body,
+        body
       );
+
       close();
     } catch {
-      /* El hook presenta el error seguro de la API. */
+      // El hook presenta el error seguro de la API.
     } finally {
       setSubmitting(false);
     }
@@ -81,12 +106,18 @@ export default function OrdersPage() {
 
   async function confirmRemoval() {
     if (!pendingRemoval) return;
+
     setRemoving(true);
+
     try {
-      await resource.mutate("DELETE", `/${pendingRemoval.id}`);
+      await resource.mutate(
+        "DELETE",
+        `/${pendingRemoval.id}`
+      );
+
       setPendingRemoval(null);
     } catch {
-      /* El hook presenta el error seguro de la API. */
+      // El hook presenta el error seguro de la API.
     } finally {
       setRemoving(false);
     }
@@ -102,10 +133,11 @@ export default function OrdersPage() {
     >
       {!resource.loading && !resource.items.length && (
         <Alert severity="info">
-          Aún no hay pedidos. Cree el primero seleccionando su punto de entrega
-          en el mapa.
+          Aún no hay pedidos. Cree el primero seleccionando su
+          punto de entrega en el mapa.
         </Alert>
       )}
+
       {!!resource.items.length && (
         <Table size="small">
           <TableHead>
@@ -119,37 +151,62 @@ export default function OrdersPage() {
               <TableCell />
             </TableRow>
           </TableHead>
+
           <TableBody>
             {resource.items.map((order) => (
               <TableRow key={order.id} hover>
                 <TableCell>{order.productName}</TableCell>
+
                 <TableCell>{order.address}</TableCell>
+
                 <TableCell>
                   <Box
                     component="span"
-                    sx={{ fontFamily: "monospace", fontSize: 12 }}
+                    sx={{
+                      fontFamily: "monospace",
+                      fontSize: 12,
+                    }}
                   >
                     {Number(order.latitude).toFixed(5)},{" "}
                     {Number(order.longitude).toFixed(5)}
                   </Box>
                 </TableCell>
+
                 <TableCell>{order.weightKg} kg</TableCell>
+
                 <TableCell>
                   <Chip
                     size="small"
-                    color={order.priority === "HIGH" ? "warning" : "default"}
-                    label={order.priority === "HIGH" ? "Alta" : "Normal"}
+                    color={
+                      order.priority === "HIGH"
+                        ? "warning"
+                        : "default"
+                    }
+                    label={
+                      order.priority === "HIGH"
+                        ? "Alta"
+                        : "Normal"
+                    }
                   />
                 </TableCell>
+
                 <TableCell>
-                  {formatTime(order.windowStart)}–{formatTime(order.windowEnd)}
+                  {formatTime(order.windowStart)}–
+                  {formatTime(order.windowEnd)}
                 </TableCell>
+
                 <TableCell>
-                  <Button onClick={() => setEditing({ ...order })}>
+                  <Button
+                    onClick={() => setEditing({ ...order })}
+                  >
                     Editar
                   </Button>
+
                   {order.status === "PENDING" && (
-                    <Button color="error" onClick={() => setPendingRemoval(order)}>
+                    <Button
+                      color="error"
+                      onClick={() => setPendingRemoval(order)}
+                    >
                       Eliminar
                     </Button>
                   )}
@@ -159,6 +216,7 @@ export default function OrdersPage() {
           </TableBody>
         </Table>
       )}
+
       {editing && (
         <FormDialog
           open
@@ -169,9 +227,10 @@ export default function OrdersPage() {
           submitting={submitting}
         >
           <Alert severity="info">
-            Complete los datos y marque con precisión el destino. Esta ubicación
-            se utilizará para optimizar la ruta.
+            Complete los datos y marque con precisión el destino.
+            Esta ubicación se utilizará para optimizar la ruta.
           </Alert>
+
           <TextField
             name="productName"
             label="Producto o carga transportada"
@@ -179,8 +238,12 @@ export default function OrdersPage() {
             value={editing.productName}
             onChange={updateField("productName")}
             required
-            slotProps={{ htmlInput: productInput }}
+            fullWidth
+            slotProps={{
+              htmlInput: productInput,
+            }}
           />
+
           <TextField
             name="address"
             label="Dirección o referencia"
@@ -188,14 +251,22 @@ export default function OrdersPage() {
             value={editing.address}
             onChange={updateField("address")}
             required
-            slotProps={{ htmlInput: { minLength: 5, maxLength: 255 } }}
+            fullWidth
+            slotProps={{
+              htmlInput: addressInput,
+            }}
           />
+
           <LocationPicker
             latitude={editing.latitude}
             longitude={editing.longitude}
             onChange={updateLocation}
           />
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+          >
             <TextField
               name="latitude"
               label="Latitud"
@@ -210,6 +281,13 @@ export default function OrdersPage() {
                   min: -90,
                   max: 90,
                   maxDecimals: 6,
+                  title: "La latitud va de -90 a 90",
+                  allowNegative: true,
+                }),
+              }}
+            />
+
+            <TextField
               name="longitude"
               label="Longitud"
               placeholder="-75.204900"
@@ -219,11 +297,6 @@ export default function OrdersPage() {
               required
               fullWidth
               helperText="Coordenada oeste de Huancayo, alrededor de -75.20."
-              slotProps={{ htmlInput: { min: -180, max: 180, step: "any" } }}
-            />
-          </Stack>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-            <TextField
               slotProps={{
                 htmlInput: numberInput({
                   min: -180,
@@ -232,7 +305,32 @@ export default function OrdersPage() {
                   title: "La longitud va de -180 a 180",
                   allowNegative: true,
                 }),
+              }}
             />
+          </Stack>
+
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+          >
+            <TextField
+              name="weightKg"
+              label="Peso (kg)"
+              placeholder="Ej. 25"
+              type="number"
+              value={editing.weightKg}
+              onChange={updateField("weightKg")}
+              required
+              fullWidth
+              slotProps={{
+                htmlInput: numberInput({
+                  min: 0.01,
+                  max: 100000,
+                  title: "El peso va de 0.01 a 100000 kg",
+                }),
+              }}
+            />
+
             <TextField
               name="priority"
               label="Prioridad"
@@ -245,37 +343,80 @@ export default function OrdersPage() {
               <MenuItem value="NORMAL">Normal</MenuItem>
               <MenuItem value="HIGH">Alta</MenuItem>
             </TextField>
-              slotProps={{
-                htmlInput: numberInput({
-                  min: 0.01,
-                  max: 100000,
-                  title: "El peso va de 0.01 a 100000 kg",
-                }),
-              }}
+          </Stack>
+
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+          >
             <input
               type="hidden"
               name="windowStart"
               value={editing.windowStart}
             />
+
             <Time12Field
               label="Inicio"
               value={editing.windowStart}
-                setEditing((current) => ({ ...current, windowStart: value }))
+              onChange={(value) =>
+                setEditing((current) => ({
+                  ...current,
+                  windowStart: value,
+                }))
               }
             />
-          </Stack>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-            <input type="hidden" name="windowEnd" value={editing.windowEnd} />
+
+            <input
+              type="hidden"
+              name="windowEnd"
+              value={editing.windowEnd}
+            />
+
             <Time12Field
               label="Fin"
               value={editing.windowEnd}
               onChange={(value) =>
-                setEditing((current) => ({ ...current, windowEnd: value }))
+                setEditing((current) => ({
+                  ...current,
+                  windowEnd: value,
+                }))
               }
             />
           </Stack>
         </FormDialog>
       )}
+
+      <Dialog
+        open={Boolean(pendingRemoval)}
+        onClose={() => {
+          if (!removing) setPendingRemoval(null);
+        }}
+      >
+        <DialogTitle>Eliminar pedido</DialogTitle>
+
+        <DialogContent>
+          ¿Está seguro de que desea eliminar este pedido?
+          Esta acción no se puede deshacer.
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            onClick={() => setPendingRemoval(null)}
+            disabled={removing}
+          >
+            Cancelar
+          </Button>
+
+          <Button
+            color="error"
+            variant="contained"
+            onClick={confirmRemoval}
+            disabled={removing}
+          >
+            {removing ? "Eliminando..." : "Eliminar"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ResourcePage>
   );
 }

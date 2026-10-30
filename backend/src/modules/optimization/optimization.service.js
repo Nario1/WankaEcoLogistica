@@ -146,31 +146,31 @@ export function buildOptimizedSequence(orders, startsAt, depot) {
 
   while (pending.length) {
     const candidates = pending
-      .map((order) => {
-        const legDistance = distanceKm(current, order);
-        const arrival =
-          startMinutes +
-          elapsedMinutes +
-          (legDistance / AVERAGE_SPEED_KMH) * 60;
-        const waiting = Math.max(0, minutes(order.windowStart) - arrival);
-        const serviceStart = arrival + waiting;
-        const windowStart = minutes(order.windowStart);
-        const windowEnd = minutes(order.windowEnd);
-        const deadline =
-          order.priority === "HIGH"
-            ? windowStart + (windowEnd - windowStart) / 2
-            : windowEnd;
-        return { order, legDistance, arrival, waiting, serviceStart, deadline };
-      })
+      .map((order) =>
+        evaluateCandidate(
+          order,
+          localLeg(current, order),
+          elapsedMinutes,
+          startMinutes,
+        ),
+      )
       .filter(({ serviceStart, deadline }) => serviceStart <= deadline)
-      .sort((left, right) => {
-        const priority =
-          Number(right.order.priority === "HIGH") -
-          Number(left.order.priority === "HIGH");
-        return (
-          priority ||
-          left.order.windowEnd.localeCompare(right.order.windowEnd) ||
-          left.legDistance - right.legDistance
+      .sort(compareCandidates);
+    ({ elapsedMinutes, totalDistanceKm, current } = takeNextStop(
+      candidates,
+      elapsedMinutes,
+      totalDistanceKm,
+      sequence,
+    ));
+    pending.splice(pending.indexOf(current), 1);
+  }
+  return {
+    sequence,
+    distanceKm: Number(totalDistanceKm.toFixed(2)),
+    elapsedMinutes,
+  };
+}
+
 export async function buildOptimizedSequenceWithRouting(
   orders,
   startsAt,
@@ -247,34 +247,6 @@ export class OptimizationService {
     this.optimizationRepository = optimizationRepository;
     this.auditRepository = auditRepository;
     this.roadRoutingClient = roadRoutingClient;
-      throw conflict(
-        "Las ventanas horarias no permiten atender todos los pedidos seleccionados",
-      );
-    }
-    const selected = candidates[0];
-    elapsedMinutes +=
-      (selected.legDistance / AVERAGE_SPEED_KMH) * 60 +
-      selected.waiting +
-      SERVICE_MINUTES;
-    if (elapsedMinutes > MAX_ROUTE_HOURS * 60) {
-      throw conflict("La ruta optimizada supera las 8 horas permitidas");
-    }
-    totalDistanceKm += selected.legDistance;
-    sequence.push({ ...selected.order, deliveryOrder: sequence.length + 1 });
-    current = selected.order;
-    pending.splice(pending.indexOf(selected.order), 1);
-  }
-  return {
-    sequence,
-    distanceKm: Number(totalDistanceKm.toFixed(2)),
-    elapsedMinutes,
-  };
-}
-
-export class OptimizationService {
-  constructor({ optimizationRepository, auditRepository }) {
-    this.optimizationRepository = optimizationRepository;
-    this.auditRepository = auditRepository;
   }
 
   async optimize(input, actorId) {
@@ -287,15 +259,11 @@ export class OptimizationService {
     if (resources.orders.length !== orderIds.length) {
       throw conflict(
         "Todos los pedidos deben existir y encontrarse pendientes",
-    const optimized = this.roadRoutingClient
-      ? await buildOptimizedSequenceWithRouting(
-          resources.orders,
-          startsAt,
-          DISPATCH_DEPOT,
-          (from, to, departAt) =>
-            estimateRoadLeg(this.roadRoutingClient, from, to, departAt),
-        )
-      : buildOptimizedSequence(resources.orders, startsAt, DISPATCH_DEPOT);
+      );
+    }
+    const totalWeightKg = resources.orders.reduce(
+      (sum, order) => sum + order.weightKg,
+      0,
     );
     if (!resources.route) {
       throw conflict("La ruta manual seleccionada no existe");
@@ -319,11 +287,15 @@ export class OptimizationService {
         `El peso supera la capacidad operativa segura del vehículo (${usableCapacityKg.toFixed(2)} kg, equivalente al 95 % de su capacidad)`,
       );
 
-    const optimized = buildOptimizedSequence(
-      resources.orders,
-      startsAt,
-      DISPATCH_DEPOT,
-    );
+    const optimized = this.roadRoutingClient
+      ? await buildOptimizedSequenceWithRouting(
+          resources.orders,
+          startsAt,
+          DISPATCH_DEPOT,
+          (from, to, departAt) =>
+            estimateRoadLeg(this.roadRoutingClient, from, to, departAt),
+        )
+      : buildOptimizedSequence(resources.orders, startsAt, DISPATCH_DEPOT);
     const endsAt = new Date(
       startsAt.getTime() + optimized.elapsedMinutes * 60_000,
     );

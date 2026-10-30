@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -10,20 +11,30 @@ import Typography from "@mui/material/Typography";
 import AppTheme from "../shared-theme/AppTheme";
 import { formatApiError } from "../api/client";
 import { useAuth } from "./AuthContext";
-import { emailInput, loginPasswordInput } from "../features/shared/fieldRules";
+import {
+  emailInput,
+  loginPasswordInput,
+} from "../features/shared/fieldRules";
 
 export default function LoginPage() {
   const { login } = useAuth();
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
+
     setLoading(true);
     setError("");
+
     try {
-      await login({ email: data.get("email"), password: data.get("password") });
+      await login({
+        email: data.get("email"),
+        password: data.get("password"),
+      });
     } catch (requestError) {
       setError(formatApiError(requestError));
     } finally {
@@ -34,6 +45,7 @@ export default function LoginPage() {
   return (
     <AppTheme>
       <CssBaseline enableColorScheme />
+
       <Box
         sx={{
           minHeight: "100dvh",
@@ -43,17 +55,39 @@ export default function LoginPage() {
           bgcolor: "background.default",
         }}
       >
-        <Card component="main" sx={{ width: "100%", maxWidth: 420, p: 4 }}>
-          <Stack component="form" spacing={2.5} onSubmit={handleSubmit}>
+        <Card
+          component="main"
+          sx={{
+            width: "100%",
+            maxWidth: 420,
+            p: 4,
+          }}
+        >
+          <Stack
+            component="form"
+            spacing={2.5}
+            onSubmit={handleSubmit}
+          >
             <Box>
-              <Typography component="h1" variant="h4" fontWeight={700}>
+              <Typography
+                component="h1"
+                variant="h4"
+                fontWeight={700}
+              >
                 WankaEcoLogística
               </Typography>
+
               <Typography color="text.secondary">
                 Acceso seguro al panel operativo
               </Typography>
             </Box>
-            {error && <Alert severity="error">{error}</Alert>}
+
+            {error && (
+              <Alert severity="error">
+                {error}
+              </Alert>
+            )}
+
             <TextField
               name="email"
               label="Correo electrónico"
@@ -62,8 +96,12 @@ export default function LoginPage() {
               autoComplete="username"
               required
               autoFocus
-              slotProps={{ htmlInput: emailInput }}
+              fullWidth
+              slotProps={{
+                htmlInput: emailInput,
+              }}
             />
+
             <TextField
               name="password"
               label="Contraseña"
@@ -71,9 +109,17 @@ export default function LoginPage() {
               type="password"
               autoComplete="current-password"
               required
+              fullWidth
+              slotProps={{
+                htmlInput: loginPasswordInput,
+              }}
+            />
+
+            <Button
               type="submit"
               variant="contained"
               size="large"
+              fullWidth
               disabled={loading}
             >
               {loading ? "Ingresando…" : "Ingresar"}

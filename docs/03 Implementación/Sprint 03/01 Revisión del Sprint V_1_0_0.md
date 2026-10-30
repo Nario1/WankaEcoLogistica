@@ -27,6 +27,12 @@ Demostración a los stakeholders de las funcionalidades implementadas el 21/10/2
 
 La verificación repetible de esa demostración está en `pruebas/`: autenticación, vehículos, conductores, pedido en mapa, flujo de planificación y mapa del conductor, además del aviso offline. La revisión de esta consigna documental ante el docente todavía no se realizó.
 
+![evidencias](pruebas1.png)
+![evidencias](pruebas2.png)
+![evidencias](pruebas3.png)
+
+
+
 ## Pendientes
 
 - US-006, US-007 y US-008 permanecen para sprints posteriores.

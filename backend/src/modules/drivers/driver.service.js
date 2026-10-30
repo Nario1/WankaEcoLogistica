@@ -23,11 +23,8 @@ export class DriverService {
   async create(input, actorId) {
     assertObject(input);
     const email = requireEmail(input.email);
-    const name = requireString(input.name, "name", { min: 3, max: 120 });
-    const password = requireString(input.password, "password", {
-      min: 12,
-      max: 128,
-    });
+    const name = requirePersonName(input.name);
+    const password = requirePassword(input.password);
     if (await this.userRepository.findByEmail(email))
       throw conflict("El correo ya se encuentra registrado");
     const passwordHash = await bcrypt.hash(password, 12);
@@ -64,6 +61,7 @@ export class DriverService {
           : "Debe enviar al menos un campo",
       });
     }
+    const changes = {};
     if (input.name !== undefined) changes.name = requirePersonName(input.name);
     if (input.email !== undefined) {
       changes.email = requireEmail(input.email);
@@ -76,14 +74,12 @@ export class DriverService {
         "ACTIVE",
         "INACTIVE",
       ]);
-    if (input.password)
+    if (input.password !== undefined) {
       changes.passwordHash = await bcrypt.hash(
         requirePassword(input.password),
-    if (input.password)
-      changes.passwordHash = await bcrypt.hash(
-        requireString(input.password, "password", { min: 12, max: 128 }),
         12,
       );
+    }
     const driver = await this.userRepository.updateDriver(id, changes);
     await this.auditRepository.record({
       userId: actorId,

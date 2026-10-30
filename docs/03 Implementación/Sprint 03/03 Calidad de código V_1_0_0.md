@@ -17,6 +17,9 @@ Este es el análisis que se expone: el que detectó los bugs y el code smell. El
 - **Porcentaje de Cobertura de Pruebas (Coverage):** 65,4 %
 - **Duplicación de Código:** 2,2 %
 
+![Texto alternativo](SonarqubeWankaecologistica.png)
+
+
 La cobertura de SonarQube considera frontend y backend juntos. El backend, medido con el test runner de Node, queda en 88 % de líneas. El frontend no tiene pruebas unitarias, y por eso la cifra combinada baja a 65,4 %. SonarQube reportó 6 638 líneas de código.
 
 ## 2. Métricas Principales
