@@ -95,7 +95,7 @@ export function requireDateTime(value, field) {
 export function requirePersonName(value, field = "name") {
   const name = requireString(value, field, { min: 3, max: 120 });
   if (
-    !/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:[ '\-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/.test(name)
+    !/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:[ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/.test(name)
   ) {
     throw badRequest("Datos inválidos", {
       [field]: "Use solo letras, espacios y guiones",

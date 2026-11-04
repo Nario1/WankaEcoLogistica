@@ -99,7 +99,7 @@ export function numberInput({
     onBeforeInput(event) {
       const data = event.data;
       if (data == null) return;
-      const allowed = allowNegative ? /^[0-9.\-]+$/ : /^[0-9.]+$/;
+      const allowed = allowNegative ? /^[0-9.-]+$/ : /^[0-9.]+$/;
       if (!allowed.test(data)) {
         event.preventDefault();
         return;
@@ -111,9 +111,18 @@ export function numberInput({
       const decimals = next.split(".")[1];
       const tooManyDots = (next.match(/\./g) ?? []).length > 1;
       const minus = next.includes("-");
-      const badMinus = minus && (!allowNegative || !next.startsWith("-") || next.indexOf("-") !== next.lastIndexOf("-"));
-      const tooManyDecimals = Boolean(decimals && decimals.length > maxDecimals);
-      const numeric = next === "" || next === "-" || next === "." || next === "-." ? null : Number(next);
+      const badMinus =
+        minus &&
+        (!allowNegative ||
+          !next.startsWith("-") ||
+          next.indexOf("-") !== next.lastIndexOf("-"));
+      const tooManyDecimals = Boolean(
+        decimals && decimals.length > maxDecimals,
+      );
+      const numeric =
+        next === "" || next === "-" || next === "." || next === "-."
+          ? null
+          : Number(next);
       const aboveMax = numeric != null && max != null && numeric > max;
       const belowMin = numeric != null && !allowNegative && numeric < 0;
       if (

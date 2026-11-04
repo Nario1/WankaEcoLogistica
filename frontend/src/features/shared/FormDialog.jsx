@@ -33,7 +33,7 @@ export default function FormDialog({
             Cancelar
           </Button>
           <Button type="submit" variant="contained" disabled={submitting}>
-            {submitting ? "Guardando…" : "Guardar"}
+            {submitting ? "Guardando…" : submitLabel}
           </Button>
         </DialogActions>
       </Stack>
@@ -48,5 +48,6 @@ FormDialog.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   submitting: PropTypes.bool,
+  submitLabel: PropTypes.string,
   maxWidth: PropTypes.oneOf(["xs", "sm", "md", "lg", "xl"]),
 };
