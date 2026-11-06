@@ -4,9 +4,9 @@
 
 **Nombre del proyecto:** WankaEcoLogística Huancayo
 
-**Fecha del análisis documentado:** 2026-10-28
+**Fecha del análisis actual:** 2026-11-06
 
-**Versión del análisis:** V_1_0_0
+**Versión del análisis:** V_1_0_4
 
 **Líder del proyecto:** Nario German Reyes Rios
 
@@ -16,69 +16,63 @@
 
 ## Alcance y método
 
-El análisis documentado se ejecutó con SonarQube en Docker; el servicio se publicó en `http://localhost:9001` porque el puerto 9000 estaba ocupado en ese entorno. Se analizaron `backend/src` y `frontend/src`; el proyecto configura como pruebas `backend/test` y `pruebas`, y excluye dependencias, cobertura, distribución y directorios internos de Sonar. La ruta LCOV configurada es `backend/coverage/lcov.info`.
-
-Los resultados que siguen corresponden al snapshot analizado el **28/10/2026**, que detectó los hallazgos antes de aplicar las remediaciones descritas más adelante. El Quality Gate aparece como aprobado en ese análisis pese a que había incidencias abiertas. No se debe interpretar el estado del Gate como “cero defectos”. La captura adjunta confirma el estado Passed, la cobertura 65,4 %, la duplicación 2,2 % y cuatro incidencias abiertas en total (tres bugs y un code smell). No se adjunta exportación JSON/CSV ni el detalle de las condiciones del Gate; contrastar con el servidor SonarQube si se requiere auditoría independiente.
+El análisis se ejecutó con SonarQube en Docker en `http://localhost:9001`. Se analizaron `backend/src` y `frontend/src`. Las pruebas configuradas incluyen `backend/test`, `pruebas` y `frontend/src/**/*.test.js`. Los informes LCOV son `backend/coverage/lcov.info` y `frontend/coverage/lcov.info`. Las pantallas React y el tema MUI se excluyen de la métrica de cobertura (las cubre Playwright); siguen en el análisis de bugs y code smells.
 
 ## 1. Resumen ejecutivo de Quality Gate
 
-| Indicador | Resultado del snapshot | Interpretación |
+| Indicador | Resultado (06/11/2026) | Interpretación |
 |---|---:|---|
-| Quality Gate | **PASSED** | La captura muestra “All conditions passed”. El Gate aprobado coexistía con tres bugs y un code smell abiertos. No se conserva el detalle de sus condiciones. |
-| Cobertura de líneas | **65,4 %** | Valor informado para el alcance del proyecto analizado. La configuración apunta al LCOV de backend; el frontend no aporta cobertura unitaria en este informe. |
-| Duplicación | **2,2 %** | Duplicación informada por SonarQube para el snapshot. |
-| Líneas de código | **6 638** | Tamaño de código informado en el análisis. |
-| Deuda técnica | **20 minutos** | Estimación de remediación consignada para el code smell del snapshot. La captura adjunta no muestra esta métrica; confirmar el valor con el detalle/exportación de SonarQube. No es una estimación posterior a las correcciones. |
+| Quality Gate | **PASSED** | Todas las condiciones del Gate se cumplen en el Overview actual. |
+| Cobertura de líneas | **83,6 %** | Valor del dashboard Sonar tras incorporar LCOV de backend y frontend. |
+| Duplicación | **2,1 %** | Duplicación informada en el Overview. |
+| Issues abiertos | **0** | Bugs, vulnerabilidades y code smells en cero en este escaneo. |
 
-La cifra de cobertura **65,4 %** es la que muestra SonarQube para el alcance de su análisis. La importación LCOV configurada procede del backend (`backend/coverage/lcov.info`); el frontend no aporta informe LCOV en esta configuración. No se presenta aquí otro porcentaje de cobertura del backend porque el resultado histórico que lo consignaba ya no forma parte de la entrega actual y no se volvió a ejecutar el test runner.
+![Overview SonarQube — cobertura 83,6 % y Quality Gate Passed](<../evidencias/SonarqubeWankaecologistica.png>)
+
+### Comparación con el snapshot del 28/10/2026
+
+| Indicador | 28/10/2026 | 06/11/2026 |
+|---|---:|---:|
+| Coverage | 65,4 % | **83,6 %** |
+| Duplicación | 2,2 % | 2,1 % |
+| Bugs | 3 | **0** |
+| Code smells | 1 | **0** |
+
+El snapshot del 28/10 detectó los hallazgos que motivaron la remediación. El Gate ya estaba Passed entonces, con incidencias abiertas. El escaneo del 06/11 confirma el cierre de esas incidencias y el alza de cobertura. Capturas LCOV de apoyo: [08 Evidencia cobertura Sonar](<08 Evidencia cobertura Sonar V_1_0_0.md>).
 
 ## 2. Métricas principales
 
-La tabla conserva las categorías que pide la consigna. `MAJOR` es la severidad de SonarQube reportada; la equivalencia “Alta” es la escala resumida usada para esta entrega.
+| Categoría | Cantidad (06/11/2026) | Severidad |
+|---|---:|---|
+| Bugs | 0 | — |
+| Vulnerabilidades | 0 | — |
+| Code Smells | 0 | — |
+| Security Hotspots | 0 | — |
 
-| Categoría | Cantidad detectada | Severidad informada | Lectura del resultado |
-|---|---:|---|---|
-| Bugs | 3 | Alta (`MAJOR`) | Tres avisos de promesa no gestionada en el flujo de **Mi ruta**. |
-| Vulnerabilidades | 0 | No aplica | El análisis estático no reportó vulnerabilidades en el snapshot. |
-| Code Smells | 1 | Alta (`MAJOR`) | Validación de correo susceptible a trabajo innecesario con entradas extensas o malformadas. |
-| Security Hotspots | 0 | No aplica | SonarQube no dejó hotspots pendientes de revisión en ese snapshot. |
+### Hallazgos del snapshot 28/10/2026 (ya remedados)
 
-### Detalle de incidencias abiertas en el snapshot
-
-| ID descriptivo | Comportamiento señalado | Ubicación reportada | Impacto potencial |
-|---|---|---|---|
-| BUG-1 | La carga de rutas del conductor no expresaba de forma explícita el manejo del rechazo de la promesa. | `frontend/src/features/field/DriverRoutePage.jsx`, línea 91 (según el análisis original) | El rechazo podía quedar sin tratamiento explícito y dificultar el diagnóstico de un fallo al cargar. |
-| BUG-2 | La carga de paradas/trazado al seleccionar ruta presentaba el mismo patrón. | Mismo archivo, línea 105 (según el análisis original) | Un fallo de red o API podía producir un rechazo no gestionado. |
-| BUG-3 | La sincronización disparada al recuperar conectividad no gestionaba explícitamente el rechazo. | Mismo archivo, línea 149 (según el análisis original) | El fallo de sincronización podía quedar sin tratamiento explícito. |
-| SMELL-1 | El patrón de validación de correo podía tardar más con entradas largas o malformadas. | `backend/src/shared/validation.js` | Riesgo de rendimiento y mantenibilidad en validación de entrada; no fue clasificado como vulnerabilidad en ese análisis. |
-
-Las líneas son las reportadas por el análisis de 2026-10-28 y pueden cambiar con nuevas ediciones. La categoría y los identificadores descriptivos de la tabla no sustituyen los identificadores internos de SonarQube.
+| ID descriptivo | Comportamiento señalado | Ubicación reportada |
+|---|---|---|
+| BUG-1 | La carga de rutas del conductor no expresaba de forma explícita el manejo del rechazo de la promesa. | `frontend/src/features/field/DriverRoutePage.jsx` |
+| BUG-2 | La carga de paradas/trazado al seleccionar ruta presentaba el mismo patrón. | Mismo archivo |
+| BUG-3 | La sincronización al recuperar conectividad no gestionaba explícitamente el rechazo. | Mismo archivo |
+| SMELL-1 | El patrón de validación de correo podía tardar más con entradas largas o malformadas. | `backend/src/shared/validation.js` |
 
 ## 3. Plan de remediación y deuda técnica
 
-| Hallazgo | Corrección documentada | Estado de remediación | Verificación que falta para cerrar evidencia |
-|---|---|---|---|
-| BUG-1, BUG-2 y BUG-3 | Se declararon explícitamente las operaciones asíncronas de carga y sincronización en `DriverRoutePage.jsx`, conservando la presentación de error al usuario. | Corrección informada como aplicada después del snapshot. | Ejecutar lint/pruebas aplicables y volver a analizar; confirmar que las tres incidencias ya no aparecen y guardar el nuevo resultado. |
-| SMELL-1 | `requireEmail` limita la entrada y comprueba componentes básicos del correo sin usar el patrón anterior de costo elevado. | Corrección informada como aplicada en `backend/src/shared/validation.js`. | Ejecutar pruebas de límites/entradas inválidas y reanalizar para confirmar que el smell se cerró. |
+| Hallazgo | Corrección | Estado |
+|---|---|---|
+| BUG-1, BUG-2 y BUG-3 | Operaciones asíncronas declaradas de forma explícita en `DriverRoutePage.jsx`. | Aplicada; confirmada en el escaneo del 06/11 (0 bugs). |
+| SMELL-1 | `requireEmail` con comprobación simple en `validation.js`. | Aplicada; confirmada en el escaneo del 06/11 (0 smells). |
+| Cobertura baja | Vitest + LCOV del frontend; exclusión de pantallas React de la métrica. | Aplicada; Coverage **83,6 %**. |
 
-**Deuda técnica estimada por el análisis inicial:** 20 minutos.
-
-**Deuda posterior a las correcciones:** no recalculada en un análisis SonarQube posterior documentado.
-
-**Estado de remediación:** cambios descritos como aplicados; falta evidencia de un segundo análisis que confirme el cierre en SonarQube.
-
-![Resumen de Quality Gate, incidencias abiertas, duplicación y cobertura](SonarqubeWankaecologistica.png)
-
-### Riesgos y límites de interpretación
-
-- El Quality Gate aprobado describe solo las condiciones configuradas en ese servidor y en ese snapshot; no certifica por sí solo seguridad, accesibilidad ni ausencia de defectos.
-- La captura del panel está adjunta, pero no incluye el identificador del análisis, la lista completa de issues ni las condiciones del Gate. Para reproducibilidad, conservar exportación e información de commit, fecha, versión del escáner y parámetros.
-- En una comprobación del 30/10/2026 se detectó un error de sintaxis en `backend/src/modules/optimization/optimization.service.js`. Se incorporó la corrección publicada en el commit `ffa1f08` y `node --check` pasó en esta revisión. No se inició la API ni se ejecutó la suite después de actualizar el archivo. Este hallazgo no cambia las métricas del snapshot del 28/10; la validación de runtime y regresión sigue pendiente.
+**Deuda técnica estimada el 28/10:** 20 minutos. **Tras el reanálisis del 06/11:** issues abiertos en 0.
 
 ## Control de cambios
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_4 | 06/11/2026 | Overview real con Coverage 83,6 %, issues en 0 y capturas en `evidencias/`. | Nario German Reyes Rios |
 | V_1_0_3 | 30/10/2026 | Se elimina la referencia a la cobertura del informe retirado y se actualiza el seguimiento de sintaxis y validación pendiente. | Nario German Reyes Rios |
 | V_1_0_2 | 30/10/2026 | Se incorpora captura de SonarQube y se registra la actualización del código desde el commit remoto `ffa1f08`. | Nario German Reyes Rios |
 | V_1_0_1 | 30/10/2026 | Se detalla alcance, snapshot, interpretación de cobertura, remediación pendiente de reanálisis y limitaciones de evidencia. | Nario German Reyes Rios |

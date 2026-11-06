@@ -12,9 +12,11 @@
     "db:migrate": "node scripts/migrate.js",
     "db:seed": "node scripts/seed-admin.js",
     "test": "node --test --experimental-test-coverage --test-coverage-lines=80",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-lines=80 --test-reporter=lcov --test-reporter-destination=coverage/lcov.info",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "security:audit": "npm audit --audit-level=high"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

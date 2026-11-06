@@ -70,6 +70,7 @@ Cada sprint conserva sus cuatro artefactos: informe, impedimentos, revisión y r
 - [Revisión del sprint](<03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>)
 - [Retrospectiva del sprint](<03 Implementación/Sprint 03/02 Retrospectiva del Sprint V_1_0_0.md>)
 - [Calidad de código](<03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>)
+- [Evidencia cobertura Sonar](<03 Implementación/Sprint 03/08 Evidencia cobertura Sonar V_1_0_0.md>)
 - [OWASP Top 10 2025](<03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
 - [Accesibilidad WCAG](<03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
 

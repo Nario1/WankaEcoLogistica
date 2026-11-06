@@ -64,6 +64,15 @@ test("health no requiere autenticación y rutas privadas sí", async () => {
   });
 });
 
+test("Helmet publica encabezados de seguridad en las respuestas", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/health`);
+    assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+    assert.ok(response.headers.get("content-security-policy"));
+    assert.equal(response.headers.get("x-powered-by"), null);
+  });
+});
+
 test("POST /api/orders identifica el campo inválido con respuesta 400", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/orders`, {

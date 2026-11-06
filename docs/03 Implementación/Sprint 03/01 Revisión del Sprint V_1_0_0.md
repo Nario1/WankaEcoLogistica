@@ -47,17 +47,19 @@ La evidencia automatizada que el equipo vincula a este recorrido se encuentra en
 
 ### Evidencia visual de la versión más reciente del repositorio
 
+Las capturas viven en [`docs/03 Implementación/evidencias/`](../evidencias/).
+
 | Captura | Qué muestra | Límite de la evidencia |
 |---|---|---|
-| [Vehículos](pruebas1.png) | Pantalla de flota con capacidad, consumo, factor de emisión y estado. | Es una captura de interfaz; no prueba por sí sola que cada operación CRUD haya pasado. |
-| [Conductores](pruebas2.png) | Lista de conductores, cuentas de demostración y estados. | Contiene datos de prueba. No publicar aquí credenciales ni usar estas cuentas en producción. |
-| [Mapa de ruta](pruebas3.png) | Ruta optimizada trazada en calles de Huancayo y proveedor de ruteo mostrado en la interfaz. | Corresponde a la vista de planificación; no demuestra por sí sola **Mi ruta** ni el comportamiento offline del conductor. |
+| [Vehículos](<../evidencias/pruebas1.png>) | Pantalla de flota con capacidad, consumo, factor de emisión y estado. | Es una captura de interfaz; no prueba por sí sola que cada operación CRUD haya pasado. |
+| [Conductores](<../evidencias/pruebas2.png>) | Lista de conductores, cuentas de demostración y estados. | Contiene datos de prueba. No publicar aquí credenciales ni usar estas cuentas en producción. |
+| [Mapa de ruta](<../evidencias/pruebas3.png>) | Ruta optimizada trazada en calles de Huancayo y proveedor de ruteo mostrado en la interfaz. | Corresponde a la vista de planificación; no demuestra por sí sola **Mi ruta** ni el comportamiento offline del conductor. |
 
-![Pantalla de vehículos del entorno de demostración](pruebas1.png)
+![Pantalla de vehículos del entorno de demostración](<../evidencias/pruebas1.png>)
 
-![Pantalla de conductores con datos de prueba](pruebas2.png)
+![Pantalla de conductores con datos de prueba](<../evidencias/pruebas2.png>)
 
-![Mapa de ruta optimizada en Huancayo](pruebas3.png)
+![Mapa de ruta optimizada en Huancayo](<../evidencias/pruebas3.png>)
 
 **Participación de stakeholders:** la documentación registra una demostración técnica, pero no identifica asistentes ni incorpora acta o comentarios individuales. La sustentación formal de esta consigna ante el docente todavía no está acreditada. Para cerrar este punto se requiere fecha, roles asistentes, comentarios y aceptación; no se deben inferir participantes.
 
@@ -74,6 +76,7 @@ La evidencia automatizada que el equipo vincula a este recorrido se encuentra en
 
 | Versión | Fecha | Cambio | Responsable |
 |---|---|---|---|
+| V_1_0_6 | 06/11/2026 | Las capturas de demostración se reubicaron en `docs/03 Implementación/evidencias/`. | Equipo del proyecto |
 | V_1_0_5 | 30/10/2026 | Se quitan claves Jira no trazables, se aclara que la demo fue técnica/intermedia y se conserva el resultado de pruebas como dato histórico no verificado. | Nario German Reyes Rios |
 | V_1_0_4 | 30/10/2026 | Se detallan objetivo, criterios de aceptación, alcance de la evidencia y pendientes sin atribuir asistentes no registrados. | Nario German Reyes Rios |
 | V_1_0_3 | 27/10/2026 | Revisión alineada a la plantilla oficial y con líder del proyecto. | Nario German Reyes Rios |
