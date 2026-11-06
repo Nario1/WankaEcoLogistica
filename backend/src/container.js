@@ -5,12 +5,15 @@ import { VehicleService } from "./modules/vehicles/vehicle.service.js";
 import { DriverService } from "./modules/drivers/driver.service.js";
 import { RouteService } from "./modules/routes/route.service.js";
 import { OptimizationService } from "./modules/optimization/optimization.service.js";
+import { IndicatorsService } from "./modules/sustainability/indicators.service.js";
+import { ReportsService } from "./modules/sustainability/reports.service.js";
 import { PgAuditRepository } from "./infrastructure/postgres/audit.repository.js";
 import { PgOrderRepository } from "./infrastructure/postgres/order.repository.js";
 import { PgRouteRepository } from "./infrastructure/postgres/route.repository.js";
 import { PgUserRepository } from "./infrastructure/postgres/user.repository.js";
 import { PgVehicleRepository } from "./infrastructure/postgres/vehicle.repository.js";
 import { PgOptimizationRepository } from "./infrastructure/postgres/optimization.repository.js";
+import { PgIndicatorsRepository } from "./infrastructure/postgres/indicators.repository.js";
 import { RoadRoutingClient } from "./infrastructure/routing/road-routing.client.js";
 
 export function createContainer(config) {
@@ -21,6 +24,7 @@ export function createContainer(config) {
   const vehicleRepository = new PgVehicleRepository(pool);
   const routeRepository = new PgRouteRepository(pool);
   const optimizationRepository = new PgOptimizationRepository(pool);
+  const indicatorsRepository = new PgIndicatorsRepository(pool);
   const roadRoutingClient = new RoadRoutingClient(config);
   const common = { auditRepository };
 
@@ -46,6 +50,11 @@ export function createContainer(config) {
       optimizationService: new OptimizationService({
         optimizationRepository,
         roadRoutingClient,
+        ...common,
+      }),
+      indicatorsService: new IndicatorsService({ indicatorsRepository }),
+      reportsService: new ReportsService({
+        indicatorsRepository,
         ...common,
       }),
     },

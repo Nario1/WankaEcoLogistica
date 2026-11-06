@@ -4,6 +4,8 @@ import {
   requireDateTime,
   requireUuid,
 } from "../../shared/validation.js";
+import { calculateEmissions } from "../sustainability/emissions.service.js";
+import { SIERRA_CENTRAL_EMISSION_FACTOR } from "../sustainability/indicators.service.js";
 
 const MAX_ORDERS = 50;
 const AVERAGE_SPEED_KMH = 25;
@@ -54,6 +56,16 @@ function localLeg(from, to) {
     distanceKm: legDistance,
     durationMinutes: (legDistance / AVERAGE_SPEED_KMH) * 60,
   };
+}
+
+export function computeBaselineDistanceKm(orders, depot) {
+  let total = 0;
+  let current = depot;
+  for (const order of orders) {
+    total += distanceKm(current, order);
+    current = order;
+  }
+  return Number(total.toFixed(2));
 }
 
 function evaluateCandidate(order, leg, elapsedMinutes, startMinutes) {
@@ -323,6 +335,18 @@ export class OptimizationService {
         "El vehículo seleccionado tiene otra ruta durante el horario calculado",
       );
     }
+    const baselineDistanceKm = computeBaselineDistanceKm(
+      resources.orders,
+      DISPATCH_DEPOT,
+    );
+    const emissionFactor =
+      Number(resources.vehicle.emissionFactor) > 0
+        ? Number(resources.vehicle.emissionFactor)
+        : SIERRA_CENTRAL_EMISSION_FACTOR;
+    const emissionsKgCo2 = calculateEmissions({
+      distanceKm: optimized.distanceKm,
+      emissionFactor,
+    }).emissionsKgCo2;
     const result = await this.optimizationRepository.save({
       routeId,
       startsAt,
@@ -331,6 +355,8 @@ export class OptimizationService {
       driverId: resources.route.driverId,
       sequence: optimized.sequence,
       distanceKm: optimized.distanceKm,
+      baselineDistanceKm,
+      emissionsKgCo2,
       totalWeightKg,
       depot: DISPATCH_DEPOT,
     });
@@ -342,6 +368,8 @@ export class OptimizationService {
       metadata: {
         orderCount: orderIds.length,
         distanceKm: optimized.distanceKm,
+        baselineDistanceKm,
+        emissionsKgCo2,
         vehicleId,
       },
     });

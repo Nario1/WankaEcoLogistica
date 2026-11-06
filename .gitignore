@@ -11,3 +11,7 @@ coverage/
 lighthouse-*.json
 backend/coverage/
 frontend/coverage/
+backend/backups/*.json
+backend/backups/reports/*.json
+!backend/backups/.gitkeep
+!backend/backups/reports/.gitkeep

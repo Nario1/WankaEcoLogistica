@@ -43,3 +43,40 @@ export async function apiRequest(path, { token, ...options } = {}) {
   }
   return payload.data;
 }
+
+export async function apiDownload(path, { token, filename } = {}) {
+  const headers = new Headers({ accept: "*/*" });
+  if (token) headers.set("authorization", `Bearer ${token}`);
+
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { headers });
+  } catch {
+    throw new ApiError("No se pudo conectar con el servidor");
+  }
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new ApiError(
+      payload.error?.message ?? "La descarga no pudo completarse",
+      {
+        status: response.status,
+        code: payload.error?.code,
+        details: payload.error?.details,
+      },
+    );
+  }
+
+  const blob = await response.blob();
+  const disposition = response.headers.get("content-disposition") ?? "";
+  const match = /filename="?([^"]+)"?/i.exec(disposition);
+  const resolvedName = filename ?? match?.[1] ?? "reporte";
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = resolvedName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}

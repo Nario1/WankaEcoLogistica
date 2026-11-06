@@ -10,6 +10,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import RouteRoundedIcon from "@mui/icons-material/RouteRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
+import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
 import PropTypes from "prop-types";
 
 const mainListItems = [
@@ -42,6 +43,12 @@ const mainListItems = [
     text: "Rutas",
     icon: <RouteRoundedIcon />,
     roles: ["ADMIN", "OPERATOR"],
+  },
+  {
+    id: "indicators",
+    text: "Indicadores",
+    icon: <InsightsRoundedIcon />,
+    roles: ["ADMIN", "OPERATOR", "AUDITOR"],
   },
   {
     id: "field",

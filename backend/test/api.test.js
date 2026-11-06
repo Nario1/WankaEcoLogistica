@@ -44,6 +44,20 @@ const services = {
       return { id: body.routeId, orders: [] };
     },
   },
+  indicatorsService: {
+    getForPeriod: async () => ({
+      hasData: false,
+      message: "No hay operaciones registradas en el periodo seleccionado",
+    }),
+  },
+  reportsService: {
+    export: async () => ({
+      format: "csv",
+      filename: "reporte.csv",
+      contentType: "text/csv; charset=utf-8",
+      body: "Sección,Campo,Valor\n",
+    }),
+  },
 };
 
 async function withServer(run) {
@@ -62,6 +76,30 @@ test("health no requiere autenticación y rutas privadas sí", async () => {
     const privateResponse = await fetch(`${baseUrl}/api/orders`);
     assert.equal(privateResponse.status, 401);
   });
+});
+
+test("health/ready degrada sin pool y responde ok con SELECT 1", async () => {
+  await withServer(async (baseUrl) => {
+    const degraded = await fetch(`${baseUrl}/health/ready`);
+    assert.equal(degraded.status, 503);
+    const degradedBody = await degraded.json();
+    assert.equal(degradedBody.data.checks.database, "unavailable");
+  });
+
+  const pool = {
+    query: async () => ({ rows: [{ "?column?": 1 }] }),
+  };
+  const server = createApp({ config, services, pool }).listen(0);
+  await new Promise((resolve) => server.once("listening", resolve));
+  try {
+    const baseUrl = `http://127.0.0.1:${server.address().port}`;
+    const ready = await fetch(`${baseUrl}/health/ready`);
+    assert.equal(ready.status, 200);
+    const body = await ready.json();
+    assert.equal(body.data.checks.database, "ok");
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
 });
 
 test("Helmet publica encabezados de seguridad en las respuestas", async () => {
@@ -181,5 +219,39 @@ test("un token inválido se rechaza sin filtrar detalles internos", async () => 
     const body = await response.json();
     assert.equal(body.error.code, "UNAUTHORIZED");
     assert.equal(body.error.stack, undefined);
+  });
+});
+
+test("GET /api/indicators permite administrador y deniega conductor", async () => {
+  await withServer(async (baseUrl) => {
+    const adminResponse = await fetch(
+      `${baseUrl}/api/indicators?from=2026-11-01T00:00:00Z&to=2026-11-07T23:59:59Z`,
+      { headers: { authorization: `Bearer ${tokenFor("ADMIN")}` } },
+    );
+    assert.equal(adminResponse.status, 200);
+    const driverResponse = await fetch(
+      `${baseUrl}/api/indicators?from=2026-11-01T00:00:00Z&to=2026-11-07T23:59:59Z`,
+      { headers: { authorization: `Bearer ${tokenFor("DRIVER")}` } },
+    );
+    assert.equal(driverResponse.status, 403);
+  });
+});
+
+test("GET /api/reports/export permite auditor y deniega operador", async () => {
+  await withServer(async (baseUrl) => {
+    const auditorResponse = await fetch(
+      `${baseUrl}/api/reports/export?from=2026-11-01T00:00:00Z&to=2026-11-07T23:59:59Z&format=csv`,
+      { headers: { authorization: `Bearer ${tokenFor("AUDITOR")}` } },
+    );
+    assert.equal(auditorResponse.status, 200);
+    assert.match(
+      auditorResponse.headers.get("content-type") ?? "",
+      /text\/csv/,
+    );
+    const operatorResponse = await fetch(
+      `${baseUrl}/api/reports/export?from=2026-11-01T00:00:00Z&to=2026-11-07T23:59:59Z&format=csv`,
+      { headers: { authorization: `Bearer ${tokenFor("OPERATOR")}` } },
+    );
+    assert.equal(operatorResponse.status, 403);
   });
 });

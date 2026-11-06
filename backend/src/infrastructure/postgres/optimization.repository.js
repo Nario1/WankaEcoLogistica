@@ -28,7 +28,9 @@ export class PgOptimizationRepository {
       ),
       this.pool.query(
         `SELECT vehiculo_id AS id, placa AS plate,
-          capacidad_kg::float AS "capacityKg", estado AS status
+          capacidad_kg::float AS "capacityKg",
+          factor_emision::float AS "emissionFactor",
+          estado AS status
          FROM vehiculos WHERE vehiculo_id = $1`,
         [vehicleId],
       ),
@@ -70,6 +72,8 @@ export class PgOptimizationRepository {
     driverId,
     sequence,
     distanceKm,
+    baselineDistanceKm,
+    emissionsKgCo2,
     totalWeightKg,
     depot,
   }) {
@@ -78,10 +82,20 @@ export class PgOptimizationRepository {
       await client.query("BEGIN");
       const routeUpdate = await client.query(
         `UPDATE rutas SET vehiculo_id = $2, inicio = $3, fin = $4, distancia_km = $5, peso_total_kg = $6,
+          distancia_base_km = $7, emisiones_co2 = $8,
           optimizada = TRUE, actualizado_en = NOW()
          WHERE ruta_id = $1 AND estado = 'PLANNED' AND optimizada = FALSE
          RETURNING ruta_id AS id`,
-        [routeId, vehicleId, startsAt, endsAt, distanceKm, totalWeightKg],
+        [
+          routeId,
+          vehicleId,
+          startsAt,
+          endsAt,
+          distanceKm,
+          totalWeightKg,
+          baselineDistanceKm,
+          emissionsKgCo2,
+        ],
       );
       if (routeUpdate.rowCount !== 1) {
         throw conflict("La ruta ya no está disponible para optimizar");
@@ -107,6 +121,8 @@ export class PgOptimizationRepository {
         startsAt,
         endsAt,
         distanceKm,
+        baselineDistanceKm,
+        emissionsKgCo2,
         totalWeightKg,
         depot,
         orders: sequence,

@@ -15,6 +15,9 @@ const OrdersPage = lazy(() => import("../features/orders/OrdersPage"));
 const VehiclesPage = lazy(() => import("../features/vehicles/VehiclesPage"));
 const DriversPage = lazy(() => import("../features/drivers/DriversPage"));
 const RoutesPage = lazy(() => import("../features/routes/RoutesPage"));
+const IndicatorsPage = lazy(
+  () => import("../features/indicators/IndicatorsPage"),
+);
 const DriverRoutePage = lazy(() => import("../features/field/DriverRoutePage"));
 
 export default function Dashboard(props) {
@@ -26,6 +29,10 @@ export default function Dashboard(props) {
     vehicles: { label: "Vehículos", component: <VehiclesPage /> },
     drivers: { label: "Conductores", component: <DriversPage /> },
     routes: { label: "Planificación de rutas", component: <RoutesPage /> },
+    indicators: {
+      label: "Indicadores de sostenibilidad",
+      component: <IndicatorsPage />,
+    },
     field: { label: "Mi ruta", component: <DriverRoutePage /> },
   };
   const activePage = pages[page] ?? pages.overview;

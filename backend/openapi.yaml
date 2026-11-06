@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
   title: WankaEcoLogística API
-  version: 0.3.0
-  description: API de los Sprints 1 y 2 para autenticación, CRUD operativo y optimización de rutas.
+  version: 0.4.0
+  description: API de operación logística, optimización, indicadores de sostenibilidad y reportes.
 servers:
   - url: http://localhost:3000
 security:
@@ -11,9 +11,16 @@ paths:
   /health:
     get:
       security: []
-      summary: Consultar el estado de la API
+      summary: Liveness de la API
       responses:
         "200": { description: API disponible }
+  /health/ready:
+    get:
+      security: []
+      summary: Readiness con verificación de base de datos
+      responses:
+        "200": { description: API y base disponibles }
+        "503": { description: Base de datos degradada o ausente }
   /api/auth/login:
     post:
       security: []
@@ -216,6 +223,42 @@ paths:
       summary: Calcular emisiones conservando valores fuente
       responses:
         "200": { description: Cálculo reproducible }
+  /api/indicators:
+    get:
+      summary: Consultar indicadores de sostenibilidad por periodo
+      parameters:
+        - in: query
+          name: from
+          required: true
+          schema: { type: string, format: date-time }
+        - in: query
+          name: to
+          required: true
+          schema: { type: string, format: date-time }
+      responses:
+        "200": { description: Indicadores consolidados o aviso sin datos }
+        "400": { description: Rango inválido o demasiado amplio }
+        "403": { description: Rol no autorizado }
+  /api/reports/export:
+    get:
+      summary: Exportar reporte operativo en CSV o PDF
+      parameters:
+        - in: query
+          name: from
+          required: true
+          schema: { type: string, format: date-time }
+        - in: query
+          name: to
+          required: true
+          schema: { type: string, format: date-time }
+        - in: query
+          name: format
+          required: true
+          schema: { type: string, enum: [csv, pdf] }
+      responses:
+        "200": { description: Archivo descargable }
+        "400": { description: Rango o volumen fuera de límite }
+        "403": { description: Solo ADMIN o AUDITOR }
 components:
   parameters:
     ResourceId:

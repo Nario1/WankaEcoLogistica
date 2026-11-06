@@ -88,6 +88,8 @@ test("optimiza pedidos, prioriza urgentes y conserva una secuencia completa", as
     [1, 2],
   );
   assert.ok(repository.saved.distanceKm >= 0);
+  assert.ok(repository.saved.baselineDistanceKm > 0);
+  assert.ok(repository.saved.emissionsKgCo2 > 0);
   assert.equal(repository.saved.routeId, id(70));
   assert.equal(repository.saved.vehicleId, id(81));
   assert.equal(
