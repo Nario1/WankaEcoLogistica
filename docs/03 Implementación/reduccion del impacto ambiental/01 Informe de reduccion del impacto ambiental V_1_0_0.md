@@ -8,6 +8,8 @@
 **Stack del informe:** MERN (MongoDB + Express + React + Node.js)
 **Trazabilidad:** Inspección 04 · Green IT · RNF eficiencia / ISO/IEC 25010  
 
+**Secuencia documental:** [Sprint 01](<../Sprint 01/01 Informe de estado del proyecto V_1_0_0.md>) → [Sprint 02](<../Sprint 02/01 Informe de estado del proyecto V_1_0_0.md>) → [Sprint 03](<../Sprint 03/01 Revisión del Sprint V_1_0_0.md>) → [Sprint 04](<../Sprint 04/01 Revisión del Sprint V_1_0_0.md>) → Reducción del impacto ambiental.
+
 > El informe sigue las ocho áreas MERN indicadas en la rúbrica.
 
 ## 1.1 Introducción y propósito del informe
