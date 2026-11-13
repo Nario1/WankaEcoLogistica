@@ -1,42 +1,117 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
-import {
-  CircleMarker,
-  MapContainer,
-  Polyline,
-  Popup,
-  TileLayer,
-  useMap,
-} from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { formatTime } from "../../utils/format";
 import { DISPATCH_DEPOT } from "../shared/depot";
 
 const HUANCAYO_CENTER = [-12.0651, -75.2049];
 
-function FitRoute({ positions }) {
-  const map = useMap();
-  useEffect(() => {
-    if (positions.length === 1) map.setView(positions[0], 15);
-    if (positions.length > 1) map.fitBounds(positions, { padding: [36, 36] });
-  }, [map, positions]);
-  return null;
+function popupHtml(title, lines) {
+  return `<strong>${title}</strong><br/>${lines.join("<br/>")}`;
 }
 
-FitRoute.propTypes = {
-  positions: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-};
-
 export default function RouteMap({ route, stops, navigation, loading }) {
-  const stopPositions = stops.map((stop) => [stop.latitude, stop.longitude]);
-  const depotPosition = [DISPATCH_DEPOT.latitude, DISPATCH_DEPOT.longitude];
-  const markerPositions = route ? [depotPosition, ...stopPositions] : [];
-  const roadPositions = navigation?.geometry ?? [];
-  const positions = roadPositions.length ? roadPositions : markerPositions;
+  const mapNodeRef = useRef(null);
+  const mapRef = useRef(null);
+  const layerRef = useRef(null);
+
+  useEffect(() => {
+    if (!mapNodeRef.current || mapRef.current) return undefined;
+
+    const map = L.map(mapNodeRef.current, {
+      center: HUANCAYO_CENTER,
+      zoom: 13,
+      scrollWheelZoom: true,
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+    layerRef.current = L.layerGroup().addTo(map);
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      layerRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layers = layerRef.current;
+    if (!map || !layers) return;
+
+    const nextStopPositions = stops.map((stop) => [
+      stop.latitude,
+      stop.longitude,
+    ]);
+    const nextDepot = [DISPATCH_DEPOT.latitude, DISPATCH_DEPOT.longitude];
+    const nextRoad = navigation?.geometry ?? [];
+    const nextMarkers = route ? [nextDepot, ...nextStopPositions] : [];
+    const nextPositions = nextRoad.length ? nextRoad : nextMarkers;
+
+    layers.clearLayers();
+
+    if (nextRoad.length > 1) {
+      L.polyline(nextRoad, {
+        color: "#087f5b",
+        weight: 5,
+        opacity: 0.8,
+      }).addTo(layers);
+    }
+
+    if (route) {
+      L.circleMarker(nextDepot, {
+        radius: 15,
+        color: "#ffffff",
+        weight: 3,
+        fillColor: "#d84315",
+        fillOpacity: 1,
+      })
+        .bindPopup(
+          popupHtml(DISPATCH_DEPOT.name, [
+            "Inicio de todas las rutas",
+            `${DISPATCH_DEPOT.latitude}, ${DISPATCH_DEPOT.longitude}`,
+          ]),
+        )
+        .addTo(layers);
+    }
+
+    stops.forEach((stop, index) => {
+      L.circleMarker(nextStopPositions[index], {
+        radius: 13,
+        color: "#ffffff",
+        weight: 3,
+        fillColor: "#087f5b",
+        fillOpacity: 1,
+      })
+        .bindPopup(
+          popupHtml(`Parada ${stop.deliveryOrder}`, [
+            stop.productName ?? "",
+            stop.address ?? "",
+            `${stop.weightKg} kg · ${formatTime(stop.windowStart)}-${formatTime(stop.windowEnd)}`,
+          ]),
+        )
+        .addTo(layers);
+    });
+
+    if (nextPositions.length === 1) {
+      map.setView(nextPositions[0], 15);
+    } else if (nextPositions.length > 1) {
+      map.fitBounds(nextPositions, { padding: [36, 36] });
+    } else {
+      map.setView(HUANCAYO_CENTER, 13);
+    }
+
+    map.invalidateSize();
+  }, [navigation, route, stops]);
+
   return (
     <Box sx={{ mt: 3 }}>
       <Stack spacing={0.5} sx={{ mb: 1.5 }}>
@@ -51,6 +126,7 @@ export default function RouteMap({ route, stops, navigation, loading }) {
         )}
       </Stack>
       <Box
+        ref={mapNodeRef}
         role="region"
         aria-label="Mapa de la ruta"
         sx={{
@@ -60,70 +136,7 @@ export default function RouteMap({ route, stops, navigation, loading }) {
           border: 1,
           borderColor: "divider",
         }}
-      >
-        <MapContainer
-          center={positions[0] ?? HUANCAYO_CENTER}
-          zoom={13}
-          scrollWheelZoom
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <FitRoute positions={positions} />
-          {roadPositions.length > 1 && (
-            <Polyline
-              positions={roadPositions}
-              pathOptions={{ color: "#087f5b", weight: 5, opacity: 0.8 }}
-            />
-          )}
-          {route && (
-            <CircleMarker
-              center={depotPosition}
-              radius={15}
-              pathOptions={{
-                color: "#ffffff",
-                weight: 3,
-                fillColor: "#d84315",
-                fillOpacity: 1,
-              }}
-            >
-              <Popup>
-                <strong>{DISPATCH_DEPOT.name}</strong>
-                <br />
-                Inicio de todas las rutas
-                <br />
-                {DISPATCH_DEPOT.latitude}, {DISPATCH_DEPOT.longitude}
-              </Popup>
-            </CircleMarker>
-          )}
-          {stops.map((stop, index) => (
-            <CircleMarker
-              key={stop.id}
-              center={stopPositions[index]}
-              radius={13}
-              pathOptions={{
-                color: "#ffffff",
-                weight: 3,
-                fillColor: "#087f5b",
-                fillOpacity: 1,
-              }}
-            >
-              <Popup>
-                <strong>Parada {stop.deliveryOrder}</strong>
-                <br />
-                {stop.productName}
-                <br />
-                {stop.address}
-                <br />
-                {stop.weightKg} kg · {formatTime(stop.windowStart)}-
-                {formatTime(stop.windowEnd)}
-              </Popup>
-            </CircleMarker>
-          ))}
-        </MapContainer>
-      </Box>
+      />
       {route && navigation && (
         <Alert severity={navigation.trafficConsidered ? "success" : "info"}>
           Tiempo estimado de viaje: {navigation.durationMinutes} min

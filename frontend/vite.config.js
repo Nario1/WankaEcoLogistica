@@ -3,6 +3,9 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    dedupe: ["react", "react-dom"],
+  },
   server: {
     port: 5174,
     strictPort: true,
@@ -14,7 +17,9 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes("node_modules/@mui")) return "mui";
           if (id.includes("node_modules/leaflet")) return "leaflet";
-          if (id.includes("node_modules/react")) return "react-vendor";
+          if (/node_modules[/\\](react|react-dom)[/\\]/.test(id)) {
+            return "react-vendor";
+          }
           return undefined;
         },
       },

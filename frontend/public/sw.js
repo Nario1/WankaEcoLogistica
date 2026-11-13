@@ -1,5 +1,5 @@
 /* WankaEcoLogística — service worker EN-004 */
-const SHELL_CACHE = "wanka-shell-v1";
+const SHELL_CACHE = "wanka-shell-v2";
 const SHELL_ASSETS = [
   "/",
   "/index.html",
@@ -31,11 +31,24 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+function shouldBypassCache(url) {
+  return (
+    url.pathname.startsWith("/src/") ||
+    url.pathname.startsWith("/@") ||
+    url.pathname.startsWith("/node_modules/") ||
+    url.pathname.includes(".vite") ||
+    url.searchParams.has("t") ||
+    url.searchParams.has("v")
+  );
+}
+
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
+  if (shouldBypassCache(url)) return;
+
   const isApi = url.pathname.startsWith("/api") || url.port === "3000";
   if (isApi) {
     event.respondWith(
@@ -46,18 +59,16 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Shell y assets estáticos: red primero; caché solo como respaldo offline.
   event.respondWith(
-    caches.match(request).then((cached) => {
-      const network = fetch(request)
-        .then((response) => {
-          if (response.ok && url.origin === self.location.origin) {
-            const copy = response.clone();
-            caches.open(SHELL_CACHE).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || network;
-    }),
+    fetch(request)
+      .then((response) => {
+        if (response.ok && url.origin === self.location.origin) {
+          const copy = response.clone();
+          caches.open(SHELL_CACHE).then((cache) => cache.put(request, copy));
+        }
+        return response;
+      })
+      .catch(() => caches.match(request)),
   );
 });
