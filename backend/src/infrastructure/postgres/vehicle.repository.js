@@ -8,10 +8,20 @@ export class PgVehicleRepository {
     this.pool = pool;
   }
 
-  async list() {
-    return (
-      await this.pool.query(`SELECT ${columns} FROM vehiculos ORDER BY placa`)
-    ).rows;
+  async list({ limit, offset } = {}) {
+    if (limit == null) {
+      return (
+        await this.pool.query(`SELECT ${columns} FROM vehiculos ORDER BY placa`)
+      ).rows;
+    }
+    const [items, countResult] = await Promise.all([
+      this.pool.query(
+        `SELECT ${columns} FROM vehiculos ORDER BY placa LIMIT $1 OFFSET $2`,
+        [limit, offset],
+      ),
+      this.pool.query(`SELECT COUNT(*)::int AS total FROM vehiculos`),
+    ]);
+    return { items: items.rows, total: countResult.rows[0].total };
   }
 
   async findById(id) {

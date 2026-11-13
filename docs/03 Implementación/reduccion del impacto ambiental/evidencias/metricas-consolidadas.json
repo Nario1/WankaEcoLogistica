@@ -1,0 +1,48 @@
+{
+  "model": "SWDM v4 simplificado E = GB * 0.815 kWh/GB * 442 gCO2e/kWh",
+  "baselineMobile": {
+    "formFactor": "mobile",
+    "performance": 94,
+    "accessibility": 100,
+    "fcpMs": 1918,
+    "lcpMs": 2208,
+    "tbtMs": 218,
+    "cls": 0,
+    "bytes": 169177,
+    "transferKiB": 165.2,
+    "kwh": 0.000128,
+    "co2eGrams": 0.057
+  },
+  "afterMobile": {
+    "formFactor": "mobile",
+    "performance": 91,
+    "accessibility": 100,
+    "fcpMs": 2362,
+    "lcpMs": 2491,
+    "tbtMs": 209,
+    "cls": 0,
+    "bytes": 240540,
+    "transferKiB": 234.9,
+    "kwh": 0.000183,
+    "co2eGrams": 0.081
+  },
+  "afterDesktop": {
+    "formFactor": "desktop",
+    "performance": 100,
+    "accessibility": 100,
+    "fcpMs": 559,
+    "lcpMs": 600,
+    "tbtMs": 25,
+    "cls": 0,
+    "bytes": 240540,
+    "transferKiB": 234.9,
+    "kwh": 0.000183,
+    "co2eGrams": 0.081
+  },
+  "annualProjection": {
+    "visits": 500000,
+    "beforeKg": 28.5,
+    "afterKg": 40.5,
+    "savedKg": -12
+  }
+}

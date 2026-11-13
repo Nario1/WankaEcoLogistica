@@ -74,6 +74,20 @@ Cada sprint conserva sus cuatro artefactos: informe, impedimentos, revisión y r
 - [OWASP Top 10 2025](<03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
 - [Accesibilidad WCAG](<03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
 
+### Sprint 04 — Sostenibilidad operativa y recuperación (EP-04)
+
+- [Revisión del sprint](<03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva del sprint](<03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
+- [Recuperación de servicio EN-003](<03 Implementación/Sprint 04/03 Recuperación de servicio EN-003 V_1_0_0.md>)
+
+### Reducción del impacto ambiental (Inspección 04 — Green IT)
+
+Carpeta consignada por el docente, al mismo nivel que Sprint 01–04:
+
+- [Informe de reducción del impacto ambiental](<03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>)
+- [Estándares de ingeniería de software (Green IT)](<03 Implementación/reduccion del impacto ambiental/02 Estandares Ingeniería de software V_1_0_0.md>)
+- [Evidencias Lighthouse / SWDM](<03 Implementación/reduccion del impacto ambiental/evidencias/>)
+
 ## Referencias técnicas
 
 - [README general](../README.md)

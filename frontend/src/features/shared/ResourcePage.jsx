@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CircularProgress from "@mui/material/CircularProgress";
+import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -14,8 +15,13 @@ export default function ResourcePage({
   loading,
   actionLabel,
   onAction,
+  pagination,
+  onPageChange,
+  setPage,
   children,
 }) {
+  const totalPages = pagination?.totalPages ?? 0;
+  const changePage = onPageChange ?? setPage;
   return (
     <Box sx={{ width: "100%", maxWidth: 1700 }}>
       <Stack
@@ -49,6 +55,20 @@ export default function ResourcePage({
         ) : (
           children
         )}
+        {totalPages > 1 && changePage ? (
+          <Stack alignItems="center" mt={2}>
+            <Pagination
+              color="primary"
+              page={pagination.page}
+              count={totalPages}
+              onChange={(_event, value) => changePage(value)}
+              aria-label="Paginación de resultados"
+            />
+            <Typography variant="caption" color="text.secondary" mt={1}>
+              {pagination.total} registros · {pagination.limit} por página
+            </Typography>
+          </Stack>
+        ) : null}
       </Card>
     </Box>
   );
@@ -61,5 +81,13 @@ ResourcePage.propTypes = {
   loading: PropTypes.bool,
   actionLabel: PropTypes.string,
   onAction: PropTypes.func,
+  pagination: PropTypes.shape({
+    total: PropTypes.number,
+    page: PropTypes.number,
+    limit: PropTypes.number,
+    totalPages: PropTypes.number,
+  }),
+  onPageChange: PropTypes.func,
+  setPage: PropTypes.func,
   children: PropTypes.node.isRequired,
 };

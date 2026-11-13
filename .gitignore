@@ -9,6 +9,8 @@ dist/
 .sonar/
 coverage/
 lighthouse-*.json
+!docs/**/evidencias/lighthouse-*.json
+!docs/**/evidencias/lighthouse-*.report.json
 backend/coverage/
 frontend/coverage/
 backend/backups/*.json

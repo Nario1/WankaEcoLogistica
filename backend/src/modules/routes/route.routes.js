@@ -18,8 +18,8 @@ export function createRouteRouter({ routeService, authenticate }) {
   router.get(
     "/",
     authorize(ROLES.ADMIN, ROLES.OPERATOR),
-    asyncHandler(async (_request, response) =>
-      response.json({ data: await routeService.list() }),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await routeService.list(request.query) }),
     ),
   );
   router.get(

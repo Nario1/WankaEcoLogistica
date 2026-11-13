@@ -12,11 +12,22 @@ export class PgOrderRepository {
     this.pool = pool;
   }
 
-  async list() {
-    const result = await this.pool.query(
-      `SELECT ${selectColumns} FROM pedidos ORDER BY creado_en DESC`,
-    );
-    return result.rows;
+  async list({ limit, offset } = {}) {
+    if (limit == null) {
+      const result = await this.pool.query(
+        `SELECT ${selectColumns} FROM pedidos ORDER BY creado_en DESC`,
+      );
+      return result.rows;
+    }
+    const [items, countResult] = await Promise.all([
+      this.pool.query(
+        `SELECT ${selectColumns} FROM pedidos
+         ORDER BY creado_en DESC LIMIT $1 OFFSET $2`,
+        [limit, offset],
+      ),
+      this.pool.query(`SELECT COUNT(*)::int AS total FROM pedidos`),
+    ]);
+    return { items: items.rows, total: countResult.rows[0].total };
   }
 
   async findById(id) {

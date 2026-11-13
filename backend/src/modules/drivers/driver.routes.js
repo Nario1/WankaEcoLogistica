@@ -8,8 +8,8 @@ export function createDriverRouter({ driverService, authenticate }) {
   router.use(authenticate, authorize(ROLES.ADMIN, ROLES.OPERATOR));
   router.get(
     "/",
-    asyncHandler(async (_request, response) =>
-      response.json({ data: await driverService.list() }),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await driverService.list(request.query) }),
     ),
   );
   router.get(

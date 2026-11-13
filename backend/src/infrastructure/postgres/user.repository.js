@@ -50,11 +50,29 @@ export class PgUserRepository {
     return mapUser(firstRow(result));
   }
 
-  async listDrivers() {
-    const result = await this.pool.query(
-      `SELECT * FROM usuarios WHERE rol = 'DRIVER' ORDER BY nombre ASC`,
-    );
-    return result.rows.map(mapUser);
+  async listDrivers({ limit, offset } = {}) {
+    const driverColumns = `usuario_id, email, nombre, password_hash, rol, estado,
+      intentos_fallidos, bloqueado_hasta`;
+    if (limit == null) {
+      const result = await this.pool.query(
+        `SELECT ${driverColumns} FROM usuarios WHERE rol = 'DRIVER' ORDER BY nombre ASC`,
+      );
+      return result.rows.map(mapUser);
+    }
+    const [items, countResult] = await Promise.all([
+      this.pool.query(
+        `SELECT ${driverColumns} FROM usuarios
+         WHERE rol = 'DRIVER' ORDER BY nombre ASC LIMIT $1 OFFSET $2`,
+        [limit, offset],
+      ),
+      this.pool.query(
+        `SELECT COUNT(*)::int AS total FROM usuarios WHERE rol = 'DRIVER'`,
+      ),
+    ]);
+    return {
+      items: items.rows.map(mapUser),
+      total: countResult.rows[0].total,
+    };
   }
 
   async updateDriver(id, changes) {

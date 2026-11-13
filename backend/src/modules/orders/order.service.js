@@ -1,5 +1,6 @@
 import { conflict, notFound } from "../../shared/errors.js";
 import { requireUuid } from "../../shared/validation.js";
+import { buildPage, parsePagination } from "../../shared/pagination.js";
 import { validateOrder, validateOrderUpdate } from "./order.validation.js";
 
 export class OrderService {
@@ -8,8 +9,10 @@ export class OrderService {
     this.auditRepository = auditRepository;
   }
 
-  list() {
-    return this.orderRepository.list();
+  async list(query) {
+    const pagination = parsePagination(query);
+    const result = await this.orderRepository.list(pagination);
+    return buildPage({ ...result, ...pagination });
   }
 
   async get(id) {

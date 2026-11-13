@@ -8,6 +8,7 @@ import {
   requireUuid,
   requireEnum,
 } from "../../shared/validation.js";
+import { buildPage, parsePagination } from "../../shared/pagination.js";
 
 export class DriverService {
   constructor({ userRepository, auditRepository }) {
@@ -15,9 +16,14 @@ export class DriverService {
     this.auditRepository = auditRepository;
   }
 
-  async list() {
-    const drivers = await this.userRepository.listDrivers();
-    return drivers.map((driver) => this.toPublicDriver(driver));
+  async list(query) {
+    const pagination = parsePagination(query);
+    const result = await this.userRepository.listDrivers(pagination);
+    return buildPage({
+      items: result.items.map((driver) => this.toPublicDriver(driver)),
+      total: result.total,
+      ...pagination,
+    });
   }
 
   async create(input, actorId) {

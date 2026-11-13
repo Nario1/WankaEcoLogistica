@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import { createAuthenticate } from "./modules/auth/auth.middleware.js";
 import { createAuthRouter } from "./modules/auth/auth.routes.js";
 import { createOrderRouter } from "./modules/orders/order.routes.js";
@@ -18,9 +19,23 @@ export function createApp({ config, services, pool = null }) {
   const authenticate = createAuthenticate(config);
 
   app.disable("x-powered-by");
+  app.set("etag", "weak");
   app.use(helmet());
+  // Gzip/deflate para JSON > 1 KB (equivalente operativo a la pauta Brotli/Gzip de Green IT).
+  app.use(compression({ threshold: 1024 }));
   app.use(cors({ origin: config.corsOrigin, credentials: false }));
   app.use(express.json({ limit: "100kb" }));
+  app.use((request, response, next) => {
+    if (request.method === "GET") {
+      response.setHeader(
+        "Cache-Control",
+        "private, max-age=0, must-revalidate",
+      );
+    } else {
+      response.setHeader("Cache-Control", "no-store");
+    }
+    next();
+  });
 
   app.get("/health", (_request, response) =>
     response.json({

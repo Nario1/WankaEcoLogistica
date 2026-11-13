@@ -24,9 +24,11 @@ Los incrementos documentados de los Sprints 01, 2 y 3 están disponibles para de
 - Trazado por calles reales mediante TomTom Routing o OSRM/OpenStreetMap.
 - Cálculo reproducible de emisiones.
 
-Permanecen planificados para sprints posteriores la reoptimización por incidencias, los indicadores consolidados y los reportes exportables.
-
 El Sprint 03 agrega el adaptador cartográfico, la consulta **Mi ruta** para el conductor autenticado y una PWA que conserva la última ruta cargada. El funcionamiento sin conexión cubre la consulta cacheada; no implica que las operaciones de administración o planificación estén disponibles offline. El alcance, la demostración, las métricas de calidad, seguridad y accesibilidad, los impedimentos y sus límites de evidencia se detallan en el [paquete documental del Sprint 03](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>).
+
+El Sprint 04 cierra EP-04 con indicadores (US-006), exportación de reportes (US-008) y recuperación de servicio (EN-003). El paquete documental está en [Sprint 04](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>). La Inspección 04 Green IT (ocho optimizaciones PERN, Lighthouse/SWDM y evidencias) se entrega en la carpeta consignada [reduccion del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>).
+
+En Jira, el proyecto **EC** (épicas, historias, habilitadores y sprints 1–4) figura en estado **Listo** / **closed**.
 
 ## Historias implementadas
 
@@ -43,8 +45,12 @@ El Sprint 03 agrega el adaptador cartográfico, la consulta **Mi ruta** para el 
 | 3 | EN-005 | Adaptador de mapas/tráfico (OSRM, TomTom, stub) desacoplado del dominio. |
 | 3 | US-005 | Conductor consulta su ruta asignada en el mapa (**Mi ruta**). |
 | 3 | EN-004 | PWA offline con caché de última ruta y sincronización al reconectar. |
+| 4 | US-006 | Consultar indicadores de CO₂, ahorro de distancia y nivel de servicio. |
+| 4 | US-008 | Exportar reportes CSV/PDF por periodo autorizado. |
+| 4 | EN-003 | Recuperación de servicio con respaldo, monitoreo y RTO/RPO. |
+| 4 | Green IT | Ocho optimizaciones PERN, Lighthouse/SWDM y estándares documentados. |
 
-US-006 a US-008 pertenecen a sprints posteriores y no se declaran como terminadas. El backlog y la priorización de riesgos se explican en [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>) y [Registro de riesgos](<docs/02 Planificación/03 Registro de riesgos V_1_0_0.md>).
+US-007 está **Listo** en Jira (EC-11). El detalle del backlog y riesgos se mantiene en [Artefactos Jira](<docs/02 Planificación/02 Artefactos Jira V_1_0_0.md>) y [Registro de riesgos](<docs/02 Planificación/03 Registro de riesgos V_1_0_0.md>).
 
 ## Arquitectura y tecnologías
 
@@ -69,7 +75,10 @@ WankaEcoLogistica/
 │   └── 03 Implementación/
 │       ├── Sprint 01/            # Base operativa y seguridad
 │       ├── Sprint 02/            # Optimización, evidencia y retrospectiva
-│       └── Sprint 03/           # Revisión, retrospectiva, calidad, seguridad y accesibilidad
+│       ├── Sprint 03/            # Revisión, retrospectiva, calidad, seguridad y accesibilidad
+│       ├── Sprint 04/            # EP-04: indicadores, reportes y EN-003
+│       ├── reduccion del impacto ambiental/  # Inspección 04 Green IT (+ evidencias)
+│       └── evidencias/           # Evidencias transversales (cobertura, Sonar, etc.)
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
 │   ├── scripts/                 # Migración y creación del administrador
@@ -316,3 +325,15 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [Calidad de código](<docs/03 Implementación/Sprint 03/03 Calidad de código V_1_0_0.md>)
 - [OWASP Top 10 2025](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
 - [Accesibilidad WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
+
+### Sprint 04
+
+- [Revisión del sprint](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva del sprint](<docs/03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
+- [Recuperación de servicio EN-003](<docs/03 Implementación/Sprint 04/03 Recuperación de servicio EN-003 V_1_0_0.md>)
+
+### Reducción del impacto ambiental (Inspección 04)
+
+- [Informe de reducción del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>)
+- [Estándares Green IT](<docs/03 Implementación/reduccion del impacto ambiental/02 Estandares Ingeniería de software V_1_0_0.md>)
+- [Evidencias Lighthouse / SWDM](<docs/03 Implementación/reduccion del impacto ambiental/evidencias/>)

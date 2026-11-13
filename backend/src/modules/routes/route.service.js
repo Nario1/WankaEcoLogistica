@@ -10,6 +10,7 @@ import {
   requireEnum,
   requireUuid,
 } from "../../shared/validation.js";
+import { buildPage, parsePagination } from "../../shared/pagination.js";
 import { DISPATCH_DEPOT } from "../optimization/optimization.service.js";
 
 const MAX_DRIVING_HOURS = 8;
@@ -29,8 +30,10 @@ export class RouteService {
     this.roadRoutingClient = roadRoutingClient;
   }
 
-  list() {
-    return this.routeRepository.list();
+  async list(query) {
+    const pagination = parsePagination(query);
+    const result = await this.routeRepository.list(pagination);
+    return buildPage({ ...result, ...pagination });
   }
 
   listMine(driverId) {

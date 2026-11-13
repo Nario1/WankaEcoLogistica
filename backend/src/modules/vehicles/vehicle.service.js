@@ -1,5 +1,6 @@
 import { conflict, notFound } from "../../shared/errors.js";
 import { requireUuid } from "../../shared/validation.js";
+import { buildPage, parsePagination } from "../../shared/pagination.js";
 import {
   validateVehicle,
   validateVehicleUpdate,
@@ -11,8 +12,10 @@ export class VehicleService {
     this.auditRepository = auditRepository;
   }
 
-  list() {
-    return this.vehicleRepository.list();
+  async list(query) {
+    const pagination = parsePagination(query);
+    const result = await this.vehicleRepository.list(pagination);
+    return buildPage({ ...result, ...pagination });
   }
 
   async get(id) {

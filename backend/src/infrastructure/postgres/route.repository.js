@@ -10,14 +10,25 @@ export class PgRouteRepository {
     this.pool = pool;
   }
 
-  async list() {
-    return (
-      await this.pool.query(
-        `SELECT ${columns} FROM rutas r
+  async list({ limit, offset } = {}) {
+    const baseFrom = `FROM rutas r
        LEFT JOIN usuarios u ON u.usuario_id = r.conductor_id
-       JOIN vehiculos v ON v.vehiculo_id = r.vehiculo_id ORDER BY r.inicio DESC`,
-      )
-    ).rows;
+       JOIN vehiculos v ON v.vehiculo_id = r.vehiculo_id`;
+    if (limit == null) {
+      return (
+        await this.pool.query(
+          `SELECT ${columns} ${baseFrom} ORDER BY r.inicio DESC`,
+        )
+      ).rows;
+    }
+    const [items, countResult] = await Promise.all([
+      this.pool.query(
+        `SELECT ${columns} ${baseFrom} ORDER BY r.inicio DESC LIMIT $1 OFFSET $2`,
+        [limit, offset],
+      ),
+      this.pool.query(`SELECT COUNT(*)::int AS total FROM rutas`),
+    ]);
+    return { items: items.rows, total: countResult.rows[0].total };
   }
 
   async listByDriver(driverId) {

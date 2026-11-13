@@ -10,8 +10,8 @@ export function createOrderRouter({ orderService, authenticate }) {
   router.get(
     "/",
     authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.AUDITOR),
-    asyncHandler(async (_request, response) =>
-      response.json({ data: await orderService.list() }),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await orderService.list(request.query) }),
     ),
   );
   router.get(

@@ -9,8 +9,8 @@ export function createVehicleRouter({ vehicleService, authenticate }) {
   router.get(
     "/",
     authorize(ROLES.ADMIN, ROLES.OPERATOR, ROLES.AUDITOR),
-    asyncHandler(async (_request, response) =>
-      response.json({ data: await vehicleService.list() }),
+    asyncHandler(async (request, response) =>
+      response.json({ data: await vehicleService.list(request.query) }),
     ),
   );
   router.get(

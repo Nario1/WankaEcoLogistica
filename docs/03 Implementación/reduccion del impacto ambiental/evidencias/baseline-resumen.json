@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-11-12T22:00:00.000Z",
+  "url": "http://127.0.0.1:5179/",
+  "formFactor": "mobile",
+  "performanceScore": 94,
+  "accessibilityScore": 100,
+  "fcp": "1.9 s",
+  "lcp": "2.2 s",
+  "tbt": "220 ms",
+  "cls": "0",
+  "transfer": "165 KiB",
+  "notes": "Baseline previo a compression, paginación y cabeceras de caché."
+}

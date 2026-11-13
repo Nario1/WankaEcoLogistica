@@ -1,9 +1,12 @@
 # EN-003 — Recuperación de servicio
 
+[← Retrospectiva](<02 Retrospectiva del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Green IT →](<../reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>)
+
 **Proyecto:** WankaEcoLogística Huancayo  
 **Trazabilidad:** RNF-003, EC-15  
 **Versión:** 1.0.0  
 **Fecha:** 06/11/2026  
+**Sprint:** 04  
 
 ## Objetivo
 
