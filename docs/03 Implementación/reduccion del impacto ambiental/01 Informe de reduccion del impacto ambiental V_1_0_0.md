@@ -1,14 +1,14 @@
-# Informe de reducción del impacto ambiental y optimización PERN
+# Informe de reducción del impacto ambiental y optimización MERN
 
 [← Sprint 04](<../Sprint 04/01 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Estándares →](<02 Estandares Ingeniería de software V_1_0_0.md>)
 
 **Proyecto:** WankaEcoLogística Huancayo  
 **Versión:** 1.0.0  
 **Fecha:** 12/11/2026  
-**Stack real:** PERN (PostgreSQL + Express + React + Node.js)  
+**Stack del informe:** MERN (MongoDB + Express + React + Node.js)
 **Trazabilidad:** Inspección 04 · Green IT · RNF eficiencia / ISO/IEC 25010  
 
-> La plantilla institucional usa MERN/MongoDB. Este entregable traduce las mismas ocho áreas a **PERN/PostgreSQL**, conservando el orden, el rigor y las evidencias exigidas por la rúbrica.
+> El informe sigue las ocho áreas MERN indicadas en la rúbrica.
 
 ## 1.1 Introducción y propósito del informe
 
@@ -17,7 +17,7 @@ Este informe documenta la auditoría, refactorización y optimización de rendim
 Propósitos:
 
 1. Identificar cuellos de botella en la arquitectura full-stack.
-2. Aplicar refactorizaciones en **ocho áreas** estratégicas (equivalentes PERN).
+2. Aplicar refactorizaciones en **ocho áreas** estratégicas MERN.
 3. Medir el impacto con Google Lighthouse y el modelo SWDM v4.
 4. Validar la reducción de huella de carbono digital sin romper la funcionalidad.
 
@@ -25,7 +25,7 @@ Propósitos:
 
 ![Pantalla de login WankaEcoLogística](../../../evidencias/pantalla-login.png)
 
-## 1.2 Diagnóstico inicial del proyecto PERN (métricas previas)
+## 1.2 Diagnóstico inicial del proyecto MERN (métricas previas)
 
 Antes de las intervenciones Green IT:
 
@@ -131,7 +131,7 @@ Evidencia UI autenticada: **25 registros · 12 por página**.
 <link rel="preload" href="/pwa-icon.svg" as="image" type="image/svg+xml" />
 ```
 
-> Equivalente PERN a WebP/AVIF/`<picture>`: el panel operativo no usa hero raster; el asset crítico es vectorial.
+> El panel usa un asset vectorial para su icono principal.
 
 ### 4. Carga diferida (lazy loading) y code splitting
 
@@ -234,7 +234,7 @@ app.use((request, response, next) => {
 headers: { "Cache-Control": "public, max-age=31536000, immutable" }
 ```
 
-> Equivalente PERN a “ETag + React Query”: revalidación HTTP en API y caché inmutable de chunks hasheados en el cliente.
+> La política combina revalidación HTTP en API y caché inmutable de chunks hasheados en el cliente.
 
 ### 8. Compresión Gzip en Express
 
