@@ -11,86 +11,102 @@
 
 ### ISO/IEC 25010 (calidad del producto de software)
 
-| Subcaracterística | Aplicación en Wanka |
+Las refactorizaciones Green IT se justifican explícitamente en:
+
+| Subcaracterística | Refactorización aplicada en Wanka |
 |---|---|
-| Eficiencia de desempeño — comportamiento temporal | Compresión Gzip, paginación, índices SQL, code splitting |
-| Eficiencia — utilización de recursos | Proyecciones de columnas, límite 50 filas, SVG en lugar de raster pesado |
+| Eficiencia de desempeño — comportamiento temporal | Compresión Gzip, code splitting, ETag/`Cache-Control`, FCP/LCP/TBT desktop sobresalientes |
+| Eficiencia — utilización de recursos | SELECT explícito, paginación 12, índices SQL, SVG en lugar de raster pesado |
+| Eficiencia — capacidad | Límite máx. 50 filas, payloads JSON comprimidos |
 | Mantenibilidad — modularidad | `React.lazy`, módulos `ops`/`sustainability`, repositorios PostgreSQL |
 | Mantenibilidad — analizabilidad | Dependencias mínimas, tests de paginación y recovery |
 
-**Evidencia de eficiencia (Lighthouse ANTES):**
+**Evidencia ISO (DESPUÉS desktop — Performance 100):**
 
-![Lighthouse ANTES — ISO 25010 desempeño](./evidencias/lighthouse-antes.png)
+![Lighthouse desktop DESPUÉS](./evidencias/lighthouse-despues-desktop.png)
 
 ### Principios Green Software Foundation (GSF)
 
-1. **Eficiencia de carbono:** menos bytes por visita y payloads acotados.  
-2. **Eficiencia energética:** menos CPU en serialización JSON y render de listas enormes.  
-3. **Eficiencia de hardware:** bundles diferidos (Leaflet solo en mapa).  
-4. **Medición (SCI-like):** Lighthouse + SWDM v4 versionados en `docs/03 Implementación/reduccion del impacto ambiental/evidencias/`.
-
-**Evidencia de medición (resumen visual ANTES/DESPUÉS):**
+1. **Eficiencia de carbono:** menos bytes transferidos vs anti-patrón 8.4 MB; proyección de ahorro ≈ 1034.5 kg CO₂e/año.  
+2. **Eficiencia energética:** menos CPU en serialización JSON y render de listas paginadas.  
+3. **Eficiencia de hardware:** Leaflet diferido; chunks MUI/React separados.  
+4. **Medición (SCI-like):** Lighthouse + SWDM v4 versionados en `evidencias/`.
 
 ![Resumen visual Lighthouse Green IT](./evidencias/resumen-visual-lighthouse.png)
 
 ### W3C Web Sustainability Guidelines (WSG 1.0)
 
-| Pauta | Cumplimiento |
+| Pauta | Cumplimiento en Wanka |
 |---|---|
-| 1.2 Media | SVG / sin PNG grandes |
-| 2.4 Arquitectura y caché | Lazy routes, ETag, Cache-Control, chunks Vite |
+| 1.2 Media | SVG / sin PNG grandes > 200 KB |
+| 2.4 Arquitectura y caché | Lazy routes, ETag, Cache-Control, chunks Vite inmutables |
 | 3.1 Transferencia de red | Gzip, paginación, SELECT explícito |
-
-**Evidencia WSG (Lighthouse DESPUÉS):**
-
-![Lighthouse DESPUÉS — transferencia y rendimiento](./evidencias/lighthouse-despues.png)
 
 ## 2.2 Buenas prácticas y guía de desarrollo verde PERN
 
 ### Normas backend (Node / Express / PostgreSQL)
 
-1. Todo listado público usa `page`/`limit` (default 12, máx. 50).  
-2. Consultas de listado proyectan columnas necesarias (sin `SELECT *`).  
+1. Prohibido listados públicos sin `page`/`limit` (default 12, máx. 50).  
+2. Consultas de listado proyectan columnas necesarias (equivalente a `.select()` / sin `SELECT *`).  
 3. Middleware `compression` obligatorio para JSON > 1 KB.  
 4. Índices para columnas de `ORDER BY` frecuentes.  
 5. Clean Code / SOLID / DRY / YAGNI: servicios delgados, repositorios SQL, sin abstracciones especulativas.
 
 ### Normas frontend (React / Vite / MUI)
 
-1. Rutas/módulos secundarios con `React.lazy` + `Suspense`.  
-2. Prohibido añadir `moment`/`lodash` sin justificación de Bundlephobia.  
-3. Imágenes raster > 200 KB deben convertirse a WebP/AVIF o SVG.  
-4. Listados consumen la API paginada; no forzar `limit` > 50 salvo casos justificados.  
-5. Assets hasheados con caché inmutable en preview/producción.
+1. Módulos secundarios con `React.lazy` + `Suspense`.  
+2. Prohibido añadir `moment`/`lodash` sin justificación Bundlephobia.  
+3. Imágenes raster > 200 KB → WebP/AVIF o SVG.  
+4. Listados consumen API paginada.  
+5. Assets hasheados con caché inmutable (`max-age=31536000`).
 
-**Pantalla de referencia (login liviano, sin raster pesado):**
+![Login liviano](./evidencias/pantalla-login.png)
 
-![Login WankaEcoLogística — asset liviano](./evidencias/pantalla-login.png)
+![Pedidos autenticado — 12 por página](./evidencias/pantalla-pedidos.png)
 
-**Proceso autenticado con paginación obligatoria (Pedidos):**
+### Integración CI/CD verde (GitHub Actions)
 
-![Pedidos autenticado — 12 registros por página](./evidencias/pantalla-pedidos.png)
+Archivo [`.github/workflows/green-audit.yml`](../../../.github/workflows/green-audit.yml):
 
-### CI/CD verde
+```yaml
+name: Green IT & Performance Audit
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.14.0
+          lhci autorun --config=./lighthouserc.cjs || true
+```
 
-Workflow [`.github/workflows/green-audit.yml`](../../../.github/workflows/green-audit.yml):
+## 2.3 Matriz de mapeo directo: estándares vs. optimizaciones PERN
 
-- Build del frontend.
-- Ejecución de `@lhci/cli` con `frontend/lighthouserc.cjs`.
-- Umbrales de performance/accesibilidad en modo `warn` para no bloquear el MVP académico ante variación de runners.
-
-## 2.3 Matriz de mapeo: optimizaciones ↔ estándares
-
-| # | Optimización PERN | ISO/IEC 25010 | GSF | W3C WSG 1.0 |
+| # | Optimización técnica aplicada | ISO/IEC 25010 | Principio GSF | Lineamiento W3C WSG 1.0 |
 |---|---|---|---|---|
-| 1 | SELECT explícito + índices | Utilización de recursos | Eficiencia de hardware | 3.1 Network |
-| 2 | Paginación 12 | Capacidad | Eficiencia energética | 2.1 UX efficiency |
-| 3 | SVG / sin raster pesado | Comportamiento temporal | Eficiencia de carbono | 1.2 Media |
-| 4 | React.lazy + chunks | Modularidad | Eficiencia de hardware | 2.4 Architecture |
-| 5 | Deps mínimas / APIs nativas | Analizabilidad | Eficiencia energética | 2.2 Libraries |
-| 6 | Icons empaquetados / menos HTTP | Comportamiento temporal | Eficiencia de carbono | 3.2 HTTP requests |
-| 7 | Cache-Control + ETag | Comportamiento temporal | Eficiencia energética | 2.4 Caching |
-| 8 | compression Gzip | Capacidad | Eficiencia de carbono | 3.1 Network |
+| 1 | PostgreSQL: SELECT explícito + índices | Eficiencia — utilización de recursos | Eficiencia de hardware | 3.1 Network Data Transfer |
+| 2 | Paginación Limit/Offset (12) | Eficiencia — capacidad | Eficiencia energética | 2.1 UX Efficiency |
+| 3 | Assets: SVG / sin raster pesado | Eficiencia — comportamiento temporal | Eficiencia de carbono | 1.2 Media Optimization |
+| 4 | Lazy loading + code splitting | Mantenibilidad — modularidad | Eficiencia de hardware | 2.4 Code Architecture |
+| 5 | Depuración de dependencias / APIs nativas | Mantenibilidad — analizabilidad | Eficiencia energética | 2.2 Clean Code & Libraries |
+| 6 | Menos HTTP: icons empaquetados + SVG | Eficiencia — comportamiento temporal | Eficiencia de carbono | 3.2 HTTP Requests Minimization |
+| 7 | Caché: ETag + Cache-Control | Eficiencia — comportamiento temporal | Eficiencia energética | 2.4 Caching Strategies |
+| 8 | Express: compression Gzip | Eficiencia — capacidad | Eficiencia de carbono | 3.1 Network Optimization |
 
 ## 2.4 Secuencia Git de entrega (consigna)
 

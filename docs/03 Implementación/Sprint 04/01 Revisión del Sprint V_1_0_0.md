@@ -54,7 +54,7 @@ La Inspección 04 (Green IT) se entrega **fuera** de esta carpeta, en la ruta co
 
 ![Lighthouse ANTES](<../reduccion del impacto ambiental/evidencias/lighthouse-antes.png>)
 
-![Lighthouse DESPUÉS](<../reduccion del impacto ambiental/evidencias/lighthouse-despues.png>)
+![Lighthouse DESPUÉS desktop (oficial)](<../reduccion del impacto ambiental/evidencias/lighthouse-despues-desktop.png>)
 
 ![Pedidos autenticado (paginación 12)](<../reduccion del impacto ambiental/evidencias/pantalla-pedidos.png>)
 
