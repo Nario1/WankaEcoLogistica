@@ -22,7 +22,7 @@
 
 - US-006, US-008, EN-003 y EP-04 quedaron **Listo** en Jira con implementación verificable.
 - Existen scripts `ops:*` reproducibles para recuperación.
-- Las evidencias Green IT (Lighthouse/SWDM) quedaron versionadas junto a los informes de la consigna.
+- Las evidencias Green IT (Lighthouse/SWDM) quedaron versionadas en `evidencias/` (raíz), enlazadas desde los informes de la consigna.
 
 ## ¿Qué podemos hacer mejor?
 
@@ -44,6 +44,6 @@ Repetir Lighthouse en desktop y móvil con el mismo commit hasheado; versionar `
 |---|---|---|---|
 | Publicar commit del Sprint 04 + carpeta Green IT | Equipo | Alta | Cambios visibles en `main` |
 | Ejecutar `db:migrate` (005 índices) en entornos de demo | Backend | Media | Migración aplicada sin error |
-| Ampliar muestra Lighthouse a dashboard autenticado | Frontend | Media | Nueva evidencia en `reduccion del impacto ambiental/evidencias/` |
+| Ampliar muestra Lighthouse a dashboard autenticado | Frontend | Media | Nueva evidencia en `evidencias/` (raíz del repositorio) |
 
 **Fin del documento**

@@ -1,6 +1,6 @@
 # Estándares de ingeniería de software y guía de desarrollo verde
 
-[← Informe Green IT](<01 Informe de reduccion del impacto ambiental V_1_0_0.md>) · [README principal](../../../README.md) · [Evidencias →](./evidencias/)
+[← Informe Green IT](<01 Informe de reduccion del impacto ambiental V_1_0_0.md>) · [README principal](../../../README.md) · [Evidencias →](../../../evidencias/)
 
 **Proyecto:** WankaEcoLogística Huancayo  
 **Versión:** 1.0.0  
@@ -23,7 +23,7 @@ Las refactorizaciones Green IT se justifican explícitamente en:
 
 **Evidencia ISO (DESPUÉS desktop — Performance 100):**
 
-![Lighthouse desktop DESPUÉS](./evidencias/lighthouse-despues-desktop.png)
+![Lighthouse desktop DESPUÉS](../../../evidencias/lighthouse-despues-desktop.png)
 
 ### Principios Green Software Foundation (GSF)
 
@@ -32,7 +32,7 @@ Las refactorizaciones Green IT se justifican explícitamente en:
 3. **Eficiencia de hardware:** Leaflet diferido; chunks MUI/React separados.  
 4. **Medición (SCI-like):** Lighthouse + SWDM v4 versionados en `evidencias/`.
 
-![Resumen visual Lighthouse Green IT](./evidencias/resumen-visual-lighthouse.png)
+![Resumen visual Lighthouse Green IT](../../../evidencias/resumen-visual-lighthouse.png)
 
 ### W3C Web Sustainability Guidelines (WSG 1.0)
 
@@ -60,9 +60,9 @@ Las refactorizaciones Green IT se justifican explícitamente en:
 4. Listados consumen API paginada.  
 5. Assets hasheados con caché inmutable (`max-age=31536000`).
 
-![Login liviano](./evidencias/pantalla-login.png)
+![Login liviano](../../../evidencias/pantalla-login.png)
 
-![Pedidos autenticado — 12 por página](./evidencias/pantalla-pedidos.png)
+![Pedidos autenticado — 12 por página](../../../evidencias/pantalla-pedidos.png)
 
 ### Integración CI/CD verde (GitHub Actions)
 
@@ -113,7 +113,7 @@ jobs:
 ```powershell
 git status
 mkdir "docs/03 Implementación/reduccion del impacto ambiental"
-mkdir "docs/03 Implementación/reduccion del impacto ambiental/evidencias"
+mkdir evidencias
 git add "docs/03 Implementación/reduccion del impacto ambiental/"
 git add .github/workflows/green-audit.yml backend frontend
 git commit -m "docs(green-it): add PERN performance optimization reports and software engineering standards"

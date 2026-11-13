@@ -86,7 +86,7 @@ Carpeta consignada por el docente, al mismo nivel que Sprint 01–04:
 
 - [Informe de reducción del impacto ambiental](<03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>)
 - [Estándares de ingeniería de software (Green IT)](<03 Implementación/reduccion del impacto ambiental/02 Estandares Ingeniería de software V_1_0_0.md>)
-- [Evidencias Lighthouse / SWDM](<03 Implementación/reduccion del impacto ambiental/evidencias/>)
+- [Evidencias Lighthouse / SWDM](../evidencias/)
 
 ## Referencias técnicas
 

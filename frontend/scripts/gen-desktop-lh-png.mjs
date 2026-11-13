@@ -7,14 +7,7 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const evidencias = path.join(
-  root,
-  "..",
-  "docs",
-  "03 Implementación",
-  "reduccion del impacto ambiental",
-  "evidencias",
-);
+const evidencias = path.join(root, "..", "evidencias");
 const jsonPath = path.join(evidencias, "lighthouse-despues-desktop.report.json");
 const htmlPath = path.join(evidencias, "lighthouse-despues-desktop.report.html");
 const pngPath = path.join(evidencias, "lighthouse-despues-desktop.png");

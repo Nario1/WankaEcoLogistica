@@ -27,7 +27,7 @@ El análisis se ejecutó con SonarQube en Docker en `http://localhost:9001`. Se 
 | Duplicación | **2,1 %** | Duplicación informada en el Overview. |
 | Issues abiertos | **0** | Bugs, vulnerabilidades y code smells en cero en este escaneo. |
 
-![Overview SonarQube — cobertura 83,6 % y Quality Gate Passed](<../evidencias/SonarqubeWankaecologistica.png>)
+![Overview SonarQube — cobertura 83,6 % y Quality Gate Passed](<../../../evidencias/SonarqubeWankaecologistica.png>)
 
 ### Comparación con el snapshot del 28/10/2026
 

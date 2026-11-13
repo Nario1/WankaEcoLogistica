@@ -77,8 +77,8 @@ WankaEcoLogistica/
 │       ├── Sprint 02/            # Optimización, evidencia y retrospectiva
 │       ├── Sprint 03/            # Revisión, retrospectiva, calidad, seguridad y accesibilidad
 │       ├── Sprint 04/            # EP-04: indicadores, reportes y EN-003
-│       ├── reduccion del impacto ambiental/  # Inspección 04 Green IT (+ evidencias)
-│       └── evidencias/           # Evidencias transversales (cobertura, Sonar, etc.)
+│       └── reduccion del impacto ambiental/  # Inspección 04 Green IT (informes)
+├── evidencias/                  # Lighthouse/SWDM, cobertura, Sonar y capturas
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
 │   ├── scripts/                 # Migración y creación del administrador
@@ -336,4 +336,4 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 
 - [Informe de reducción del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>)
 - [Estándares Green IT](<docs/03 Implementación/reduccion del impacto ambiental/02 Estandares Ingeniería de software V_1_0_0.md>)
-- [Evidencias Lighthouse / SWDM](<docs/03 Implementación/reduccion del impacto ambiental/evidencias/>)
+- [Evidencias Lighthouse / SWDM](evidencias/)

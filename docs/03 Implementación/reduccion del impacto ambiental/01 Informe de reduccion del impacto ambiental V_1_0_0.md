@@ -23,7 +23,7 @@ Propósitos:
 
 **Pantalla de entrada auditada:**
 
-![Pantalla de login WankaEcoLogística](./evidencias/pantalla-login.png)
+![Pantalla de login WankaEcoLogística](../../../evidencias/pantalla-login.png)
 
 ## 1.2 Diagnóstico inicial del proyecto PERN (métricas previas)
 
@@ -47,7 +47,7 @@ Antes de las intervenciones Green IT:
 | Transferencia | 165.2 KiB |
 | CO₂e (SWDM v4) | 0.057 g / visita |
 
-![Auditoría Lighthouse — estado inicial (ANTES)](./evidencias/lighthouse-antes.png)
+![Auditoría Lighthouse — estado inicial (ANTES)](../../../evidencias/lighthouse-antes.png)
 
 ## 1.3 Detalle técnico de las 8 optimizaciones implementadas
 
@@ -110,7 +110,7 @@ export function parsePagination(query) {
 
 Evidencia UI autenticada: **25 registros · 12 por página**.
 
-![Pedidos autenticado — paginación 12](./evidencias/pantalla-pedidos.png)
+![Pedidos autenticado — paginación 12](../../../evidencias/pantalla-pedidos.png)
 
 ### 3. Compresión y optimización de imágenes / assets livianos
 
@@ -273,13 +273,13 @@ Referencia móvil post-optimización (informativa): Performance 91, FCP 2.4 s, L
 
 ### Captura Lighthouse — ESTADO OPTIMIZADO (DESPUÉS desktop)
 
-![Auditoría Lighthouse desktop — Performance 100](./evidencias/lighthouse-despues-desktop.png)
+![Auditoría Lighthouse desktop — Performance 100](../../../evidencias/lighthouse-despues-desktop.png)
 
 Captura móvil DESPUÉS (complementaria):
 
-![Auditoría Lighthouse móvil DESPUÉS](./evidencias/lighthouse-despues.png)
+![Auditoría Lighthouse móvil DESPUÉS](../../../evidencias/lighthouse-despues.png)
 
-Consolidados: [metricas-consolidadas.json](./evidencias/metricas-consolidadas.json).
+Consolidados: [metricas-consolidadas.json](../../../evidencias/metricas-consolidadas.json).
 
 ## 1.5 Análisis de impacto ambiental y eficiencia energética
 
@@ -335,26 +335,26 @@ AUDITORÍA LIGHTHOUSE - ESTADO OPTIMIZADO (DESPUÉS) — desktop oficial
 Diagnósticos: techo 1.1 MB cumplido | Carbon Rating: A+
 ```
 
-![Resumen visual Lighthouse ANTES vs DESPUÉS](./evidencias/resumen-visual-lighthouse.png)
+![Resumen visual Lighthouse ANTES vs DESPUÉS](../../../evidencias/resumen-visual-lighthouse.png)
 
-![Lighthouse ANTES](./evidencias/lighthouse-antes.png)
+![Lighthouse ANTES](../../../evidencias/lighthouse-antes.png)
 
-![Lighthouse DESPUÉS desktop](./evidencias/lighthouse-despues-desktop.png)
+![Lighthouse DESPUÉS desktop](../../../evidencias/lighthouse-despues-desktop.png)
 
-![Login auditado](./evidencias/pantalla-login.png)
+![Login auditado](../../../evidencias/pantalla-login.png)
 
-![Pedidos autenticado — paginación 12](./evidencias/pantalla-pedidos.png)
+![Pedidos autenticado — paginación 12](../../../evidencias/pantalla-pedidos.png)
 
 ### Índice de evidencias
 
 | Archivo | Descripción |
 |---|---|
-| [evidencias/lighthouse-antes.png](./evidencias/lighthouse-antes.png) | Captura ANTES |
-| [evidencias/lighthouse-despues-desktop.png](./evidencias/lighthouse-despues-desktop.png) | Captura DESPUÉS desktop (oficial) |
-| [evidencias/lighthouse-despues.png](./evidencias/lighthouse-despues.png) | Captura DESPUÉS móvil |
-| [evidencias/pantalla-login.png](./evidencias/pantalla-login.png) | Login |
-| [evidencias/pantalla-pedidos.png](./evidencias/pantalla-pedidos.png) | Pedidos + paginación 12 |
-| [evidencias/metricas-consolidadas.json](./evidencias/metricas-consolidadas.json) | SWDM consolidado |
-| [evidencias/lighthouse-*.report.html](./evidencias/) | Reportes HTML/JSON |
+| [evidencias/lighthouse-antes.png](../../../evidencias/lighthouse-antes.png) | Captura ANTES |
+| [evidencias/lighthouse-despues-desktop.png](../../../evidencias/lighthouse-despues-desktop.png) | Captura DESPUÉS desktop (oficial) |
+| [evidencias/lighthouse-despues.png](../../../evidencias/lighthouse-despues.png) | Captura DESPUÉS móvil |
+| [evidencias/pantalla-login.png](../../../evidencias/pantalla-login.png) | Login |
+| [evidencias/pantalla-pedidos.png](../../../evidencias/pantalla-pedidos.png) | Pedidos + paginación 12 |
+| [evidencias/metricas-consolidadas.json](../../../evidencias/metricas-consolidadas.json) | SWDM consolidado |
+| [evidencias/lighthouse-*.report.html](../../../evidencias/) | Reportes HTML/JSON |
 
 **Fin del documento 1**

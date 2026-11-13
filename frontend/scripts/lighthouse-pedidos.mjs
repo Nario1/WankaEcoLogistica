@@ -9,13 +9,7 @@ import { spawnSync } from "node:child_process";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(root, "..");
-const outDir = path.join(
-  repoRoot,
-  "docs",
-  "03 Implementación",
-  "reduccion del impacto ambiental",
-  "evidencias",
-);
+const outDir = path.join(repoRoot, "evidencias");
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return;
