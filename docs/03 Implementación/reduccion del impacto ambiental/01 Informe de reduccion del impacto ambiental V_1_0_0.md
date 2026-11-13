@@ -21,6 +21,10 @@ Propósitos:
 3. Medir el impacto con Google Lighthouse y el modelo SWDM v4.
 4. Validar la reducción de huella de carbono digital sin romper la funcionalidad.
 
+**Pantalla auditada (login operativo):**
+
+![Pantalla de login WankaEcoLogística auditada con Lighthouse](./evidencias/pantalla-login.png)
+
 ## 1.2 Diagnóstico inicial del proyecto PERN (métricas previas)
 
 Antes de las intervenciones del 12/11/2026:
@@ -35,18 +39,18 @@ Antes de las intervenciones del 12/11/2026:
 
 Fuente: [lighthouse-antes.report.json](./evidencias/lighthouse-antes.report.json)
 
-| Indicador | Valor |
-|---|---|
-| Performance (Lighthouse) | **94 / 100** |
-| Accessibility | 100 / 100 |
-| FCP | 1.9 s |
-| LCP | 2.2 s |
-| TBT | 218 ms |
-| CLS | 0 |
-| Transferencia | 165.2 KiB (≈ 0.165 MB) |
-| CO₂e (SWDM v4) | 0.057 g / visita |
+| Indicador | Valor | Semáforo |
+|---|---|---|
+| Performance (Lighthouse) | **94 / 100** | GREEN |
+| Accessibility | 100 / 100 | GREEN |
+| FCP | 1.9 s | ORANGE |
+| LCP | 2.2 s | GREEN |
+| TBT | 218 ms | ORANGE |
+| CLS | 0 | GREEN |
+| Transferencia | 165.2 KiB (≈ 0.165 MB) | GREEN vs techo 1.1 MB |
+| CO₂e (SWDM v4) | 0.057 g / visita | — |
 
-Captura ANTES:
+### Captura Lighthouse — ESTADO INICIAL (ANTES)
 
 ![Auditoría Lighthouse — estado inicial (ANTES)](./evidencias/lighthouse-antes.png)
 
@@ -111,30 +115,25 @@ app.use(compression({ threshold: 1024 }));
 
 ## 1.4 Tabla comparativa de métricas ANTES vs. DESPUÉS
 
-| Métrica / Indicador | ANTES (móvil) | DESPUÉS (móvil) | DESPUÉS (desktop) |
-|---|---|---|---|
-| Performance Score (Lighthouse) | 94 | 91 | **100** |
-| First Contentful Paint (FCP) | 1.9 s | 2.4 s | **0.6 s** |
-| Largest Contentful Paint (LCP) | 2.2 s | 2.5 s | **0.6 s** |
-| Total Blocking Time (TBT) | 218 ms | 209 ms | **25 ms** |
-| Cumulative Layout Shift (CLS) | 0 | 0 | **0** |
-| Peso total de transferencia | 165 KiB | 235 KiB | 235 KiB |
-| vs techo rúbrica 1.1 MB | −85 % | −79 % | −79 % |
-| Huella de carbono (g CO₂e / visita) | 0.057 | 0.081 | 0.081 |
+| Métrica / Indicador | Estado inicial (ANTES) | Estado optimizado (DESPUÉS móvil) | DESPUÉS desktop | Semáforo final |
+|---|---|---|---|---|
+| Performance Score (Lighthouse) | 94 / 100 | 91 / 100 | **100 / 100** | GREEN |
+| First Contentful Paint (FCP) | 1.9 s | 2.4 s | **0.6 s** | GREEN |
+| Largest Contentful Paint (LCP) | 2.2 s | 2.5 s | **0.6 s** | GREEN |
+| Total Blocking Time (TBT) | 218 ms | 209 ms | **25 ms** | GREEN |
+| Cumulative Layout Shift (CLS) | 0 | 0 | **0** | GREEN |
+| Peso total de transferencia | 165 KiB | 235 KiB | 235 KiB | GREEN (&lt; 1.1 MB) |
+| Huella de carbono (g CO₂e / visita) | 0.057 | 0.081 | 0.081 | A+ vs anti-patrón 2.15 g |
+
+### Captura Lighthouse — ESTADO OPTIMIZADO (DESPUÉS)
+
+![Auditoría Lighthouse — estado optimizado (DESPUÉS)](./evidencias/lighthouse-despues.png)
 
 Notas:
 
 - El split de chunks sube ligeramente el peso del shell de login (más requests), pero el **techo de 1.1 MB se cumple con holgura**.
 - En **desktop** (perfil LHCI de laboratorio) se alcanzan FCP/LCP/TBT/CLS del nivel sobresaliente.
 - El beneficio mayor de paginación/compresión aparece en listados API con datos reales, no solo en el shell estático.
-
-Captura DESPUÉS (móvil):
-
-![Auditoría Lighthouse — estado optimizado (DESPUÉS)](./evidencias/lighthouse-despues.png)
-
-Pantalla auditada (login):
-
-![Pantalla de login auditada](./evidencias/pantalla-login.png)
 
 Consolidados: [metricas-consolidadas.json](./evidencias/metricas-consolidadas.json).
 
@@ -152,30 +151,52 @@ E (g CO2e) = Ancho_de_banda_GB × 0.815 kWh/GB × 442 g CO2e/kWh
 
 ## 1.6 Evidencias visuales de validación (auditoría Lighthouse)
 
+Formato alineado al ejemplo docente (resumen terminal + capturas reales del proyecto):
+
 ```text
 ================================================================================
-AUDITORÍA LIGHTHOUSE - ESTADO INICIAL (ANTES) — móvil / login
+AUDITORÍA LIGHTHOUSE - ESTADO INICIAL (ANTES)
 ================================================================================
-Performance:  94/100
-- FCP: 1.9s
-- LCP: 2.2s
-- TBT: 218ms
-- CLS: 0
-Transfer: 165 KiB | CO2e: 0.057 g/visita
+[!] Performance:  ██████████████████░░  94/100
+- FCP: 1.9s  (ORANGE)
+- LCP: 2.2s  (GREEN)
+- TBT: 218ms (ORANGE)
+- CLS: 0     (GREEN)
+- Transfer: 165 KiB | CO₂e: 0.057 g/visita
 
 ================================================================================
 AUDITORÍA LIGHTHOUSE - ESTADO OPTIMIZADO (DESPUÉS) — desktop
 ================================================================================
-Performance:  100/100
-- FCP: 0.6s
-- LCP: 0.6s
-- TBT: 25ms
-- CLS: 0
-Transfer: 235 KiB | CO2e: 0.081 g/visita | techo 1.1 MB: CUMPLE
+[*] Performance:  ████████████████████  100/100
+- FCP: 0.6s  (GREEN)
+- LCP: 0.6s  (GREEN)
+- TBT: 25ms  (GREEN)
+- CLS: 0     (GREEN)
+Diagnósticos: techo 1.1 MB cumplido | Carbon Rating: A+
 ```
+
+### Captura resumen visual (ANTES + DESPUÉS)
+
+![Resumen visual Lighthouse ANTES vs DESPUÉS](./evidencias/resumen-visual-lighthouse.png)
+
+### Captura ANTES (reporte Lighthouse)
+
+![Lighthouse ANTES — Performance 94](./evidencias/lighthouse-antes.png)
+
+### Captura DESPUÉS (reporte Lighthouse)
+
+![Lighthouse DESPUÉS — Performance 91 móvil / 100 desktop](./evidencias/lighthouse-despues.png)
+
+### Captura de la pantalla auditada
+
+![Login WankaEcoLogística](./evidencias/pantalla-login.png)
+
+### Índice de evidencias versionadas
 
 | Archivo | Descripción |
 |---|---|
+| [evidencias/resumen-visual-lighthouse.png](./evidencias/resumen-visual-lighthouse.png) | Resumen visual tipo consigna (ANTES/DESPUÉS) |
+| [evidencias/resumen-visual-lighthouse.html](./evidencias/resumen-visual-lighthouse.html) | Misma vista en HTML |
 | [evidencias/lighthouse-antes.png](./evidencias/lighthouse-antes.png) | Captura móvil previa |
 | [evidencias/lighthouse-despues.png](./evidencias/lighthouse-despues.png) | Captura móvil posterior |
 | [evidencias/pantalla-login.png](./evidencias/pantalla-login.png) | Pantalla auditada |

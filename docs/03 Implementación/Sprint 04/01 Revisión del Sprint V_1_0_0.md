@@ -48,6 +48,14 @@ docs/03 Implementación/Sprint 04/
 
 La Inspección 04 (Green IT) se entrega **fuera** de esta carpeta, en la ruta consignada por el docente: [`../reduccion del impacto ambiental/`](<../reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>).
 
+### Evidencias Green IT referenciadas
+
+![Resumen visual Lighthouse ANTES vs DESPUÉS](<../reduccion del impacto ambiental/evidencias/resumen-visual-lighthouse.png>)
+
+![Lighthouse ANTES](<../reduccion del impacto ambiental/evidencias/lighthouse-antes.png>)
+
+![Lighthouse DESPUÉS](<../reduccion del impacto ambiental/evidencias/lighthouse-despues.png>)
+
 ## Estado del tablero al cierre
 
 - US-007 (EC-11) consta como **Listo** en Jira junto al resto del proyecto EC.

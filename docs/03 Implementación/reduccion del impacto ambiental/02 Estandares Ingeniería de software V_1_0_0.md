@@ -18,12 +18,20 @@
 | Mantenibilidad — modularidad | `React.lazy`, módulos `ops`/`sustainability`, repositorios PostgreSQL |
 | Mantenibilidad — analizabilidad | Dependencias mínimas, tests de paginación y recovery |
 
+**Evidencia de eficiencia (Lighthouse ANTES):**
+
+![Lighthouse ANTES — ISO 25010 desempeño](./evidencias/lighthouse-antes.png)
+
 ### Principios Green Software Foundation (GSF)
 
 1. **Eficiencia de carbono:** menos bytes por visita y payloads acotados.  
 2. **Eficiencia energética:** menos CPU en serialización JSON y render de listas enormes.  
 3. **Eficiencia de hardware:** bundles diferidos (Leaflet solo en mapa).  
 4. **Medición (SCI-like):** Lighthouse + SWDM v4 versionados en `docs/03 Implementación/reduccion del impacto ambiental/evidencias/`.
+
+**Evidencia de medición (resumen visual ANTES/DESPUÉS):**
+
+![Resumen visual Lighthouse Green IT](./evidencias/resumen-visual-lighthouse.png)
 
 ### W3C Web Sustainability Guidelines (WSG 1.0)
 
@@ -32,6 +40,10 @@
 | 1.2 Media | SVG / sin PNG grandes |
 | 2.4 Arquitectura y caché | Lazy routes, ETag, Cache-Control, chunks Vite |
 | 3.1 Transferencia de red | Gzip, paginación, SELECT explícito |
+
+**Evidencia WSG (Lighthouse DESPUÉS):**
+
+![Lighthouse DESPUÉS — transferencia y rendimiento](./evidencias/lighthouse-despues.png)
 
 ## 2.2 Buenas prácticas y guía de desarrollo verde PERN
 
@@ -50,6 +62,10 @@
 3. Imágenes raster > 200 KB deben convertirse a WebP/AVIF o SVG.  
 4. Listados consumen la API paginada; no forzar `limit` > 50 salvo casos justificados.  
 5. Assets hasheados con caché inmutable en preview/producción.
+
+**Pantalla de referencia (login liviano, sin raster pesado):**
+
+![Login WankaEcoLogística — asset liviano](./evidencias/pantalla-login.png)
 
 ### CI/CD verde
 

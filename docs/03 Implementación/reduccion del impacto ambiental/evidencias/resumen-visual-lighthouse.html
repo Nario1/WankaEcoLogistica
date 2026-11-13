@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>1.6 Evidencias Visuales — Lighthouse WankaEcoLogística</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #212322;
+    }
+    h1 {
+      color: #0202c6;
+      font-size: 20px;
+      margin: 0 0 12px;
+    }
+    .box {
+      background: #212322;
+      color: #f8f9fa;
+      padding: 16px 18px;
+      border-radius: 6px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      line-height: 1.5;
+      width: 900px;
+      box-sizing: border-box;
+    }
+    .y { color: #ffd166; }
+    .g { color: #00e676; font-weight: bold; }
+    .o { color: #f0ad4e; font-weight: bold; }
+    .pair {
+      display: flex;
+      gap: 12px;
+      width: 900px;
+      margin-top: 14px;
+    }
+    figure {
+      margin: 0;
+      flex: 1;
+      background: #fff;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    figcaption {
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #6802c1;
+    }
+    img { width: 100%; height: auto; display: block; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>1.6 Evidencias Visuales de Validación (Auditoría Lighthouse)</h1>
+  <div class="box">
+    <div class="y">================================================================================</div>
+    <div class="y">AUDITORÍA LIGHTHOUSE - ESTADO INICIAL (ANTES)</div>
+    <div class="y">================================================================================</div>
+    <div>[!] Performance:  ██████████████████░░  <span class="g">94/100</span></div>
+    <div>- FCP: 1.9s  (<span class="o">ORANGE</span>)</div>
+    <div>- LCP: 2.2s  (<span class="g">GREEN</span>)</div>
+    <div>- TBT: 218ms (<span class="o">ORANGE</span>)</div>
+    <div>- CLS: 0     (<span class="g">GREEN</span>)</div>
+    <div>- Transfer: 165 KiB | CO₂e: 0.057 g/visita</div>
+    <br />
+    <div class="y">================================================================================</div>
+    <div class="g">AUDITORÍA LIGHTHOUSE - ESTADO OPTIMIZADO (DESPUÉS) — desktop</div>
+    <div class="y">================================================================================</div>
+    <div>[*] Performance:  ████████████████████  <span class="g">100/100</span></div>
+    <div>- FCP: 0.6s  (<span class="g">GREEN</span>)</div>
+    <div>- LCP: 0.6s  (<span class="g">GREEN</span>)</div>
+    <div>- TBT: 25ms  (<span class="g">GREEN</span>)</div>
+    <div>- CLS: 0     (<span class="g">GREEN</span>)</div>
+    <div>Diagnósticos: techo 1.1 MB cumplido | Carbon Rating: <span class="g">A+</span> (0.081 g CO₂e/visita)</div>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <figcaption>ANTES — Lighthouse móvil (94)</figcaption>
+      <img src="./lighthouse-antes.png" alt="Lighthouse ANTES" />
+    </figure>
+    <figure>
+      <figcaption>DESPUÉS — Lighthouse móvil (91) / desktop 100</figcaption>
+      <img src="./lighthouse-despues.png" alt="Lighthouse DESPUÉS" />
+    </figure>
+  </div>
+</body>
+</html>
