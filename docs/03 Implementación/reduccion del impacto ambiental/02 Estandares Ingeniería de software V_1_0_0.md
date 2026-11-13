@@ -42,7 +42,7 @@ Las refactorizaciones Green IT se justifican explícitamente en:
 | 2.4 Arquitectura y caché | Lazy routes, ETag, Cache-Control, chunks Vite inmutables |
 | 3.1 Transferencia de red | Gzip, paginación, SELECT explícito |
 
-## 2.2 Buenas prácticas y guía de desarrollo verde MERN
+## 2.2 Buenas prácticas y guía de desarrollo verde PERN
 
 ### Normas backend (Node / Express / PostgreSQL)
 
@@ -95,7 +95,7 @@ jobs:
           lhci autorun --config=./lighthouserc.cjs
 ```
 
-## 2.3 Matriz de mapeo directo: estándares vs. optimizaciones MERN
+## 2.3 Matriz de mapeo directo: estándares vs. optimizaciones PERN
 
 | # | Optimización técnica aplicada | ISO/IEC 25010 | Principio GSF | Lineamiento W3C WSG 1.0 |
 |---|---|---|---|---|
@@ -116,7 +116,7 @@ mkdir "docs/03 Implementación/reduccion del impacto ambiental"
 mkdir evidencias
 git add "docs/03 Implementación/reduccion del impacto ambiental/"
 git add .github/workflows/green-audit.yml backend frontend
-git commit -m "docs(green-it): add MERN performance optimization reports and software engineering standards"
+git commit -m "docs(green-it): add PERN performance optimization reports and software engineering standards"
 git push origin main
 ```
 

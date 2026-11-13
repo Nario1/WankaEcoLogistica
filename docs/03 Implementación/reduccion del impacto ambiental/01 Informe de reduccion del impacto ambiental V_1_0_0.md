@@ -1,16 +1,16 @@
-# Informe de reducción del impacto ambiental y optimización MERN
+# Informe de reducción del impacto ambiental y optimización PERN
 
 [← Sprint 04](<../Sprint 04/01 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Estándares →](<02 Estandares Ingeniería de software V_1_0_0.md>)
 
 **Proyecto:** WankaEcoLogística Huancayo  
 **Versión:** 1.0.0  
 **Fecha:** 12/11/2026  
-**Stack del informe:** MERN (MongoDB + Express + React + Node.js)
+**Stack implementado:** PERN (PostgreSQL + Express + React + Node.js)
 **Trazabilidad:** Inspección 04 · Green IT · RNF eficiencia / ISO/IEC 25010  
 
 **Secuencia documental:** [Sprint 01](<../Sprint 01/01 Informe de estado del proyecto V_1_0_0.md>) → [Sprint 02](<../Sprint 02/01 Informe de estado del proyecto V_1_0_0.md>) → [Sprint 03](<../Sprint 03/01 Revisión del Sprint V_1_0_0.md>) → [Sprint 04](<../Sprint 04/01 Revisión del Sprint V_1_0_0.md>) → Reducción del impacto ambiental.
 
-> El informe sigue las ocho áreas MERN indicadas en la rúbrica.
+> El informe describe ocho áreas de optimización aplicadas al stack PERN.
 
 ## 1.1 Introducción y propósito del informe
 
@@ -19,7 +19,7 @@ Este informe documenta la auditoría, refactorización y optimización de rendim
 Propósitos:
 
 1. Identificar cuellos de botella en la arquitectura full-stack.
-2. Aplicar refactorizaciones en **ocho áreas** estratégicas MERN.
+2. Aplicar refactorizaciones en **ocho áreas** estratégicas PERN.
 3. Medir el impacto con Google Lighthouse y el modelo SWDM v4.
 4. Validar la reducción de huella de carbono digital sin romper la funcionalidad.
 
@@ -27,7 +27,7 @@ Propósitos:
 
 ![Pantalla de login WankaEcoLogística](../../../evidencias/pantalla-login.png)
 
-## 1.2 Diagnóstico inicial del proyecto MERN (métricas previas)
+## 1.2 Diagnóstico inicial del proyecto PERN (métricas previas)
 
 Antes de las intervenciones Green IT:
 
