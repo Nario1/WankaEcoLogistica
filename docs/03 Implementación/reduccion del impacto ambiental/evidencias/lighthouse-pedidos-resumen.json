@@ -1,0 +1,17 @@
+{
+  "page": "Pedidos (autenticado)",
+  "capturedAt": "2026-11-13T05:10:00.000Z",
+  "method": "Sesión ADMIN + sessionStorage wanka-page=orders",
+  "evidence": {
+    "screen": "pantalla-pedidos.png",
+    "shows": [
+      "Módulo Pedidos autenticado (no login)",
+      "Listado con datos reales",
+      "Paginación Green IT: 25 registros · 12 por página"
+    ]
+  },
+  "notes": [
+    "La consigna exige Lighthouse del front; el score oficial sobresaliente se midió en login/desktop.",
+    "Esta evidencia autentica demuestra la optimización #2 (paginación 12) en un proceso real del sistema."
+  ]
+}

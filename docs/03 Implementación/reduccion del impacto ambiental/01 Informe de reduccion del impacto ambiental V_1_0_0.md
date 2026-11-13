@@ -187,9 +187,21 @@ Diagnósticos: techo 1.1 MB cumplido | Carbon Rating: A+
 
 ![Lighthouse DESPUÉS — Performance 91 móvil / 100 desktop](./evidencias/lighthouse-despues.png)
 
-### Captura de la pantalla auditada
+### Captura de la pantalla auditada (login)
 
 ![Login WankaEcoLogística](./evidencias/pantalla-login.png)
+
+### Evidencia autenticada — proceso Pedidos (no login)
+
+Además del shell de login, se documentó un **proceso operativo autenticado**: el listado de pedidos con paginación Green IT (12 registros por página).
+
+![Pedidos autenticado — listado paginado 12/página](./evidencias/pantalla-pedidos.png)
+
+Detalle observable en la captura:
+
+- Usuario autenticado en el panel (menú hamburguesa / shell del dashboard).
+- Módulo **Pedidos** con datos reales.
+- Pie de tabla: **25 registros · 12 por página** (optimización #2 de la consigna).
 
 ### Índice de evidencias versionadas
 
@@ -199,7 +211,9 @@ Diagnósticos: techo 1.1 MB cumplido | Carbon Rating: A+
 | [evidencias/resumen-visual-lighthouse.html](./evidencias/resumen-visual-lighthouse.html) | Misma vista en HTML |
 | [evidencias/lighthouse-antes.png](./evidencias/lighthouse-antes.png) | Captura móvil previa |
 | [evidencias/lighthouse-despues.png](./evidencias/lighthouse-despues.png) | Captura móvil posterior |
-| [evidencias/pantalla-login.png](./evidencias/pantalla-login.png) | Pantalla auditada |
+| [evidencias/pantalla-login.png](./evidencias/pantalla-login.png) | Pantalla login auditada |
+| [evidencias/pantalla-pedidos.png](./evidencias/pantalla-pedidos.png) | **Pedidos autenticado** + paginación 12 |
+| [evidencias/lighthouse-pedidos-resumen.json](./evidencias/lighthouse-pedidos-resumen.json) | Metadatos de la evidencia Pedidos |
 | [evidencias/lighthouse-antes.report.html](./evidencias/lighthouse-antes.report.html) | Reporte HTML previo |
 | [evidencias/lighthouse-despues.report.html](./evidencias/lighthouse-despues.report.html) | Reporte HTML posterior |
 | [evidencias/lighthouse-despues-desktop.report.json](./evidencias/lighthouse-despues-desktop.report.json) | Auditoría desktop |

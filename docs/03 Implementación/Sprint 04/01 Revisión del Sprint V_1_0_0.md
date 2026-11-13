@@ -56,6 +56,8 @@ La Inspección 04 (Green IT) se entrega **fuera** de esta carpeta, en la ruta co
 
 ![Lighthouse DESPUÉS](<../reduccion del impacto ambiental/evidencias/lighthouse-despues.png>)
 
+![Pedidos autenticado (paginación 12)](<../reduccion del impacto ambiental/evidencias/pantalla-pedidos.png>)
+
 ## Estado del tablero al cierre
 
 - US-007 (EC-11) consta como **Listo** en Jira junto al resto del proyecto EC.

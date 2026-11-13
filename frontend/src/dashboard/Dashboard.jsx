@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { alpha } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -20,9 +20,16 @@ const IndicatorsPage = lazy(
 );
 const DriverRoutePage = lazy(() => import("../features/field/DriverRoutePage"));
 
+const PAGE_STORAGE_KEY = "wanka-page";
+
 export default function Dashboard(props) {
-  const [page, setPage] = useState("overview");
+  const [page, setPage] = useState(
+    () => sessionStorage.getItem(PAGE_STORAGE_KEY) || "overview",
+  );
   const { session, logout } = useAuth();
+  useEffect(() => {
+    sessionStorage.setItem(PAGE_STORAGE_KEY, page);
+  }, [page]);
   const pages = {
     overview: { label: "Inicio", component: <OverviewPage /> },
     orders: { label: "Pedidos", component: <OrdersPage /> },

@@ -67,6 +67,10 @@
 
 ![Login WankaEcoLogística — asset liviano](./evidencias/pantalla-login.png)
 
+**Proceso autenticado con paginación obligatoria (Pedidos):**
+
+![Pedidos autenticado — 12 registros por página](./evidencias/pantalla-pedidos.png)
+
 ### CI/CD verde
 
 Workflow [`.github/workflows/green-audit.yml`](../../../.github/workflows/green-audit.yml):
