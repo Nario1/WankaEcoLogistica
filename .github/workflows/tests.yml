@@ -86,7 +86,6 @@ jobs:
           --health-retries 10
           --shm-size=256mb
     env:
-      NODE_ENV: production
       PORT: 3000
       JWT_SECRET: ci-only-secret-with-at-least-32-characters
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wanka_e2e
@@ -118,11 +117,14 @@ jobs:
           npm run db:seed
       - name: Start API
         working-directory: backend
+        env:
+          NODE_ENV: production
         run: |
           npm start &
           npx --yes wait-on http://localhost:3000/health -t 60000
       - name: Install frontend
         working-directory: frontend
+        # Sin NODE_ENV=production: npm ci debe instalar vite (devDependency).
         run: npm ci
       - name: Build & preview frontend
         working-directory: frontend
@@ -130,8 +132,8 @@ jobs:
           VITE_API_URL: http://localhost:3000/api
         run: |
           npm run build
-          npx vite preview --host localhost --port 4173 &
-          npx --yes wait-on http://localhost:4173 -t 60000
+          npx vite preview --host 127.0.0.1 --port 4173 &
+          npx --yes wait-on http://127.0.0.1:4173 -t 60000
       - name: Install Playwright browsers
         working-directory: frontend
         run: npx playwright install --with-deps chromium firefox webkit
