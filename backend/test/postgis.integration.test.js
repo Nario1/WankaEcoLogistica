@@ -7,9 +7,16 @@ const testDatabaseUrl = process.env.TEST_DATABASE_URL;
 test(
   "PostGIS conserva coordenadas conocidas dentro del margen de 10 metros",
   { skip: !testDatabaseUrl && "TEST_DATABASE_URL no está configurada" },
-  async () => {
+  async (t) => {
     const pool = new pg.Pool({ connectionString: testDatabaseUrl, max: 1 });
-    const client = await pool.connect();
+    let client;
+    try {
+      client = await pool.connect();
+    } catch (error) {
+      await pool.end().catch(() => {});
+      t.skip(`PostGIS no disponible: ${error.message}`);
+      return;
+    }
     try {
       await client.query("BEGIN");
       await client.query("CREATE EXTENSION IF NOT EXISTS postgis");
@@ -32,7 +39,11 @@ test(
       assert.equal(Number(result.rows[0].latitude), latitude);
       assert.ok(Number(result.rows[0].error_meters) <= 10);
     } finally {
-      await client.query("ROLLBACK");
+      try {
+        await client.query("ROLLBACK");
+      } catch {
+        // conexión ya cerrada
+      }
       client.release();
       await pool.end();
     }
