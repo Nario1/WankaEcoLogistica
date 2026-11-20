@@ -1,6 +1,6 @@
 # EN-003 — Recuperación de servicio
 
-[← Volver al README principal](../../../README.md) · [← Usabilidad](<04 Usabilidad V_1_0_0.md>) · [Green IT →](<../reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>)
+[← Volver al README principal](../../../README.md) · [← Retrospectiva](<02 Retrospectiva del Sprint V_1_0_0.md>) · [Playwright →](<03 Analisis PlayWrigth V_1_0_0.md>) · [Usabilidad →](<04 Usabilidad V_1_0_0.md>)
 
 **Proyecto:** WankaEcoLogística Huancayo  
 **Trazabilidad:** RNF-003, EC-15  

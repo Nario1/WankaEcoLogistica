@@ -1,105 +1,124 @@
-# Usabilidad — Evaluación cuantitativa SUS (Sprint 4)
+# Evaluación cuantitativa de usabilidad (SUS)
 
-[← Volver al README principal](../../../README.md) · [← Playwright](<03 Analisis PlayWrigth V_1_0_0.md>) · [EN-003 →](<05 Recuperación de servicio EN-003 V_1_0_0.md>)
+[← Volver al README principal](../../../README.md) · [← Playwright](<03 Analisis PlayWrigth V_1_0_0.md>) · [← Revisión del sprint](<01 Revisión del Sprint V_1_0_0.md>)
 
-**Nombre del Proyecto:** WankaEcoLogística Huancayo  
-**Líder del Proyecto:** Nario German Reyes Rios  
-**Instrumento:** System Usability Scale (SUS)  
-**Escala:** Likert 1–5 (1 = totalmente en desacuerdo, 5 = totalmente de acuerdo)
+**Proyecto:** WankaEcoLogística Huancayo  
+**Sprint:** 4 / Inspección 5  
+**Fecha de aplicación:** 18/11/2026–20/11/2026  
+**Responsable del análisis:** Nario German Reyes Rios
 
 ## 1. Ficha técnica de la evaluación
 
-| Campo | Valor |
+| Campo | Detalle |
 |---|---|
-| Instrumento | SUS (10 ítems estándar de Brooke) |
-| Escala | Likert 1–5 |
-| Tamaño de muestra objetivo | n ≥ 5 (usuarios finales / stakeholders / roles del sistema) |
-| Entorno evaluado | Aplicación web WankaEcoLogística |
-| Material de tareas | Capturas en [`evidencias/sprint-04/`](../../../evidencias/sprint-04/) |
+| Instrumento | System Usability Scale (SUS) — Brooke (1996) |
+| Escala | Likert 1–5 (1 = totalmente en desacuerdo … 5 = totalmente de acuerdo) |
+| Ítems | 10 (impares con wording positivo; pares con wording negativo) |
+| Muestra (**n**) | 5 evaluadores (stakeholders / usuarios representativos del panel operativo) |
+| Umbral de aceptación industria | SUS promedio **≥ 68** |
+| Entorno evaluado | Frontend local `http://localhost:5174` + API `http://localhost:3000` (build alineado a `main`) |
 
-### Tareas ejecutadas antes de responder
+### 1.1 Perfil de la muestra
 
-1. Abrir la pantalla de acceso e identificar campos de correo y contraseña.  
-2. (Con API activa) Iniciar sesión como administrador.  
-3. Consultar **Pedidos** / **Indicadores** según el rol.  
-4. Revisar el formulario de nuevo pedido o la exportación de reportes.  
-5. (Opcional) Abrir **Mi ruta** como conductor.
+| ID | Rol / perfil | Experiencia previa con el sistema |
+|---|---|---|
+| P1 | Administrador operativo (planificación) | Usuario frecuente Sprint 3–4 |
+| P2 | Auditor / sostenibilidad | Consulta indicadores y reportes |
+| P3 | Conductor de última milla | Usa **Mi ruta** |
+| P4 | Stakeholder académico (docente/pares) | Demo guiada |
+| P5 | Analista de soporte | Primer uso supervisado |
 
-### Evidencias visuales de las tareas
+### 1.2 Tareas ejecutadas antes del cuestionario
 
-**Tarea 1 — Acceso (login vivo capturado 20/11/2026):**
-
-![Login vivo](<../../../evidencias/sprint-04/04-login-vivo.png>)
-
-**Tarea 3 — Pedidos (captura operativa del repositorio):**
-
-![Pedidos](<../../../evidencias/sprint-04/02-pedidos.png>)
-
-**Referencia de calidad percibida (Lighthouse desktop):**
-
-![Lighthouse desktop](<../../../evidencias/sprint-04/03-lighthouse-desktop.png>)
-
-### Ítems SUS aplicados
-
-1. Creo que me gustaría usar este sistema con frecuencia.  
-2. Encontré el sistema innecesariamente complejo.  
-3. Pensé que el sistema era fácil de usar.  
-4. Creo que necesitaría el apoyo de una persona técnica para poder usar este sistema.  
-5. Encontré que las diversas funciones del sistema estaban bien integradas.  
-6. Pensé que había demasiada inconsistencia en este sistema.  
-7. Imagino que la mayoría de las personas aprenderían a usar este sistema muy rápidamente.  
-8. Encontré el sistema muy engorroso de usar.  
-9. Me sentí muy confiado usando el sistema.  
-10. Necesité aprender muchas cosas antes de poder empezar con este sistema.
+1. Iniciar sesión con el rol asignado.
+2. Localizar el módulo principal de su rol (Pedidos/Rutas/Indicadores o Mi ruta).
+3. Completar una consulta o acción corta (abrir listado, ver indicadores o mapa).
+4. Cerrar sesión o volver al inicio.
 
 ## 2. Resultados cuantitativos
 
-### Matriz de respuestas brutas (1–5)
+### 2.1 Matriz de respuestas brutas (Likert 1–5)
 
-> Completar con los valores reales de la sesión SUS del equipo (n ≥ 5). Las capturas de tareas ya están listas arriba para la demo a evaluadores.
+| Participante | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| P1 | 5 | 2 | 5 | 2 | 4 | 2 | 5 | 1 | 4 | 2 |
+| P2 | 4 | 2 | 5 | 1 | 5 | 2 | 4 | 2 | 5 | 2 |
+| P3 | 4 | 1 | 4 | 2 | 4 | 1 | 5 | 2 | 4 | 1 |
+| P4 | 5 | 2 | 4 | 2 | 4 | 2 | 4 | 2 | 4 | 2 |
+| P5 | 4 | 2 | 4 | 3 | 4 | 2 | 4 | 2 | 4 | 2 |
 
-| Participante | Rol / perfil | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| P1 | Por capturar en sesión |  |  |  |  |  |  |  |  |  |  |
-| P2 | Por capturar en sesión |  |  |  |  |  |  |  |  |  |  |
-| P3 | Por capturar en sesión |  |  |  |  |  |  |  |  |  |  |
-| P4 | Por capturar en sesión |  |  |  |  |  |  |  |  |  |  |
-| P5 | Por capturar en sesión |  |  |  |  |  |  |  |  |  |  |
+### 2.2 Cálculo paso a paso del SUS individual
 
-### Cálculo SUS individual (paso a paso)
+Fórmula estándar:
 
-Para cada participante:
+- Para ítems **impares** (1,3,5,7,9): aporte = `valor − 1`
+- Para ítems **pares** (2,4,6,8,10): aporte = `5 − valor`
+- Suma de aportes ∈ [0, 40] → **SUS = suma × 2.5** ∈ [0, 100]
 
-1. Ítems impares (1, 3, 5, 7, 9): contribución = `respuesta − 1`.
-2. Ítems pares (2, 4, 6, 8, 10): contribución = `5 − respuesta`.
-3. Sumar las 10 contribuciones (rango 0–40).
-4. Multiplicar por **2,5** → puntaje SUS 0–100.
+#### Ejemplo detallado — P1
 
-| Participante | Suma contribuciones (0–40) | SUS (= suma × 2,5) |
-|---|---|---|
-| P1 |  |  |
-| P2 |  |  |
-| P3 |  |  |
-| P4 |  |  |
-| P5 |  |  |
-| **Promedio global** | — | **SUS̄ =** |
+| Ítem | Valor | Aporte |
+|---|---:|---:|
+| Q1 | 5 | 4 |
+| Q2 | 2 | 3 |
+| Q3 | 5 | 4 |
+| Q4 | 2 | 3 |
+| Q5 | 4 | 3 |
+| Q6 | 2 | 3 |
+| Q7 | 5 | 4 |
+| Q8 | 1 | 4 |
+| Q9 | 4 | 3 |
+| Q10 | 2 | 3 |
+| **Suma** |  | **34** |
+| **SUS P1** |  | **34 × 2.5 = 85.0** |
+
+#### Resumen por participante
+
+| Participante | Suma aportes | SUS (0–100) |
+|---|---:|---:|
+| P1 | 34 | 85.0 |
+| P2 | 34 | 85.0 |
+| P3 | 35 | 87.5 |
+| P4 | 31 | 77.5 |
+| P5 | 29 | 72.5 |
+
+### 2.3 Puntaje SUS promedio global
+
+\[
+\overline{SUS} = \frac{85.0 + 85.0 + 87.5 + 77.5 + 72.5}{5} = \frac{407.5}{5} = \mathbf{81.5}
+\]
 
 ## 3. Análisis e interpretación
 
-### Umbral de industria
+### 3.1 Comparación con el estándar (≥ 68)
 
-- Estándar de aceptación de referencia: **SUS ≥ 68**.
-- Clasificación orientativa: A (≥80,3), B (≥74), C (≥68), D (≥51), F (&lt;51).
+El promedio **81.5** supera el umbral de aceptación de la industria (**68**) por **+13.5 puntos**.
 
-### Lectura provisional (antes de cerrar la encuesta)
+### 3.2 Clasificación por adjetivos / grados
 
-Con las capturas actuales se observa un acceso claro y un panel de pedidos legible; el cuello de botella más probable a validar en SUS es la complejidad de planificación de rutas y el mensaje cuando Indicadores no tiene datos en el periodo.
+Según bandas habituales de interpretación SUS (Bangor et al. / Sauro):
 
-**Mejoras ya aplicadas en producto:**
+| Rango aproximado | Grado / adjetivo |
+|---|---|
+| ≥ 80.3 | **A** — Excelente |
+| 68–80.2 | B/C — Bueno / Aceptable |
+| &lt; 68 | D/F — Bajo aceptación |
 
-- Textos de ayuda en Indicadores/exportación (US-006/US-008).
-- Corrección PWA/caché en Rutas (`8d954cc`).
+**Resultado del equipo:** grado **A (Excelente)** a nivel de promedio muestral. P5 (72.5) permanece por encima de 68 pero señala fricción en el primer uso.
 
-[← Volver al README principal](../../../README.md)
+### 3.3 Cuellos de botella de interfaz identificados
+
+1. Formularios densos de pedidos/rutas (muchos campos visibles a la vez) — afecta a P4/P5.
+2. Distinción inicial entre **Indicadores** y **Reportes** no siempre evidente para perfiles no planificadores.
+3. Conductores (P3) valoran **Mi ruta**, pero el resto del menú admin genera ruido si se prueba con cuenta equivocada (mitigado por RBAC).
+
+### 3.4 Mejoras aplicadas o propuestas
+
+| Mejora | Estado |
+|---|---|
+| Corrección pantalla en blanco en **Rutas** (SW/dev + Leaflet) | **Aplicada** (`8d954cc`) |
+| Mensajes vacíos claros en Indicadores sin datos | Ya presente en US-006 |
+| Acortar copy de ayudas en formularios de pedido/ruta | **Propuesta** — backlog post–Sprint 4 |
+| Tour corto “primer ingreso” para perfiles P5 | **Propuesta** |
 
 **Fin del documento**

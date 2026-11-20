@@ -8,31 +8,18 @@ export default defineConfig({
   expect: { timeout: 20_000 },
   fullyParallel: false,
   workers: 1,
-  retries: process.env.CI ? 1 : 0,
-  reporter: [
-    ["list"],
-    ["html", { open: "never", outputFolder: "playwright-report" }],
-  ],
+  retries: 0,
+  reporter: "list",
   use: {
     baseURL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
-    launchOptions: process.argv.includes("--headed")
-      ? { slowMo: 500 }
-      : undefined,
+    launchOptions: process.argv.includes("--headed") ? { slowMo: 500 } : undefined,
   },
   projects: [
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-    },
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
     },
   ],
 });

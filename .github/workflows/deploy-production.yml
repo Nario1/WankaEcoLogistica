@@ -1,57 +1,117 @@
-name: Deploy production
+name: Deploy Production
 
 on:
   push:
     branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Motivo del despliegue manual"
+        required: false
+        default: "despliegue manual Inspección 5"
 
 permissions:
   contents: read
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  build:
+    name: Build production artifacts
     runs-on: ubuntu-latest
-    environment: production
+    outputs:
+      frontend_built: ${{ steps.build_fe.outcome }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
           cache-dependency-path: |
-            backend/package-lock.json
             frontend/package-lock.json
+            backend/package-lock.json
 
-      - name: Build backend (verificación)
-        working-directory: backend
-        run: |
-          npm ci
-          npm run lint
-
-      - name: Build frontend de producción
+      - name: Install & build frontend
+        id: build_fe
         working-directory: frontend
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           npm ci
+          if [ -z "$VITE_API_URL" ]; then
+            echo "VITE_API_URL no definido: build con default del .env.example (localhost)."
+          fi
           npm run build
 
-      - name: Publicar artifact de frontend
+      - name: Verify backend package
+        working-directory: backend
+        run: npm ci
+
+      - name: Upload frontend dist
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: frontend/dist
+          path: frontend/dist/
+          retention-days: 30
 
-      - name: Disparar despliegue remoto
+      - name: Upload deploy notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-readme
+          path: docs/03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md
+          if-no-files-found: ignore
+
+  deploy:
+    name: Publish to production hook
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.summary.outputs.prod_url }}
+    steps:
+      - name: Resolve deploy target
+        id: summary
         env:
           DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
           PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
         run: |
-          if [ -n "$DEPLOY_HOOK_URL" ]; then
-            curl -fsS -X POST "$DEPLOY_HOOK_URL"
-            echo "Hook de despliegue ejecutado."
-          else
-            echo "DEPLOY_HOOK_URL no está configurado todavía."
-            echo "Configure el Secret en GitHub (Render/Railway/Vercel deploy hook) para despliegue automático."
-          fi
           if [ -n "$PRODUCTION_URL" ]; then
-            echo "URL de producción declarada: $PRODUCTION_URL"
+            echo "prod_url=$PRODUCTION_URL" >> "$GITHUB_OUTPUT"
+          else
+            echo "prod_url=" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger production deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::notice::DEPLOY_HOOK_URL aún no configurado."
+            echo "El artefacto frontend-dist ya está listo."
+            echo "Cuando tenga hosting (Render/Railway/Vercel), agregue el secret y re-ejecute este workflow."
+            exit 0
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK_URL"
+          echo "Hook de despliegue invocado correctamente."
+
+      - name: Deployment summary
+        env:
+          PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+        run: |
+          echo "### Deploy Production" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artefacto: \`frontend-dist\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$PRODUCTION_URL" ]; then
+            echo "- URL: $PRODUCTION_URL" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- URL: pendiente (secret \`PRODUCTION_URL\`)" >> "$GITHUB_STEP_SUMMARY"
           fi

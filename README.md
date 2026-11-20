@@ -6,6 +6,17 @@ Este es el único README general del proyecto. Los entregables específicos se e
 
 Para recorrer toda la documentación en orden, consulte el [índice central de documentación](<docs/00 Índice de documentación.md>).
 
+## Estado de CI/CD (Inspección 5)
+
+[![CI](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/ci.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/ci.yml)
+[![Tests](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/tests.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/tests.yml)
+[![Deploy Production](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/deploy-production.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/deploy-production.yml)
+[![Green IT & Performance Audit](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/green-audit.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/green-audit.yml)
+
+Workflows en [`.github/workflows/`](.github/workflows/): `ci.yml`, `tests.yml`, `deploy-production.yml` y `green-audit.yml`.
+
+Para el go-live posterior configure los secrets `DEPLOY_HOOK_URL`, `PRODUCTION_URL` y `VITE_API_URL` (paso a paso en [Guía de despliegue](<docs/03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md>)). Mientras tanto, cada push a `main` ya genera el artefacto `frontend-dist`.
+
 ## Estado actual
 
 Los incrementos documentados de los Sprints 01, 2 y 3 están disponibles para desarrollo local:
@@ -26,15 +37,7 @@ Los incrementos documentados de los Sprints 01, 2 y 3 están disponibles para de
 
 El Sprint 03 agrega el adaptador cartográfico, la consulta **Mi ruta** para el conductor autenticado y una PWA que conserva la última ruta cargada. El funcionamiento sin conexión cubre la consulta cacheada; no implica que las operaciones de administración o planificación estén disponibles offline. El alcance, la demostración, las métricas de calidad, seguridad y accesibilidad, los impedimentos y sus límites de evidencia se detallan en el [paquete documental del Sprint 03](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>).
 
-El Sprint 04 cierra EP-04 con indicadores (US-006), exportación de reportes (US-008) y recuperación de servicio (EN-003). El paquete documental de Inspección 5 está en [Sprint 04](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>). La Inspección 04 Green IT (ocho optimizaciones PERN, Lighthouse/SWDM y evidencias) se entrega en la carpeta consignada [reduccion del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>).
-
-### CI/CD (GitHub Actions)
-
-[![CI](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/ci.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/ci.yml)
-[![Tests](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/tests.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/tests.yml)
-[![Deploy production](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/deploy-production.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/deploy-production.yml)
-
-Workflows: [`ci.yml`](.github/workflows/ci.yml), [`tests.yml`](.github/workflows/tests.yml), [`deploy-production.yml`](.github/workflows/deploy-production.yml). Para el deploy automático configure el Secret `DEPLOY_HOOK_URL` (y opcionalmente `PRODUCTION_URL`).
+El Sprint 04 cierra EP-04 con indicadores (US-006), exportación de reportes (US-008) y recuperación de servicio (EN-003). El paquete documental de cierre (Inspección 5: revisión, retrospectiva, Playwright y usabilidad SUS) está en [Sprint 04](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>). La Inspección 04 Green IT (ocho optimizaciones PERN, Lighthouse/SWDM y evidencias) se entrega en la carpeta consignada [reduccion del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>).
 
 En Jira, el proyecto **EC** (épicas, historias, habilitadores y sprints 1–4) figura en estado **Listo** / **closed**.
 
@@ -84,9 +87,10 @@ WankaEcoLogistica/
 │       ├── Sprint 01/            # Base operativa y seguridad
 │       ├── Sprint 02/            # Optimización, evidencia y retrospectiva
 │       ├── Sprint 03/            # Revisión, retrospectiva, calidad, seguridad y accesibilidad
-│       ├── Sprint 04/            # EP-04: indicadores, reportes y EN-003
+│       ├── Sprint 04/            # EP-04 + Inspección 5 (Playwright, SUS, CI/CD)
 │       └── reduccion del impacto ambiental/  # Inspección 04 Green IT (informes)
 ├── evidencias/                  # Lighthouse/SWDM, cobertura, Sonar y capturas
+├── .github/workflows/           # ci.yml, tests.yml, deploy-production.yml
 ├── backend/
 │   ├── migrations/              # Migraciones SQL incrementales
 │   ├── scripts/                 # Migración y creación del administrador
@@ -334,13 +338,14 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [OWASP Top 10 2025](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
 - [Accesibilidad WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
 
-### Sprint 04 (Inspección 5)
+### Sprint 04 (Inspección 5 — cierre)
 
-- [01 Revisión del Sprint](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>)
-- [02 Retrospectiva del Sprint](<docs/03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
-- [03 Analisis PlayWrigth](<docs/03 Implementación/Sprint 04/03 Analisis PlayWrigth V_1_0_0.md>)
-- [04 Usabilidad (SUS)](<docs/03 Implementación/Sprint 04/04 Usabilidad V_1_0_0.md>)
-- [05 Recuperación de servicio EN-003](<docs/03 Implementación/Sprint 04/05 Recuperación de servicio EN-003 V_1_0_0.md>)
+- [Revisión del sprint](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>)
+- [Retrospectiva del sprint](<docs/03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
+- [Análisis Playwright](<docs/03 Implementación/Sprint 04/03 Analisis PlayWrigth V_1_0_0.md>)
+- [Usabilidad SUS](<docs/03 Implementación/Sprint 04/04 Usabilidad V_1_0_0.md>)
+- [Recuperación de servicio EN-003](<docs/03 Implementación/Sprint 04/05 Recuperación de servicio EN-003 V_1_0_0.md>)
+- [Guía de despliegue](<docs/03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md>)
 
 ### Reducción del impacto ambiental (Inspección 04)
 

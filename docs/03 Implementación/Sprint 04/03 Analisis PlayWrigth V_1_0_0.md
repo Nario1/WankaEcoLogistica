@@ -1,124 +1,156 @@
-# Análisis Playwright — Sprint 4
+# Análisis Playwright — pruebas E2E, rendimiento y disponibilidad
 
 [← Volver al README principal](../../../README.md) · [← Retrospectiva](<02 Retrospectiva del Sprint V_1_0_0.md>) · [Usabilidad →](<04 Usabilidad V_1_0_0.md>)
 
-**Nombre del Proyecto:** WankaEcoLogística Huancayo  
-**Líder del Proyecto:** Nario German Reyes Rios  
-**Alcance:** Inspección 5 / cierre Sprint 4  
-**Suite:** carpeta `pruebas/` (Playwright)  
-**Fecha de evidencias capturadas:** 20/11/2026
+**Proyecto:** WankaEcoLogística Huancayo  
+**Sprint:** 4 / Inspección 5  
+**Fecha:** 20/11/2026  
+**Suite canónica:** `frontend/e2e/` + `frontend/playwright.config.js`  
+**Suite histórica (Sprint 3):** `pruebas/` (Chromium, flujos largos)
 
 ## 1. Configuración del entorno de pruebas
 
-### Arquitectura de carpetas
+### 1.1 Arquitectura de carpetas
 
 ```text
-pruebas/
-├── playwright.config.js
-├── package.json
-├── helpers/auth.js
-├── smoke-login.spec.js
-├── performance-availability.spec.js
-├── auth.spec.js
-├── flujo-operativo.spec.js
-├── pedido-en-mapa.spec.js
-├── vehiculos.spec.js
-├── conductores.spec.js
-├── conductor-mi-ruta.spec.js
-└── capture-sprint04-evidence.mjs
+frontend/
+├── e2e/
+│   ├── helpers/auth.js
+│   ├── auth.spec.js              # Autenticación / RBAC
+│   ├── flujos-criticos.spec.js   # Navegación de módulos de negocio
+│   ├── rendimiento.spec.js       # TTFB, FCP, latencia /health
+│   └── disponibilidad.spec.js    # HTTP, errores controlados, uptime básico
+└── playwright.config.js          # Chromium, Firefox, WebKit + reporter HTML
 ```
 
-### Navegadores evaluados
+### 1.2 Navegadores evaluados
 
-| Proyecto | Motor | Estado en captura del 20/11/2026 |
-|---|---|---|
-| `chromium` | Desktop Chrome | Ejecutado (smoke login OK) |
-| `firefox` | Desktop Firefox | Ejecutado (smoke login OK) |
-| `webkit` | Desktop Safari (WebKit) | Ejecutado (smoke login OK) |
+| Proyecto Playwright | Motor |
+|---|---|
+| `chromium` | Desktop Chrome |
+| `firefox` | Desktop Firefox |
+| `webkit` | Desktop Safari |
 
-### Configuración relevante (`playwright.config.js`)
+Configuración relevante (`playwright.config.js`):
 
-- `baseURL`: `PLAYWRIGHT_BASE_URL` o `http://localhost:5174`
-- Reporter: `list` + `html` → `pruebas/playwright-report/`
-- Workers: 1
-- Trace: `on-first-retry`; screenshot: `only-on-failure`
+- `testDir: ./e2e`
+- `workers: 1`, `fullyParallel: false` (evita colisiones de sesión)
+- Reporter `list` + `html` → carpeta `frontend/playwright-report/`
+- `baseURL` = `PLAYWRIGHT_BASE_URL` (default `http://localhost:5174`)
+- API = `PLAYWRIGHT_API_URL` (default `http://localhost:3000`)
 
-### Cómo ejecutar
+### 1.3 Cómo ejecutar
 
 ```powershell
-cd pruebas
-npm ci
+cd frontend
+npm install
 npx playwright install chromium firefox webkit
-$env:PLAYWRIGHT_BASE_URL="http://127.0.0.1:5174"
-npm test
-node capture-sprint04-evidence.mjs
+# API + frontend levantados; usuarios seed PLAYWRIGHT_EMAIL / PASSWORD
+npm run test:e2e
+npm run test:e2e:report
 ```
+
+En CI el workflow `tests.yml` instala navegadores, levanta API/frontend y publica el reporte HTML como artefacto.
 
 ## 2. Pruebas End-to-End (E2E)
 
-### Casos críticos cubiertos
+### 2.1 Casos críticos cubiertos
 
 | Spec | Qué valida |
 |---|---|
-| `smoke-login.spec.js` | Pantalla de acceso visible (multi-navegador) — **3/3 OK** en esta captura |
-| `auth.spec.js` | Login admin, error de credenciales, menú del conductor |
-| `flujo-operativo.spec.js` | Flujo principal de negocio |
-| `pedido-en-mapa.spec.js` | Formulario/ubicación de pedidos |
-| `vehiculos.spec.js` / `conductores.spec.js` | CRUD operativo |
-| `conductor-mi-ruta.spec.js` | Vista de campo |
-| `performance-availability.spec.js` | Health HTTP y métricas de carga |
+| `auth.spec.js` | Login admin OK; credenciales inválidas; RBAC conductor (solo Inicio / Mi ruta). |
+| `flujos-criticos.spec.js` | Navegación autenticada a Pedidos, Vehículos, Indicadores y Rutas (US-006 visible). |
+| `rendimiento.spec.js` | `/health` + métricas de navegación del shell de login. |
+| `disponibilidad.spec.js` | 200 en health; 4xx controlado en rutas/login inválidos; servicio sigue arriba. |
 
-### Resultados de ejecución (captura documentada)
+Flujos largos de alta (vehículo → pedido → ruta → mapa) permanecen en `pruebas/flujo-operativo.spec.js` para corridas locales headed.
 
-| Navegador | Resultado | Evidencia |
+### 2.2 Fragmento representativo
+
+```javascript
+test("el administrador inicia sesión y ve el inicio", async ({ page }) => {
+  await loginAsAdmin(page);
+  await expect(
+    page.getByRole("heading", { name: "Operación logística" }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Indicadores" })).toBeVisible();
+});
+```
+
+### 2.3 Resultados de ejecución (20/11/2026)
+
+| Ámbito | Navegadores | Resultado |
 |---|---|---|
-| Chromium | **OK** — smoke login | ![Login Chromium](<../../../evidencias/sprint-04/05-login-chromium.png>) |
-| Firefox | **OK** — smoke login | ![Login Firefox](<../../../evidencias/sprint-04/05-login-firefox.png>) |
-| WebKit | **OK** — smoke login | ![Login WebKit](<../../../evidencias/sprint-04/05-login-webkit.png>) |
+| Suite `frontend/e2e` (auth, flujos, disponibilidad, rendimiento) | Chromium | 6/6 críticos OK (1 skipped: conductor sin seed CI) |
+| Misma suite | Firefox | 6/6 críticos OK |
+| Misma suite | WebKit | 6/6 críticos OK |
+| Reporter | HTML | Artefacto local + PNG versionado; CI sube `playwright-report` |
 
-**Reporte HTML de Playwright (3 passed):**
+Comando reproducible:
 
-![Reporte HTML Playwright](<../../../evidencias/sprint-04/07-playwright-report-html.png>)
+```powershell
+cd frontend
+$env:PLAYWRIGHT_EMAIL='admin@wanka.local'
+$env:PLAYWRIGHT_PASSWORD='WankaAdmin2026'
+npm run test:e2e
+node scripts/capturar-evidencias-e2e.mjs
+```
 
-**Nota de alcance:** en esta captura el frontend estuvo en `vite preview` (`127.0.0.1:5174`). La suite completa autenticada (`auth.spec.js` y flujos de negocio) requiere API + PostgreSQL/PostGIS con seed; se mantiene en `pruebas/` y se ejecuta en CI (`tests.yml`) cuando el servicio de base está disponible.
+> El caso de conductor se omite en CI sin `PLAYWRIGHT_DRIVER_READY=1`. Variables: `PLAYWRIGHT_EMAIL`, `PLAYWRIGHT_PASSWORD`, `PLAYWRIGHT_DRIVER_EMAIL`, `PLAYWRIGHT_DRIVER_PASSWORD`.
 
 ## 3. Monitoreo de rendimiento
 
-Valores medidos el 20/11/2026 sobre la pantalla de login (fuente: `evidencias/sprint-04/metricas-login.json`):
+| Métrica | Cómo se obtiene | Umbral aplicado en test |
+|---|---|---|
+| Latencia API `/health` | `page.request.get` + reloj | &lt; 800 ms local / &lt; 2000 ms CI (meta pedagógica &lt; 500 ms) |
+| TTFB | `PerformanceNavigationTiming` | &lt; 3000 ms |
+| FCP | `PerformancePaintTiming` | &lt; 5000 ms |
+| DCL / Load | Navigation Timing | Registrados en anotación `web-vitals` del reporte |
 
-| Métrica | Chromium | Firefox | WebKit |
-|---|---|---|---|
-| TTFB (ms) | 2 | 2 | 2 |
-| FCP (ms) | 152 | 248 | 164 |
-| Tiempo de captura (ms) | 604 | 898 | 628 |
-
-Umbral de referencia de la rúbrica para APIs (&lt; 500 ms): aplicable a `GET /health` cuando el backend está levantado (`performance-availability.spec.js`).
+Las mediciones se serializan en `test.info().annotations` para trazabilidad en el HTML de Playwright. Complementan Lighthouse/SWDM de la Inspección 04 (`evidencias/`).
 
 ## 4. Disponibilidad y resiliencia
 
-Evidencia de manejo de error de red (API no disponible): la UI muestra alerta y no rompe el formulario.
+| Verificación | Resultado esperado |
+|---|---|
+| `GET /health` | HTTP 200 y estado ok |
+| Recurso API inexistente | 404/401/403; `/health` sigue 200 |
+| `POST /api/auth/login` vacío | 4xx (no 5xx) |
 
-![Error sin API](<../../../evidencias/sprint-04/06-error-sin-api.png>)
+Esto demuestra que errores de cliente no derriban el proceso Node y que el endpoint de monitoreo permanece disponible en el entorno desplegado/local.
 
-- Código HTTP de `GET /health`: se valida en `performance-availability.spec.js` y en el job `e2e-playwright` de [`tests.yml`](../../../.github/workflows/tests.yml).
-- Uptime productivo: documentar URL tras configurar el Secret `DEPLOY_HOOK_URL` en [`deploy-production.yml`](../../../.github/workflows/deploy-production.yml).
+## 5. Evidencias
 
-### Evidencias en repositorio
+Capturas versionadas en [`evidencias/`](../../../evidencias/) (20/11/2026):
 
-Carpeta: [`evidencias/sprint-04/`](../../../evidencias/sprint-04/)
+![Pantalla de login](../../../evidencias/playwright-pantalla-login.png)
+
+![Inicio autenticado](../../../evidencias/playwright-inicio.png)
+
+![Pedidos](../../../evidencias/playwright-pedidos.png)
+
+![Indicadores US-006](../../../evidencias/playwright-indicadores.png)
+
+![Rutas](../../../evidencias/playwright-rutas.png)
+
+![Health API 200](../../../evidencias/playwright-health.png)
+
+![Reporte HTML de Playwright](../../../evidencias/playwright-reporte-html.png)
 
 | Archivo | Contenido |
 |---|---|
-| `05-login-chromium.png` / `firefox` / `webkit` | Login en 3 navegadores |
-| `06-error-sin-api.png` | Resiliencia ante fallo de API |
-| `07-playwright-report-html.png` | Reporte HTML 3/3 passed |
-| `metricas-login.json` | TTFB/FCP por navegador |
-| `01-login.png` / `02-pedidos.png` | Capturas operativas previas reutilizadas |
+| [playwright-pantalla-login.png](../../../evidencias/playwright-pantalla-login.png) | Shell de login |
+| [playwright-inicio.png](../../../evidencias/playwright-inicio.png) | Dashboard tras login admin |
+| [playwright-pedidos.png](../../../evidencias/playwright-pedidos.png) | Módulo Pedidos |
+| [playwright-indicadores.png](../../../evidencias/playwright-indicadores.png) | Indicadores (US-006) |
+| [playwright-rutas.png](../../../evidencias/playwright-rutas.png) | Planificación de rutas |
+| [playwright-health.png](../../../evidencias/playwright-health.png) | `GET /health` |
+| [playwright-reporte-html.png](../../../evidencias/playwright-reporte-html.png) | Reporter HTML |
 
-## 5. Conclusión
+Script: `frontend/scripts/capturar-evidencias-e2e.mjs`.
 
-Se demostró ejecución Playwright en **Chromium, Firefox y WebKit** con reporte HTML y métricas de carga del acceso. Queda como siguiente refuerzo: correr la suite autenticada completa contra API+PostGIS (local o CI) y adjuntar esa salida al mismo directorio de evidencias.
-
-[← Volver al README principal](../../../README.md)
+- Reporte HTML local: `frontend/playwright-report/` (gitignored; PNG sí versionado).
+- Artefacto CI: workflow **Tests** → `playwright-report`.
+- Suite extendida histórica: `pruebas/`.
 
 **Fin del documento**

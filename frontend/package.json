@@ -12,7 +12,11 @@
     "format:check": "prettier --check .",
     "security:audit": "npm audit --audit-level=high",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report playwright-report",
+    "test:e2e:evidence": "node scripts/capturar-evidencias-e2e.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -34,6 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "jsdom": "^31.0.0",
     "path-exists": "^4.0.0",
+    "@playwright/test": "^1.58.2",
     "prettier": "^3.6.2",
     "vite": "^8.0.0",
     "vitest": "^5.1.0"
