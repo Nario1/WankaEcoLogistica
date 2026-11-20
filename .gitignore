@@ -1,6 +1,7 @@
 node_modules/
 *~
 dist/
+build/
 .env
 .env.*
 !.env.example
@@ -17,3 +18,7 @@ backend/backups/*.json
 backend/backups/reports/*.json
 !backend/backups/.gitkeep
 !backend/backups/reports/.gitkeep
+playwright-report/
+test-results/
+pruebas/playwright-report/
+pruebas/test-results/

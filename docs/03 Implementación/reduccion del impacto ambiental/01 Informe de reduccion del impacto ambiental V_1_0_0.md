@@ -1,6 +1,6 @@
 # Informe de reducción del impacto ambiental y optimización PERN
 
-[← Sprint 04](<../Sprint 04/01 Revisión del Sprint V_1_0_0.md>) · [README principal](../../../README.md) · [Estándares →](<02 Estandares Ingeniería de software V_1_0_0.md>)
+[← Sprint 04](<../Sprint 04/01 Revisión del Sprint V_1_0_0.md>) · [← Volver al README principal](../../../README.md) · [Estándares →](<02 Estandares Ingeniería de software V_1_0_0.md>)
 
 **Proyecto:** WankaEcoLogística Huancayo  
 **Versión:** 1.0.0  

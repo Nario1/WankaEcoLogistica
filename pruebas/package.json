@@ -5,7 +5,8 @@
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
-    "test:install": "playwright install chromium"
+    "test:chromium": "playwright test --project=chromium",
+    "test:install": "playwright install chromium firefox webkit"
   },
   "engines": {
     "node": ">=20"

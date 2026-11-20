@@ -1,0 +1,27 @@
+{
+  "baseURL": "http://127.0.0.1:5174",
+  "capturedAt": "2026-11-20T18:15:52.812Z",
+  "results": [
+    {
+      "browser": "chromium",
+      "file": "evidencias\\sprint-04\\05-login-chromium.png",
+      "elapsedMs": 604,
+      "ttfb": 2,
+      "fcp": 152
+    },
+    {
+      "browser": "firefox",
+      "file": "evidencias\\sprint-04\\05-login-firefox.png",
+      "elapsedMs": 898,
+      "ttfb": 2,
+      "fcp": 248
+    },
+    {
+      "browser": "webkit",
+      "file": "evidencias\\sprint-04\\05-login-webkit.png",
+      "elapsedMs": 628,
+      "ttfb": 2,
+      "fcp": 164
+    }
+  ]
+}

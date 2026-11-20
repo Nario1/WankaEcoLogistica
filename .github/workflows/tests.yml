@@ -1,0 +1,137 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  backend-unit:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_DB: wanka_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d wanka_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      NODE_ENV: test
+      JWT_SECRET: ci-only-secret-with-at-least-32-characters
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wanka_test
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wanka_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npm run db:migrate
+      - run: npm test
+
+  frontend-unit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run test:coverage
+
+  e2e-playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_DB: wanka_e2e
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d wanka_e2e"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      CI: true
+      NODE_ENV: development
+      JWT_SECRET: ci-only-secret-with-at-least-32-characters
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wanka_e2e
+      CORS_ORIGIN: http://127.0.0.1:5174
+      ADMIN_EMAIL: admin@wanka.local
+      ADMIN_PASSWORD: WankaAdmin2026
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:5174
+      PLAYWRIGHT_API_URL: http://127.0.0.1:3000
+      PLAYWRIGHT_EMAIL: admin@wanka.local
+      PLAYWRIGHT_PASSWORD: WankaAdmin2026
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+            pruebas/package-lock.json
+      - name: Instalar backend
+        working-directory: backend
+        run: npm ci
+      - name: Migrar y seed
+        working-directory: backend
+        run: |
+          npm run db:migrate
+          npm run db:seed
+      - name: Instalar frontend
+        working-directory: frontend
+        run: npm ci
+      - name: Instalar pruebas
+        working-directory: pruebas
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium firefox webkit
+      - name: Levantar API
+        working-directory: backend
+        run: |
+          nohup npm run start > /tmp/api.log 2>&1 &
+          npx --yes wait-on http://127.0.0.1:3000/health --timeout 60000
+      - name: Levantar frontend
+        working-directory: frontend
+        run: |
+          echo "VITE_API_URL=http://127.0.0.1:3000/api" > .env
+          npm run build
+          nohup npx vite preview --host 127.0.0.1 --port 5174 > /tmp/web.log 2>&1 &
+          npx --yes wait-on http://127.0.0.1:5174 --timeout 60000
+      - name: Ejecutar Playwright
+        working-directory: pruebas
+        run: npm test
+      - name: Subir reporte HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: pruebas/playwright-report
+          if-no-files-found: ignore

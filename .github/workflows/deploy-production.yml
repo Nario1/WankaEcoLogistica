@@ -1,0 +1,57 @@
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Build backend (verificación)
+        working-directory: backend
+        run: |
+          npm ci
+          npm run lint
+
+      - name: Build frontend de producción
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publicar artifact de frontend
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Disparar despliegue remoto
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+          PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+        run: |
+          if [ -n "$DEPLOY_HOOK_URL" ]; then
+            curl -fsS -X POST "$DEPLOY_HOOK_URL"
+            echo "Hook de despliegue ejecutado."
+          else
+            echo "DEPLOY_HOOK_URL no está configurado todavía."
+            echo "Configure el Secret en GitHub (Render/Railway/Vercel deploy hook) para despliegue automático."
+          fi
+          if [ -n "$PRODUCTION_URL" ]; then
+            echo "URL de producción declarada: $PRODUCTION_URL"
+          fi

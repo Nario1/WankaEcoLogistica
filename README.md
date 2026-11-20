@@ -26,7 +26,15 @@ Los incrementos documentados de los Sprints 01, 2 y 3 están disponibles para de
 
 El Sprint 03 agrega el adaptador cartográfico, la consulta **Mi ruta** para el conductor autenticado y una PWA que conserva la última ruta cargada. El funcionamiento sin conexión cubre la consulta cacheada; no implica que las operaciones de administración o planificación estén disponibles offline. El alcance, la demostración, las métricas de calidad, seguridad y accesibilidad, los impedimentos y sus límites de evidencia se detallan en el [paquete documental del Sprint 03](<docs/03 Implementación/Sprint 03/01 Revisión del Sprint V_1_0_0.md>).
 
-El Sprint 04 cierra EP-04 con indicadores (US-006), exportación de reportes (US-008) y recuperación de servicio (EN-003). El paquete documental está en [Sprint 04](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>). La Inspección 04 Green IT (ocho optimizaciones PERN, Lighthouse/SWDM y evidencias) se entrega en la carpeta consignada [reduccion del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>).
+El Sprint 04 cierra EP-04 con indicadores (US-006), exportación de reportes (US-008) y recuperación de servicio (EN-003). El paquete documental de Inspección 5 está en [Sprint 04](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>). La Inspección 04 Green IT (ocho optimizaciones PERN, Lighthouse/SWDM y evidencias) se entrega en la carpeta consignada [reduccion del impacto ambiental](<docs/03 Implementación/reduccion del impacto ambiental/01 Informe de reduccion del impacto ambiental V_1_0_0.md>).
+
+### CI/CD (GitHub Actions)
+
+[![CI](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/ci.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/ci.yml)
+[![Tests](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/tests.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/tests.yml)
+[![Deploy production](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/deploy-production.yml/badge.svg)](https://github.com/Nario1/WankaEcoLogistica/actions/workflows/deploy-production.yml)
+
+Workflows: [`ci.yml`](.github/workflows/ci.yml), [`tests.yml`](.github/workflows/tests.yml), [`deploy-production.yml`](.github/workflows/deploy-production.yml). Para el deploy automático configure el Secret `DEPLOY_HOOK_URL` (y opcionalmente `PRODUCTION_URL`).
 
 En Jira, el proyecto **EC** (épicas, historias, habilitadores y sprints 1–4) figura en estado **Listo** / **closed**.
 
@@ -326,11 +334,13 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [OWASP Top 10 2025](<docs/03 Implementación/Sprint 03/04 OWASP V_1_0_0.md>)
 - [Accesibilidad WCAG](<docs/03 Implementación/Sprint 03/05 WCAG V_1_0_0.md>)
 
-### Sprint 04
+### Sprint 04 (Inspección 5)
 
-- [Revisión del sprint](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>)
-- [Retrospectiva del sprint](<docs/03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
-- [Recuperación de servicio EN-003](<docs/03 Implementación/Sprint 04/03 Recuperación de servicio EN-003 V_1_0_0.md>)
+- [01 Revisión del Sprint](<docs/03 Implementación/Sprint 04/01 Revisión del Sprint V_1_0_0.md>)
+- [02 Retrospectiva del Sprint](<docs/03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
+- [03 Analisis PlayWrigth](<docs/03 Implementación/Sprint 04/03 Analisis PlayWrigth V_1_0_0.md>)
+- [04 Usabilidad (SUS)](<docs/03 Implementación/Sprint 04/04 Usabilidad V_1_0_0.md>)
+- [05 Recuperación de servicio EN-003](<docs/03 Implementación/Sprint 04/05 Recuperación de servicio EN-003 V_1_0_0.md>)
 
 ### Reducción del impacto ambiental (Inspección 04)
 
