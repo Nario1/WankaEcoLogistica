@@ -7,10 +7,10 @@ import {
 } from "./helpers/auth.js";
 
 test.describe("Autenticación y RBAC", () => {
-  test("el administrador inicia sesión y ve el inicio", async ({ page }) => {
+  test("el administrador inicia sesión y ve el dashboard", async ({ page }) => {
     await loginAsAdmin(page);
     await expect(
-      page.getByRole("heading", { name: "Operación logística" }),
+      page.getByRole("heading", { name: "Dashboard operativo" }),
     ).toBeVisible();
     await expect(page.getByRole("button", { name: "Pedidos" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Rutas" })).toBeVisible();
@@ -25,7 +25,7 @@ test.describe("Autenticación y RBAC", () => {
     await expect(page.getByRole("button", { name: "Ingresar" })).toBeVisible();
   });
 
-  test("el conductor solo ve Inicio y Mi ruta", async ({ page }) => {
+  test("el conductor solo ve Dashboard y Mi ruta", async ({ page }) => {
     test.skip(
       process.env.CI === "true" && process.env.PLAYWRIGHT_DRIVER_READY !== "1",
       "Requiere usuario conductor seed (PLAYWRIGHT_DRIVER_READY=1)",

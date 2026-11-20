@@ -31,7 +31,10 @@ export default function Dashboard(props) {
     sessionStorage.setItem(PAGE_STORAGE_KEY, page);
   }, [page]);
   const pages = {
-    overview: { label: "Inicio", component: <OverviewPage /> },
+    overview: {
+      label: "Dashboard",
+      component: <OverviewPage onNavigate={setPage} />,
+    },
     orders: { label: "Pedidos", component: <OrdersPage /> },
     vehicles: { label: "Vehículos", component: <VehiclesPage /> },
     drivers: { label: "Conductores", component: <DriversPage /> },

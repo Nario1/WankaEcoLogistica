@@ -14,6 +14,7 @@ import RouteRoundedIcon from "@mui/icons-material/RouteRounded";
 import VerifiedRoundedIcon from "@mui/icons-material/VerifiedRounded";
 import { apiDownload, apiRequest, formatApiError } from "../../api/client";
 import { useAuth } from "../../auth/AuthContext";
+import MetricCard from "../shared/MetricCard";
 
 function defaultRange() {
   const to = new Date();
@@ -28,29 +29,6 @@ function toIsoStart(date) {
 
 function toIsoEnd(date) {
   return `${date}T23:59:59.999Z`;
-}
-
-function MetricCard({ icon, title, value, detail }) {
-  return (
-    <Card sx={{ height: "100%" }}>
-      <CardContent>
-        <Stack direction="row" spacing={1.5} alignItems="center" mb={1}>
-          {icon}
-          <Typography variant="subtitle2" color="text.secondary">
-            {title}
-          </Typography>
-        </Stack>
-        <Typography variant="h4" fontWeight={700}>
-          {value}
-        </Typography>
-        {detail ? (
-          <Typography variant="body2" color="text.secondary" mt={0.5}>
-            {detail}
-          </Typography>
-        ) : null}
-      </CardContent>
-    </Card>
-  );
 }
 
 export default function IndicatorsPage() {

@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { apiRequest } from "../api/client";
+import { clearResourceCache } from "../api/resourceCache";
 
 const AuthContext = createContext(null);
 const STORAGE_KEY = "wanka-session";
@@ -27,6 +28,7 @@ export function AuthProvider({ children }) {
         setSession(nextSession);
       },
       logout() {
+        clearResourceCache();
         sessionStorage.removeItem(STORAGE_KEY);
         setSession(null);
       },

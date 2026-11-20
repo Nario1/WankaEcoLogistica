@@ -4,7 +4,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
@@ -16,8 +16,8 @@ import PropTypes from "prop-types";
 const mainListItems = [
   {
     id: "overview",
-    text: "Inicio",
-    icon: <HomeRoundedIcon />,
+    text: "Dashboard",
+    icon: <DashboardRoundedIcon />,
     roles: ["ADMIN", "OPERATOR", "DRIVER", "AUDITOR"],
   },
   {

@@ -1,3 +1,8 @@
+import {
+  getCachedResource,
+  setCachedResource,
+} from "./resourceCache.js";
+
 // En producción el navegador llama a /api del mismo dominio de Vercel.
 // Una VITE_API_URL con localhost queda ignorada: ese valor se hornea en el
 // build y el navegador bloquea el acceso a la PC.
@@ -9,6 +14,8 @@ const API_URL = import.meta.env.PROD
     ? "/api"
     : configured
   : (configured ?? "http://localhost:3000/api");
+
+const GET_CACHE_TTL_MS = 60_000;
 
 export class ApiError extends Error {
   constructor(message, { status, code, details } = {}) {
@@ -52,6 +59,20 @@ export async function apiRequest(path, { token, ...options } = {}) {
     );
   }
   return payload.data;
+}
+
+/** GET con caché en memoria (TTL 60s). Mutations deben invalidar vía resourceCache. */
+export async function cachedApiGet(
+  path,
+  { token, ttlMs = GET_CACHE_TTL_MS, force = false } = {},
+) {
+  if (!force) {
+    const cached = getCachedResource(path, token, ttlMs);
+    if (cached != null) return cached;
+  }
+  const payload = await apiRequest(path, { token });
+  setCachedResource(path, token, payload);
+  return payload;
 }
 
 export async function apiDownload(path, { token, filename } = {}) {

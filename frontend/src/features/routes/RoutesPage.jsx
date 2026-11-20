@@ -20,7 +20,8 @@ import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { apiRequest, formatApiError } from "../../api/client";
+import { apiRequest, cachedApiGet, formatApiError } from "../../api/client";
+import { invalidateResourceCache } from "../../api/resourceCache";
 import { useAuth } from "../../auth/AuthContext";
 
 import FormDialog from "../shared/FormDialog";
@@ -246,13 +247,13 @@ export default function RoutesPage() {
     const unwrap = (payload) =>
       Array.isArray(payload) ? payload : (payload?.items ?? []);
     Promise.all([
-      apiRequest(`/vehicles?${pageQuery}`, {
+      cachedApiGet(`/vehicles?${pageQuery}`, {
         token: session.token,
       }),
-      apiRequest(`/drivers?${pageQuery}`, {
+      cachedApiGet(`/drivers?${pageQuery}`, {
         token: session.token,
       }),
-      apiRequest(`/orders?${pageQuery}`, {
+      cachedApiGet(`/orders?${pageQuery}`, {
         token: session.token,
       }),
     ])
@@ -344,6 +345,9 @@ export default function RoutesPage() {
       setOrders((current) =>
         current.filter((order) => !selectedOrderIds.includes(order.id)),
       );
+      invalidateResourceCache("/orders", session.token);
+      invalidateResourceCache("/routes", session.token);
+      invalidateResourceCache("/indicators", session.token);
 
       setDialog(null);
 

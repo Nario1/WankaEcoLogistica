@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { apiRequest, formatApiError } from "../../api/client";
+import {
+  getCachedResource,
+  invalidateResourceCache,
+  setCachedResource,
+} from "../../api/resourceCache";
 import { useAuth } from "../../auth/AuthContext";
 
 const DEFAULT_LIMIT = 12;
+const LIST_TTL_MS = 60_000;
 
 function buildPath(path, page, limit) {
   const separator = path.includes("?") ? "&" : "?";
@@ -47,16 +53,40 @@ export function useApiResource(path, { limit = DEFAULT_LIMIT } = {}) {
     [limit],
   );
 
+  const fetchPage = useCallback(
+    async (nextPage, { force = false } = {}) => {
+      const requestPath = buildPath(path, nextPage, limit);
+      if (!force) {
+        const cached = getCachedResource(
+          requestPath,
+          session.token,
+          LIST_TTL_MS,
+        );
+        if (cached != null) {
+          applyPayload(cached);
+          setPage(nextPage);
+          setLoading(false);
+          setError("");
+          return cached;
+        }
+      }
+      const payload = await apiRequest(requestPath, {
+        token: session.token,
+      });
+      setCachedResource(requestPath, session.token, payload);
+      applyPayload(payload);
+      setPage(nextPage);
+      return payload;
+    },
+    [applyPayload, limit, path, session.token],
+  );
+
   const load = useCallback(
     async (nextPage = page) => {
       setLoading(true);
       setError("");
       try {
-        const payload = await apiRequest(buildPath(path, nextPage, limit), {
-          token: session.token,
-        });
-        applyPayload(payload);
-        setPage(nextPage);
+        await fetchPage(nextPage, { force: true });
       } catch (requestError) {
         if (requestError.status === 401) {
           logout();
@@ -67,15 +97,28 @@ export function useApiResource(path, { limit = DEFAULT_LIMIT } = {}) {
         setLoading(false);
       }
     },
-    [applyPayload, limit, logout, page, path, session.token],
+    [fetchPage, logout, page],
   );
 
   useEffect(() => {
     let active = true;
+    const requestPath = buildPath(path, 1, limit);
+    const cached = getCachedResource(requestPath, session.token, LIST_TTL_MS);
+    if (cached != null) {
+      applyPayload(cached);
+      setPage(1);
+      setLoading(false);
+      setError("");
+      return () => {
+        active = false;
+      };
+    }
+
     setLoading(true);
-    apiRequest(buildPath(path, 1, limit), { token: session.token })
+    apiRequest(requestPath, { token: session.token })
       .then((payload) => {
         if (!active) return;
+        setCachedResource(requestPath, session.token, payload);
         applyPayload(payload);
         setPage(1);
       })
@@ -102,6 +145,7 @@ export function useApiResource(path, { limit = DEFAULT_LIMIT } = {}) {
         token: session.token,
         body: JSON.stringify(body),
       });
+      invalidateResourceCache(path, session.token);
       await load(page);
       return result;
     } catch (requestError) {
