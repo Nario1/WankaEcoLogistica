@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: "20"
           cache: npm
           cache-dependency-path: |
             frontend/package-lock.json
@@ -40,11 +40,13 @@ jobs:
         id: build_fe
         working-directory: frontend
         env:
+          # Vacío = build con /api (mismo origen en Vercel). No hornear localhost.
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: |
           npm ci
           if [ -z "$VITE_API_URL" ]; then
-            echo "VITE_API_URL no definido: build con default del .env.example (localhost)."
+            echo "VITE_API_URL vacío: el cliente usará /api en producción."
+            unset VITE_API_URL
           fi
           npm run build
 
@@ -83,7 +85,7 @@ jobs:
           if [ -n "$PRODUCTION_URL" ]; then
             echo "prod_url=$PRODUCTION_URL" >> "$GITHUB_OUTPUT"
           else
-            echo "prod_url=" >> "$GITHUB_OUTPUT"
+            echo "prod_url=https://wanka-ecologistica.vercel.app" >> "$GITHUB_OUTPUT"
           fi
           if [ -z "$DEPLOY_HOOK_URL" ]; then
             echo "pending=true" >> "$GITHUB_OUTPUT"
@@ -98,7 +100,8 @@ jobs:
           if [ -z "$DEPLOY_HOOK_URL" ]; then
             echo "::notice::DEPLOY_HOOK_URL aún no configurado."
             echo "El artefacto frontend-dist ya está listo."
-            echo "Cuando tenga hosting (Render/Railway/Vercel), agregue el secret y re-ejecute este workflow."
+            echo "URL por defecto: https://wanka-ecologistica.vercel.app"
+            echo "Cuando tenga el Deploy Hook de Vercel, agregue el secret y re-ejecute."
             exit 0
           fi
           curl -fsS -X POST "$DEPLOY_HOOK_URL"
@@ -113,5 +116,5 @@ jobs:
           if [ -n "$PRODUCTION_URL" ]; then
             echo "- URL: $PRODUCTION_URL" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "- URL: pendiente (secret \`PRODUCTION_URL\`)" >> "$GITHUB_STEP_SUMMARY"
+            echo "- URL: https://wanka-ecologistica.vercel.app (default; configure \`PRODUCTION_URL\`)" >> "$GITHUB_STEP_SUMMARY"
           fi
