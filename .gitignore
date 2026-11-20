@@ -24,3 +24,6 @@ backend/backups/*.json
 backend/backups/reports/*.json
 !backend/backups/.gitkeep
 !backend/backups/reports/.gitkeep
+.neon
+
+.neon-database-url.tmp
