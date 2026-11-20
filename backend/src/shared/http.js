@@ -6,8 +6,18 @@ export function notFoundHandler(_request, response) {
     .json({ error: { code: "NOT_FOUND", message: "Ruta no encontrada" } });
 }
 
+function isAppError(error) {
+  // En Vercel el bundle puede duplicar el módulo y romper `instanceof`.
+  return (
+    error instanceof AppError ||
+    (error?.name === "AppError" &&
+      Number.isInteger(error.status) &&
+      typeof error.code === "string")
+  );
+}
+
 export function errorHandler(error, _request, response, _next) {
-  if (error instanceof AppError) {
+  if (isAppError(error)) {
     return response.status(error.status).json({
       error: {
         code: error.code,
