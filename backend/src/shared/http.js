@@ -27,6 +27,15 @@ export function errorHandler(error, _request, response, _next) {
     });
   }
 
+  if (error instanceof SyntaxError || error?.type === "entity.parse.failed") {
+    return response.status(400).json({
+      error: {
+        code: "VALIDATION_ERROR",
+        message: "JSON de entrada inválido",
+      },
+    });
+  }
+
   if (error?.code === "23505") {
     return response
       .status(409)
