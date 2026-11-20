@@ -1,10 +1,11 @@
 /* WankaEcoLogística — service worker EN-004 */
-const SHELL_CACHE = "wanka-shell-v2";
+const SHELL_CACHE = "wanka-shell-v3";
 const SHELL_ASSETS = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
-  "/pwa-icon.svg",
+  "/pwa-icon-192.png",
+  "/pwa-icon-512.png",
 ];
 
 self.addEventListener("install", (event) => {

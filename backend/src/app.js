@@ -12,11 +12,27 @@ import { createEmissionsRouter } from "./modules/sustainability/emissions.routes
 import { createIndicatorsRouter } from "./modules/sustainability/indicators.routes.js";
 import { createReportsRouter } from "./modules/sustainability/reports.routes.js";
 import { createOptimizationRouter } from "./modules/optimization/optimization.routes.js";
+import { serviceUnavailable } from "./shared/errors.js";
 import { errorHandler, notFoundHandler } from "./shared/http.js";
 
-export function createApp({ config, services, pool = null }) {
+export function createApp({
+  config,
+  services,
+  pool = null,
+  requirePoolForApi = false,
+}) {
   const app = express();
   const authenticate = createAuthenticate(config);
+  const requireDatabase = (_request, _response, next) => {
+    if (requirePoolForApi && !pool) {
+      return next(
+        serviceUnavailable(
+          "Base de datos no configurada (DATABASE_URL). El API no puede autenticar ni persistir datos.",
+        ),
+      );
+    }
+    return next();
+  };
 
   app.disable("x-powered-by");
   app.set("etag", "weak");
@@ -76,6 +92,7 @@ export function createApp({ config, services, pool = null }) {
       });
     }
   });
+  app.use("/api", requireDatabase);
   app.use("/api/auth", createAuthRouter({ authService: services.authService }));
   app.use(
     "/api/orders",

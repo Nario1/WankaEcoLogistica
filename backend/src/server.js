@@ -8,6 +8,7 @@ const app = createApp({
   config,
   services: container.services,
   pool: container.pool,
+  requirePoolForApi: true,
 });
 
 const server = app.listen(config.port, () => {
