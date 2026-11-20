@@ -20,14 +20,12 @@ jobs:
           POSTGRES_DB: wanka_test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST_AUTH_METHOD: trust
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres -d wanka_test"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 10
-          --shm-size=256mb
+          --health-retries 5
     defaults:
       run:
         working-directory: backend
@@ -36,7 +34,6 @@ jobs:
       JWT_SECRET: ci-only-secret-with-at-least-32-characters
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wanka_test
       TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wanka_test
-      DATABASE_SSL: "false"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -62,9 +59,7 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
-      # El SW solo registra fuera de DEV; el test unitario asume registro inmediato.
-      - name: Unit tests with coverage
-        run: npx vitest run --coverage --exclude "src/pwa/registerServiceWorker.test.js"
+      - run: npm run test:coverage
 
   e2e-playwright:
     name: Playwright E2E
@@ -77,14 +72,12 @@ jobs:
           POSTGRES_DB: wanka_e2e
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST_AUTH_METHOD: trust
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres -d wanka_e2e"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 10
-          --shm-size=256mb
+          --health-retries 5
     env:
       NODE_ENV: production
       PORT: 3000

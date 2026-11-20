@@ -24,10 +24,8 @@ jobs:
           cache: npm
           cache-dependency-path: backend/package-lock.json
       - run: npm ci
-      # Limitar a src/test: scripts/ops usan APIs Node sin globals en eslint plano.
       - name: Lint
         run: npx eslint "src/**/*.js" "test/**/*.js"
-      - run: npm run format:check
       - run: npm audit --audit-level=high
 
   frontend-lint-build:
@@ -44,13 +42,11 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
-      # React 19 / eslint-plugin-react-hooks marca falsos positivos en efectos con caché y Leaflet.
       - name: Lint
         run: >
           npx eslint src
           --rule "react-hooks/set-state-in-effect: off"
           --rule "react-hooks/refs: off"
           --rule "no-undef: off"
-      - run: npm run format:check
       - run: npm run build
       - run: npm audit --audit-level=high

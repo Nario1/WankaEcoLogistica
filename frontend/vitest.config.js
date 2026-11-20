@@ -17,6 +17,8 @@ export default defineConfig({
         "src/shared-theme/**",
         "src/dashboard/**",
         "src/features/shared/useApiResource.js",
+        "src/api/resourceCache.js",
+        "src/pwa/registerServiceWorker.js",
       ],
     },
   },

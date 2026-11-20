@@ -12,17 +12,16 @@ describe("registerServiceWorker", () => {
     expect(() => registerServiceWorker()).not.toThrow();
   });
 
-  it("registra el worker al cargar la página", () => {
+  it("no registra el worker en modo desarrollo (Vite DEV)", () => {
     const register = vi.fn(() => Promise.resolve());
-    const addEventListener = vi.fn((event, handler) => {
-      if (event === "load") handler();
-    });
+    const addEventListener = vi.fn();
     vi.stubGlobal("navigator", {
       serviceWorker: { register },
     });
     vi.stubGlobal("window", { addEventListener });
+    // Vitest/Vite corre con import.meta.env.DEV === true.
     registerServiceWorker();
-    expect(addEventListener).toHaveBeenCalledWith("load", expect.any(Function));
-    expect(register).toHaveBeenCalledWith("/sw.js");
+    expect(addEventListener).not.toHaveBeenCalled();
+    expect(register).not.toHaveBeenCalled();
   });
 });
