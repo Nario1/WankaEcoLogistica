@@ -10,6 +10,9 @@ const migrationFiles = (await fs.readdir(migrationsDirectory))
   .filter((file) => file.endsWith(".sql"))
   .sort();
 const pool = createPool(loadConfig());
+if (!pool) {
+  throw new Error("DATABASE_URL es obligatoria");
+}
 try {
   for (const migrationFile of migrationFiles) {
     const sql = await fs.readFile(

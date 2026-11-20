@@ -16,7 +16,9 @@ const server = app.listen(config.port, () => {
 
 async function shutdown() {
   server.close(async () => {
-    await container.pool.end();
+    if (container.pool) {
+      await container.pool.end();
+    }
     process.exit(0);
   });
 }

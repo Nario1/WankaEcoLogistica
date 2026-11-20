@@ -11,6 +11,9 @@ if (!email || !password || password.length < 12) {
   );
 }
 const pool = createPool(config);
+if (!pool) {
+  throw new Error("DATABASE_URL es obligatoria");
+}
 try {
   const passwordHash = await bcrypt.hash(password, 12);
   await pool.query(

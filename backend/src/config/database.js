@@ -1,8 +1,10 @@
 import pg from "pg";
 
 export function createPool(config) {
+  // En Vercel el frontend puede subir sin PostGIS; /health sigue vivo.
+  // Sin DATABASE_URL el pool queda null y /health/ready responde degraded.
   if (!config.databaseUrl) {
-    throw new Error("DATABASE_URL es obligatoria");
+    return null;
   }
 
   return new pg.Pool({
