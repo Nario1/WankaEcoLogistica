@@ -80,8 +80,11 @@ Cada sprint conserva sus cuatro artefactos: informe, impedimentos, revisión y r
 - [Retrospectiva del sprint](<03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
 - [Análisis Playwright](<03 Implementación/Sprint 04/03 Analisis PlayWrigth V_1_0_0.md>)
 - [Usabilidad SUS](<03 Implementación/Sprint 04/04 Usabilidad V_1_0_0.md>)
-- [Recuperación de servicio EN-003](<03 Implementación/Sprint 04/05 Recuperación de servicio EN-003 V_1_0_0.md>)
-- [Guía de despliegue (listo para producción)](<03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md>)
+
+### Operación y despliegue
+
+- [Recuperación de servicio EN-003](<03 Implementación/EN-003 Recuperación de servicio V_1_0_0.md>)
+- [Guía de despliegue](<03 Implementación/Guia de despliegue V_1_0_0.md>)
 
 ### Reducción del impacto ambiental (Inspección 04 — Green IT)
 

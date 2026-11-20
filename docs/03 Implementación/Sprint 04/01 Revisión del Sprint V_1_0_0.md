@@ -17,7 +17,7 @@
 |---|---|---|---|
 | US-006 (EC-10) | Consultar indicadores de sostenibilidad | Rango de fechas muestra CO₂, ahorro de distancia y nivel de servicio; periodo vacío no inventa cifras. | Commit `5759592` (`feat(ep-04): indicadores, reportes y recuperación de servicio`); menú **Indicadores**; `GET /api/indicators`. |
 | US-008 (EC-12) | Exportar reporte CSV/PDF | Usuario autorizado descarga CSV/PDF; rangos excesivos se rechazan. | Mismo commit `5759592`; botones de exportación; `GET /api/reports/export`. |
-| EN-003 (EC-15) | Recuperación de servicio | Respaldo restaurable, monitoreo y registro de RTO/RPO. | `5759592` + documento [05 Recuperación de servicio EN-003](<05 Recuperación de servicio EN-003 V_1_0_0.md>); scripts `ops:*`. |
+| EN-003 (EC-15) | Recuperación de servicio | Respaldo restaurable, monitoreo y registro de RTO/RPO. | `5759592` + documento [EN-003 Recuperación de servicio](<../EN-003 Recuperación de servicio V_1_0_0.md>); scripts `ops:*`. |
 | EP-04 (EC-4) | Cierre de sostenibilidad y reportes | Épica cerrada en Jira (**Listo**). | Tablero EC + paquete Sprint 04 en `docs/03 Implementación/Sprint 04/`. |
 | Inspección 5 | Cierre técnico Sprint 4 | E2E Playwright, SUS, CI/CD (`ci` / `tests` / `deploy-production`) y trazabilidad README. | Commits de cierre en `main`; workflows en `.github/workflows/`; informes `03` y `04` de este sprint. |
 

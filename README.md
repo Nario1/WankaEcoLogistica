@@ -15,7 +15,7 @@ Para recorrer toda la documentación en orden, consulte el [índice central de d
 
 Workflows en [`.github/workflows/`](.github/workflows/): `ci.yml`, `tests.yml`, `deploy-production.yml` y `green-audit.yml`.
 
-Para el go-live posterior configure los secrets `DEPLOY_HOOK_URL`, `PRODUCTION_URL` y `VITE_API_URL` (paso a paso en [Guía de despliegue](<docs/03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md>)). Mientras tanto, cada push a `main` ya genera el artefacto `frontend-dist`.
+Para el go-live posterior configure los secrets `DEPLOY_HOOK_URL`, `PRODUCTION_URL` y `VITE_API_URL` (paso a paso en [Guía de despliegue](<docs/03 Implementación/Guia de despliegue V_1_0_0.md>)). Mientras tanto, cada push a `main` ya genera el artefacto `frontend-dist`.
 
 ## Estado actual
 
@@ -87,7 +87,7 @@ WankaEcoLogistica/
 │       ├── Sprint 01/            # Base operativa y seguridad
 │       ├── Sprint 02/            # Optimización, evidencia y retrospectiva
 │       ├── Sprint 03/            # Revisión, retrospectiva, calidad, seguridad y accesibilidad
-│       ├── Sprint 04/            # EP-04 + Inspección 5 (Playwright, SUS, CI/CD)
+│       ├── Sprint 04/            # Inspección 5: revisión, retrospectiva, Playwright, SUS
 │       └── reduccion del impacto ambiental/  # Inspección 04 Green IT (informes)
 ├── evidencias/                  # Lighthouse/SWDM, cobertura, Sonar y capturas
 ├── .github/workflows/           # ci.yml, tests.yml, deploy-production.yml
@@ -344,8 +344,11 @@ También puede utilizar el [índice documental central](<docs/00 Índice de docu
 - [Retrospectiva del sprint](<docs/03 Implementación/Sprint 04/02 Retrospectiva del Sprint V_1_0_0.md>)
 - [Análisis Playwright](<docs/03 Implementación/Sprint 04/03 Analisis PlayWrigth V_1_0_0.md>)
 - [Usabilidad SUS](<docs/03 Implementación/Sprint 04/04 Usabilidad V_1_0_0.md>)
-- [Recuperación de servicio EN-003](<docs/03 Implementación/Sprint 04/05 Recuperación de servicio EN-003 V_1_0_0.md>)
-- [Guía de despliegue](<docs/03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md>)
+
+### Operación y despliegue
+
+- [Recuperación de servicio EN-003](<docs/03 Implementación/EN-003 Recuperación de servicio V_1_0_0.md>)
+- [Guía de despliegue](<docs/03 Implementación/Guia de despliegue V_1_0_0.md>)
 
 ### Reducción del impacto ambiental (Inspección 04)
 

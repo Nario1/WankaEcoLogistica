@@ -1,6 +1,6 @@
 # Guía de despliegue (listo para producción)
 
-[← Volver al README principal](../../../README.md) · [← Usabilidad](<04 Usabilidad V_1_0_0.md>) · [CI/CD badges](../../../README.md#estado-de-cicd-inspección-5)
+[← Volver al README principal](../../README.md) · [Sprint 04 →](<Sprint 04/01 Revisión del Sprint V_1_0_0.md>) · [CI/CD badges](../../README.md#estado-de-cicd-inspección-5)
 
 **Proyecto:** WankaEcoLogística Huancayo  
 **Workflow:** `.github/workflows/deploy-production.yml`  

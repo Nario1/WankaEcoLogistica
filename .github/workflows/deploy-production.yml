@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: deploy-readme
-          path: docs/03 Implementación/Sprint 04/06 Guia de despliegue V_1_0_0.md
+          path: docs/03 Implementación/Guia de despliegue V_1_0_0.md
           if-no-files-found: ignore
 
   deploy:
