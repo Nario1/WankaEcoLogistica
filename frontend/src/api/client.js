@@ -1,4 +1,8 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
+// Producción (Vercel): mismo origen, rewrite público /api → servicio backend.
+// `vite dev` sigue apuntando al Express local. VITE_API_URL, si existe, gana.
+const API_URL =
+  import.meta.env.VITE_API_URL ??
+  (import.meta.env.DEV ? "http://localhost:3000/api" : "/api");
 
 export class ApiError extends Error {
   constructor(message, { status, code, details } = {}) {
